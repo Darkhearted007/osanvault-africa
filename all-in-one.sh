@@ -1,4 +1,7 @@
+
 #!/bin/bash
+# Ensure we are in the Git repo
+cd /data/data/com.termux/files/home/osanvault-africa || exit 1
 # ÒsánVault Africa All-in-One Automation Script
 # This script commits changes, pushes to GitHub, and applies grants automatically
 
