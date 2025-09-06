@@ -1,0 +1,123 @@
+#!/bin/bash
+# --------------------------------------
+# ÒsánVault Africa Web Setup Script
+# Sets up folder structure, CSS, placeholders
+# --------------------------------------
+
+echo "🚀 Starting ÒsánVault Africa web setup..."
+
+# Create main folders
+mkdir -p osanvault-africa/assets/css
+mkdir -p osanvault-africa/assets/images
+
+# Create style.css
+cat > osanvault-africa/assets/css/style.css <<EOL
+/* ------------------------------
+   ÒsánVault Africa - Optimized CSS
+-------------------------------*/
+/* Reset & Base */
+* { margin: 0; padding: 0; box-sizing: border-box; }
+html, body { font-family: 'Poppins', sans-serif; background-color: #f9f9f9; color: #1a1a1a; line-height: 1.6; min-height: 100vh; }
+.container { width: 90%; max-width: 1200px; margin: 0 auto; padding: 1rem; }
+/* Header/Footer */
+.header, .footer { background: linear-gradient(90deg, #0f172a, #1e293b); color: #fff; padding: 1rem 0; text-align: center; }
+/* Typography */
+h1, h2, h3 { font-weight: 700; margin-bottom: 0.5rem; color: #0f172a; }
+p { font-size: 1rem; color: #334155; margin-bottom: 1rem; }
+/* Buttons */
+.btn { display: inline-block; padding: 0.75rem 1.5rem; font-weight: 600; border-radius: 0.5rem; border: none; cursor: pointer; transition: all 0.3s ease; text-decoration: none; text-align: center; }
+.btn-primary { background-color: #2563eb; color: #fff; }
+.btn-primary:hover { background-color: #1e40af; }
+.btn-secondary { background-color: #10b981; color: #fff; }
+.btn-secondary:hover { background-color: #047857; }
+/* Cards */
+.card { background: #fff; border-radius: 0.75rem; box-shadow: 0 4px 12px rgba(0,0,0,0.08); padding: 1.5rem; flex: 1 1 280px; transition: transform 0.3s ease, box-shadow 0.3s ease; }
+.card:hover { transform: translateY(-5px); box-shadow: 0 8px 20px rgba(0,0,0,0.15); }
+.card img { max-width: 100%; border-radius: 0.5rem; margin-bottom: 1rem; }
+.card-title { font-size: 1.25rem; font-weight: 700; margin-bottom: 0.5rem; }
+.card-text { font-size: 0.95rem; color: #475569; }
+/* Forms */
+input, select, textarea { width: 100%; padding: 0.75rem; border-radius: 0.5rem; border: 1px solid #cbd5e1; margin-bottom: 1rem; font-size: 1rem; outline: none; transition: border 0.3s ease; }
+input:focus, select:focus, textarea:focus { border-color: #2563eb; }
+/* Grid */
+.grid { display: grid; gap: 1rem; }
+@media (min-width: 640px) { .grid-2 { grid-template-columns: repeat(2, 1fr); } .grid-3 { grid-template-columns: repeat(3, 1fr); } .grid-4 { grid-template-columns: repeat(4, 1fr); } }
+/* Navbar */
+.navbar { display: flex; justify-content: space-between; align-items: center; padding: 1rem 0; background-color: #1e293b; color: #fff; }
+.navbar a { color: #fff; margin-left: 1rem; text-decoration: none; font-weight: 500; }
+.navbar a:hover { color: #2563eb; }
+/* Footer */
+.footer p { font-size: 0.9rem; color: #94a3b8; }
+/* Animations */
+.fade-in { animation: fadeIn 1s ease forwards; opacity: 0; }
+@keyframes fadeIn { to { opacity: 1; } }
+EOL
+
+echo "✅ CSS created at assets/css/style.css"
+
+# Download placeholder images
+PLACEHOLDER_URLS=(
+"https://via.placeholder.com/400x300?text=Property+1"
+"https://via.placeholder.com/400x300?text=Property+2"
+"https://via.placeholder.com/400x300?text=Property+3"
+)
+
+for i in ${!PLACEHOLDER_URLS[@]}; do
+    wget -O "osanvault-africa/assets/images/placeholder$((i+1)).png" "${PLACEHOLDER_URLS[$i]}"
+done
+
+echo "✅ Placeholder images downloaded to assets/images/"
+
+# Create basic index.html
+cat > osanvault-africa/index.html <<EOL
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ÒsánVault Africa</title>
+<link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body>
+<header class="header">
+  <h1>ÒsánVault Africa</h1>
+  <p>Your gateway to tokenized real estate in Africa</p>
+</header>
+
+<nav class="navbar container">
+  <a href="#">Home</a>
+  <a href="#">Properties</a>
+  <a href="#">Invest</a>
+  <a href="#">Contact</a>
+</nav>
+
+<main class="main container">
+  <h2>Featured Properties</h2>
+  <div class="flex">
+    <div class="card">
+      <img src="assets/images/placeholder1.png" alt="Property 1">
+      <div class="card-title">Property 1</div>
+      <div class="card-text">Location: Lagos, Nigeria</div>
+    </div>
+    <div class="card">
+      <img src="assets/images/placeholder2.png" alt="Property 2">
+      <div class="card-title">Property 2</div>
+      <div class="card-text">Location: Abuja, Nigeria</div>
+    </div>
+    <div class="card">
+      <img src="assets/images/placeholder3.png" alt="Property 3">
+      <div class="card-title">Property 3</div>
+      <div class="card-text">Location: Port Harcourt, Nigeria</div>
+    </div>
+  </div>
+</main>
+
+<footer class="footer">
+  <p>&copy; 2025 ÒsánVault Africa. All rights reserved.</p>
+</footer>
+</body>
+</html>
+EOL
+
+echo "✅ index.html created successfully!"
+echo "🎉 ÒsánVault Africa folder setup complete!"
