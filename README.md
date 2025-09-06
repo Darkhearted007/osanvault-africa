@@ -1,2 +1,1 @@
-# osanvault-africa
-ÒsánVault Africa: Tokenized Real Estate &amp; Digital Assets Platform on Solana
+ÒsánVault Africa is a blockchain-powered platform enabling fractional ownership of Nigerian real estate and digital assets through the NigeriaEstate Token (NET). Built on Solana, it integrates DeFi features, real-yield vaults, NFT collateral lending, and DAO-lite governance, allowing users to invest, manage, and earn from real-world properties seamlessly. Our mission is to democratize property ownership, foster financial inclusion, and bring cutting-edge Web3 infrastructure to Africa.
