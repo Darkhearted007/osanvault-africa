@@ -1,45 +1,51 @@
-
 #!/bin/bash
-# Ensure we are in the Git repo
-cd /data/data/com.termux/files/home/osanvault-africa || exit 1
-# ÒsánVault Africa All-in-One Automation Script
-# This script commits changes, pushes to GitHub, and applies grants automatically
+# ÒsánVault Africa - All-in-One Automation Script
+# Automatically updates, commits, and pushes changes to GitHub
+# Author: Olugbenga Ajayi
 
-# Timestamp
-echo "⏱ Starting sync at $(date)"
+# Set variables
+REPO_DIR="$HOME/osanvault-africa"
+BRANCH="main"
 
-# Step 1: Stage all changes
+# Navigate to repository
+cd "$REPO_DIR" || { echo "❌ Repository directory not found! Exiting..."; exit 1; }
+
+# Ensure we are in a git repository
+if [ ! -d ".git" ]; then
+    echo "❌ Not a git repository. Initialize first!"
+    exit 1
+fi
+
+# Pull latest changes to avoid conflicts
+echo "🔄 Pulling latest changes from GitHub..."
+git pull origin $BRANCH --rebase
+
+# Stage all changes
+echo "📥 Staging all changes..."
 git add .
 
-# Step 2: Commit changes
-echo "Enter a commit message (or press Enter for default):"
-read commit_msg
-if [ -z "$commit_msg" ]; then
-    commit_msg="Auto-update: $(date)"
-fi
-git commit -m "$commit_msg"
+# Commit changes
+COMMIT_MSG="Auto update $(date '+%Y-%m-%d %H:%M:%S')"
+git commit -m "$COMMIT_MSG" 2>/dev/null || echo "ℹ️ Nothing to commit."
 
-# Step 3: Pull latest changes and rebase to avoid conflicts
-git pull origin main --rebase
+# Push to GitHub
+echo "🚀 Pushing changes to GitHub..."
+git push origin $BRANCH
 
-# Step 4: Push changes to GitHub
-git push origin main --force
-echo "✅ All changes synced to GitHub successfully!"
-
-# Step 5: Run grant application script
-if [ -f "./scripts/grant-apply.sh" ]; then
-    chmod +x ./scripts/grant-apply.sh
-    ./scripts/grant-apply.sh
-    echo "✅ Grant application process completed!"
+# Optional: Run grant script if it exists
+GRANT_SCRIPT="$REPO_DIR/scripts/grant-apply.sh"
+if [ -f "$GRANT_SCRIPT" ]; then
+    echo "💰 Running grant script..."
+    bash "$GRANT_SCRIPT"
 else
     echo "⚠️ Grant script not found, skipping..."
 fi
 
-# Step 6: Push README updates (if needed)
-if [ -f "./scripts/push-readme.sh" ]; then
-    chmod +x ./scripts/push-readme.sh
-    ./scripts/push-readme.sh
-    echo "✅ README.md updated and pushed!"
+# Optional: Any other automation scripts
+AUTO_SCRIPT="$REPO_DIR/scripts/push-readme.sh"
+if [ -f "$AUTO_SCRIPT" ]; then
+    echo "📝 Running README push script..."
+    bash "$AUTO_SCRIPT"
 fi
 
-echo "🎉 ÒsánVault Africa automation complete at $(date)"
+echo "🎉 ÒsánVault Africa automation complete at $(date '+%Y-%m-%d %H:%M:%S')"
