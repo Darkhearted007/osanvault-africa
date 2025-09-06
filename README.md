@@ -1,36 +1,22 @@
- ÒsánVault Africa
+# ÒsánVault Africa
 
- Overview
-ÒsánVault Africa is a blockchain-powered real estate and asset tokenization platform built on Solana. It allows users to invest in Nigerian real estate and mineral resources securely, transparently, and with real-yield returns.
+Welcome to **ÒsánVault Africa**, a blockchain-powered platform revolutionizing real estate, investments, and digital assets in Africa. 
 
- Features
-- Tokenized Real Estate
-- Mineral Resource Investments
-- DeFi Tools: Swap, staking, real-yield vaults
+**Official Website:** [osanvaultafrica.com](https://osanvaultafrica.com)
+
+## Key Features
+- Tokenized Real Estate Investment
+- Fractional Ownership of Properties
+- Real On-Chain Yields
 - DAO-lite Governance
-- Cross-chain Compatibility
-- Fiat On-ramp
-- Education & Inclusion Programs
+- Cross-Chain Integration
+- Community Dashboard & Voting
+- Secure Wallet & Identity Verification
 
- Token: NET (NigeriaEstate Token)
-- Total Supply: 1 Billion NET
-- Use Cases: Real estate, minerals, staking, governance
+## Repository Contents
 
- Roadmap
-1. Launch platform and NET token
-2. Integrate properties and minerals
-3. Deploy DeFi & staking features
-4. Expand into:
-   - ÒsánVault LandBank
-   - ÒsánVault Lend
-   - ÒsánVault REITs
-   - ÒsánCarbon
-5. Community growth & partnerships
+- README.md
+- push-readme.sh
+- sync-osanvault.sh
 
- Contact
-- Website: [osanvault.africa](https://osanvault.africa)
-- Telegram: [@ÒsánVaultAfrica](https://t.me/ÒsánVaultAfrica)
-- Email: olugbenga1000@gmail.com
-
- License
-All rights reserved © ÒsánVault Africa 2025
+*Last updated: 2025-09-06 10:05:48*
