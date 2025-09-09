@@ -1,11 +1,4 @@
 {
-  "token_name": "NigeriaEstate Token (NET)",
-  "symbol": "NET",
-  "mint_address": "2wGmLXiJaNCRhKzpvifTywXWHMgA4FETep57DAcmLv41",
-  "total_supply": 1000000000,
-  "holders": 0,
-  "last_transaction": "2025-09-09T12:00:00Z",
-  "total_investors": 0,
-  "total_tokenized_properties": 3,
-  "last_property_added": "2025-09-09T12:00:00Z"
+  "price": "N/A",
+  "market_cap": "N/A"
 }
