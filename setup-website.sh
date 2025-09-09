@@ -1,19 +1,10 @@
-#!/bin/bash
-# setup-website.sh
-# Script to auto-generate ÒsánVault Africa website skeleton with ready-made content
-# and push it directly to GitHub
-
-# --------- CONFIG (edit these before first run) ---------
-PROJECT_DIR=~/osanvault-africa
-GIT_REPO=https://github.com/Darkhearted007/osanvault-africa.git
-BRANCH=main
-COMMIT_MSG="🚀 Auto-generated ÒsánVault Africa website update"
-# --------------------------------------------------------
-
-mkdir -p $PROJECT_DIR
-cd $PROJECT_DIR || exit
+#!/usr/bin/env bash
+set -euo pipefail
 
 echo "🌍 Setting up ÒsánVault Africa website..."
+
+# Go to project folder
+cd ~/osanvault-africa
 
 # ---------- index.html ----------
 cat > index.html <<'EOF'
@@ -33,18 +24,20 @@ cat > index.html <<'EOF'
       <a href="about.html">About</a>
       <a href="roadmap.html">Roadmap</a>
       <a href="tokenomics.html">Tokenomics</a>
+      <a href="net.html">NET Token</a>
       <a href="contact.html">Contact</a>
     </nav>
   </header>
-  
+
   <section>
     <h2>Own a Piece of Nigeria, One Piece at a Time</h2>
     <p>ÒsánVault Africa is the first Web3 platform tokenizing real estate and minerals across Nigeria.</p>
-    <a href="about.html" class="cta">Learn More</a>
+    <p><b>Powered by NigeriaEstate Token (NET)</b></p>
+    <a href="net.html" class="cta">Explore NET Token</a>
   </section>
-  
+
   <footer>
-    <p>&copy; 2025 ÒsánVault Africa. All rights reserved.</p>
+    <p>&copy; 2025 ÒsánVault Africa</p>
   </footer>
 </body>
 </html>
@@ -62,24 +55,22 @@ cat > about.html <<'EOF'
 </head>
 <body>
   <header>
-    <h1>About ÒsánVault</h1>
+    <h1>About ÒsánVault Africa</h1>
     <nav>
       <a href="index.html">Home</a>
       <a href="about.html">About</a>
       <a href="roadmap.html">Roadmap</a>
       <a href="tokenomics.html">Tokenomics</a>
+      <a href="net.html">NET Token</a>
       <a href="contact.html">Contact</a>
     </nav>
   </header>
-  
+
   <section>
-    <h2>Our Mission</h2>
-    <p>ÒsánVault Africa bridges blockchain technology with real estate, land banking, minerals, and carbon credits—empowering Africans to invest, own, and earn transparently.</p>
-    
-    <h2>Vision</h2>
-    <p>To be Africa’s leading decentralized vault for wealth creation and sustainable development.</p>
+    <h2>Who We Are</h2>
+    <p>ÒsánVault Africa is a blockchain-powered platform enabling fractional ownership of real estate, mineral resources, and sustainable assets across Nigeria. Our goal is to democratize access to wealth through tokenization.</p>
   </section>
-  
+
   <footer>
     <p>&copy; 2025 ÒsánVault Africa</p>
   </footer>
@@ -99,39 +90,27 @@ cat > roadmap.html <<'EOF'
 </head>
 <body>
   <header>
-    <h1>ÒsánVault Roadmap</h1>
+    <h1>Roadmap</h1>
     <nav>
       <a href="index.html">Home</a>
       <a href="about.html">About</a>
       <a href="roadmap.html">Roadmap</a>
       <a href="tokenomics.html">Tokenomics</a>
+      <a href="net.html">NET Token</a>
       <a href="contact.html">Contact</a>
     </nav>
   </header>
-  
+
   <section>
-    <h2>Phase 1: Foundation</h2>
+    <h2>Our Journey</h2>
     <ul>
-      <li>Mint NigeriaEstate Token (NET)</li>
-      <li>Tokenize 10 properties</li>
-      <li>Launch community channels</li>
-    </ul>
-    
-    <h2>Phase 2: Expansion</h2>
-    <ul>
-      <li>Introduce ÒsánVault Minerals</li>
-      <li>Government partnerships (Ekiti & Oyo)</li>
-      <li>Launch rent payout backend</li>
-    </ul>
-    
-    <h2>Phase 3: Global Scale</h2>
-    <ul>
-      <li>Cross-chain expansion</li>
-      <li>DAO-lite governance</li>
-      <li>Regional inclusion programs</li>
+      <li><b>2025 Q1:</b> Launch of NET Token on Solana Devnet</li>
+      <li><b>2025 Q2:</b> Property and mineral listings begin</li>
+      <li><b>2025 Q3:</b> Community DAO-lite governance launch</li>
+      <li><b>2025 Q4:</b> Yield vaults, carbon credits, and cross-chain expansion</li>
     </ul>
   </section>
-  
+
   <footer>
     <p>&copy; 2025 ÒsánVault Africa</p>
   </footer>
@@ -151,34 +130,79 @@ cat > tokenomics.html <<'EOF'
 </head>
 <body>
   <header>
-    <h1>ÒsánVault Tokenomics</h1>
+    <h1>Tokenomics</h1>
     <nav>
       <a href="index.html">Home</a>
       <a href="about.html">About</a>
       <a href="roadmap.html">Roadmap</a>
       <a href="tokenomics.html">Tokenomics</a>
+      <a href="net.html">NET Token</a>
       <a href="contact.html">Contact</a>
     </nav>
   </header>
-  
+
   <section>
-    <h2>NigeriaEstate Token (NET)</h2>
+    <h2>NET Token Distribution</h2>
     <ul>
-      <li>Total Supply: 1,000,000,000 NET</li>
-      <li>Utility: Real Estate, Minerals, Carbon Credits</li>
-      <li>Rewards: Rent payouts, staking, and governance</li>
-    </ul>
-    
-    <h2>Distribution</h2>
-    <ul>
-      <li>40% Community & Rewards</li>
-      <li>25% Properties & Minerals Backing</li>
-      <li>20% Development & Team</li>
-      <li>10% Partnerships & Grants</li>
-      <li>5% Liquidity</li>
+      <li>Community & Airdrops: 40%</li>
+      <li>Development & Team: 20%</li>
+      <li>Strategic Partnerships: 20%</li>
+      <li>Treasury & Reserves: 10%</li>
+      <li>Public Sale: 10%</li>
     </ul>
   </section>
-  
+
+  <footer>
+    <p>&copy; 2025 ÒsánVault Africa</p>
+  </footer>
+</body>
+</html>
+EOF
+
+# ---------- net.html ----------
+cat > net.html <<'EOF'
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>NigeriaEstate Token (NET) | ÒsánVault Africa</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <header>
+    <h1>NigeriaEstate Token (NET)</h1>
+    <nav>
+      <a href="index.html">Home</a>
+      <a href="about.html">About</a>
+      <a href="roadmap.html">Roadmap</a>
+      <a href="tokenomics.html">Tokenomics</a>
+      <a href="net.html">NET Token</a>
+      <a href="contact.html">Contact</a>
+    </nav>
+  </header>
+
+  <section>
+    <h2>About NET</h2>
+    <p><b>NigeriaEstate Token (NET)</b> is the official utility token powering ÒsánVault Africa.</p>
+    <ul>
+      <li><b>Total Supply:</b> 1,000,000,000 NET</li>
+      <li><b>Network:</b> Solana (Devnet)</li>
+      <li><b>Wallet Address:</b> 7rDzXgyZhNEZT9KFoNowL7fo8cbdryg8RnVUhuN2MjXd</li>
+      <li><b>Utility:</b> Real estate tokenization, rent payouts, minerals, carbon credits, staking, governance</li>
+    </ul>
+
+    <h2>Explorer</h2>
+    <p>
+      <a href="https://explorer.solana.com/address/7rDzXgyZhNEZT9KFoNowL7fo8cbdryg8RnVUhuN2MjXd?cluster=devnet" target="_blank" class="cta">
+        View NET on Solana Explorer
+      </a>
+    </p>
+
+    <h2>Coming Soon</h2>
+    <p>Swap NET, stake NET, and earn real on-chain yields.</p>
+  </section>
+
   <footer>
     <p>&copy; 2025 ÒsánVault Africa</p>
   </footer>
@@ -198,23 +222,24 @@ cat > contact.html <<'EOF'
 </head>
 <body>
   <header>
-    <h1>Contact ÒsánVault</h1>
+    <h1>Contact ÒsánVault Africa</h1>
     <nav>
       <a href="index.html">Home</a>
       <a href="about.html">About</a>
       <a href="roadmap.html">Roadmap</a>
       <a href="tokenomics.html">Tokenomics</a>
+      <a href="net.html">NET Token</a>
       <a href="contact.html">Contact</a>
     </nav>
   </header>
-  
+
   <section>
     <h2>Get in Touch</h2>
     <p>Email: <a href="mailto:olugbenga1000@gmail.com">olugbenga1000@gmail.com</a></p>
-    <p>Telegram: <a href="https://t.me/OsanVaultAfrica">@OsanVaultAfrica</a></p>
-    <p>WhatsApp: +2347065056103</p>
+    <p>Telegram: <a href="https://t.me/OsanVaultAfrica" target="_blank">@OsanVaultAfrica</a></p>
+    <p>GitHub: <a href="https://github.com/Darkhearted007/osanvault-africa" target="_blank">osanvault-africa</a></p>
   </section>
-  
+
   <footer>
     <p>&copy; 2025 ÒsánVault Africa</p>
   </footer>
@@ -228,58 +253,55 @@ body {
   font-family: Arial, sans-serif;
   margin: 0;
   padding: 0;
+  line-height: 1.6;
   background: #f9f9f9;
   color: #333;
 }
 header {
-  background: #0a3d62;
-  color: white;
-  padding: 15px;
+  background: #0a2f5c;
+  color: #fff;
+  padding: 1rem;
+  text-align: center;
+}
+header h1 {
+  margin: 0;
 }
 nav a {
-  color: white;
-  margin: 0 10px;
+  color: #fff;
+  margin: 0 0.5rem;
   text-decoration: none;
 }
 nav a:hover {
   text-decoration: underline;
 }
 section {
-  padding: 20px;
+  padding: 2rem;
 }
 .cta {
   display: inline-block;
-  padding: 10px 15px;
-  background: #1abc9c;
-  color: white;
-  border-radius: 5px;
+  background: #ff7a00;
+  color: #fff;
+  padding: 0.75rem 1.5rem;
+  margin-top: 1rem;
   text-decoration: none;
+  border-radius: 5px;
 }
 .cta:hover {
-  background: #16a085;
+  background: #e56a00;
 }
 footer {
-  background: #0a3d62;
-  color: white;
   text-align: center;
-  padding: 10px;
+  padding: 1rem;
+  background: #0a2f5c;
+  color: #fff;
+  margin-top: 2rem;
 }
 EOF
 
-echo "✅ Website files generated in $PROJECT_DIR"
-
-# ---------- GitHub push ----------
+# ---------- Git Setup & Push ----------
 echo "📦 Pushing to GitHub..."
-
-if [ ! -d ".git" ]; then
-  git init
-  git remote add origin $GIT_REPO
-fi
-
-git checkout -B $BRANCH
 git add .
-git commit -m "$COMMIT_MSG"
-git pull origin $BRANCH --rebase || true
-git push origin $BRANCH --force
+git commit -m "🚀 Auto-generated ÒsánVault Africa website update with NET token"
+git push origin main || true
 
 echo "🚀 Deployment complete!"
