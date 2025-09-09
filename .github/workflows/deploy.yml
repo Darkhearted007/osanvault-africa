@@ -10,81 +10,32 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout repo
-        uses: actions/checkout@v3
+      - uses: actions/checkout@v3
 
-      - name: Setup Bash
-        uses: actions/setup-bash@v1
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: "3.x"
 
-      - name: Generate website files with timestamp
-        run: |
-          TIMESTAMP=$(date +"%B %d, %Y %H:%M %Z")
-          mkdir -p site
+      - name: Install Dependencies
+        run: pip install requests
 
-          # index.html
-          cat > site/index.html <<EOF
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>ÒsánVault Africa | Own a Piece of Nigeria</title>
-  <link rel="stylesheet" href="styles.css">
-</head>
-<body>
-  <header>
-    <h1>ÒsánVault Africa</h1>
-    <nav>
-      <a href="index.html">Home</a>
-      <a href="about.html">About</a>
-      <a href="roadmap.html">Roadmap</a>
-      <a href="tokenomics.html">Tokenomics</a>
-      <a href="net.html">NET Token</a>
-      <a href="contact.html">Contact</a>
-    </nav>
-  </header>
+      - name: Fetch NET Token Data
+        run: python3 scripts/fetch-net-data.py
 
-  <section>
-    <h2>Own a Piece of Nigeria, One Piece at a Time</h2>
-    <p>ÒsánVault Africa is the first Web3 platform tokenizing real estate and minerals across Nigeria.</p>
-    <p><b>Powered by NigeriaEstate Token (NET)</b></p>
-    <a href="net.html" class="cta">Explore NET Token</a>
-  </section>
+      - name: Generate Website Pages
+        run: python3 scripts/generate-pages.py
 
-  <footer>
-    <p>&copy; 2025 ÒsánVault Africa</p>
-    <p>Last updated: $TIMESTAMP</p>
-  </footer>
-</body>
-</html>
-EOF
-
-          # Copy remaining static files
-          cp about.html roadmap.html tokenomics.html net.html contact.html styles.css site/ || true
-
-          # Move generated site files to repo root
-          cp -r site/* ./
-
-      - name: Configure Git
+      - name: Commit and Push Changes
         run: |
           git config user.name "GitHub Actions"
           git config user.email "actions@github.com"
+          git add site/
+          git commit -m "⚡ Auto-update website" || echo "No changes to commit"
+          git push origin main
 
-      - name: Commit auto-updates
-        run: |
-          git add .
-          git commit -m "⚡ Auto update website with timestamp" || echo "No changes to commit"
-
-      - name: Push changes
-        run: git push origin main
-
-      - name: Deploy to GitHub Pages
-        uses: actions/configure-pages@v3
-
-      - name: Upload artifact
-        uses: actions/upload-pages-artifact@v2
+      - uses: actions/configure-pages@v3
+      - uses: actions/upload-pages-artifact@v2
         with:
-          path: .
-
-      - name: Deploy Pages
-        uses: actions/deploy-pages@v2
+          path: site
+      - uses: actions/deploy-pages@v2
