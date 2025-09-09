@@ -1,0 +1,4 @@
+Traceback (most recent call last):
+  File "/data/data/com.termux/files/home/osanvault-africa/scripts/auto-telegram.py", line 5, in <module>
+    from telegram.ext import Updater, CommandHandler, MessageHandler, Filters, CallbackContext
+ImportError: cannot import name 'Filters' from 'telegram.ext' (/data/data/com.termux/files/usr/lib/python3.12/site-packages/telegram/ext/__init__.py). Did you mean: 'filters'?

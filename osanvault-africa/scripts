@@ -1,0 +1,63 @@
+#!/usr/bin/env python3
+import time
+import json
+import requests
+import random
+
+# === CONFIGURATION ===
+BOT_TOKEN = "7624236697:AAH_WELRZ1sL9f7iGaMNwM4DfLKgFhH3rSI"
+CHANNEL_ID = "@OsanVaultAfrica"
+SLEEP_INTERVAL = 3600  # 1 hour between posts
+POST_FILE = "/data/data/com.termux/files/home/osanvault-africa/scripts/content/posts.json"
+
+# === FUNCTIONS ===
+def send_message(text, pin=False):
+    url = f"https://api.telegram.org/bot{BOT_TOKEN}/sendMessage"
+    payload = {"chat_id": CHANNEL_ID, "text": text, "parse_mode": "HTML"}
+    r = requests.post(url, data=payload)
+    if r.status_code == 200:
+        if pin:
+            msg_id = r.json()["result"]["message_id"]
+            pin_url = f"https://api.telegram.org/bot{BOT_TOKEN}/pinChatMessage"
+            requests.post(pin_url, data={"chat_id": CHANNEL_ID, "message_id": msg_id, "disable_notification": True})
+        print(f"✅ Message sent: {text[:50]}...")
+    else:
+        print(f"⚠️ Failed to send message: {r.text}")
+
+def send_poll(question, options):
+    url = f"https://api.telegram.org/bot{BOT_TOKEN}/sendPoll"
+    payload = {"chat_id": CHANNEL_ID, "question": question, "options": str(options).replace("'", '"'), "is_anonymous": False}
+    r = requests.post(url, data=payload)
+    if r.status_code == 200:
+        print("✅ Poll sent successfully!")
+    else:
+        print(f"⚠️ Failed to send poll: {r.text}")
+
+def load_posts():
+    with open(POST_FILE, "r") as f:
+        return json.load(f)
+
+# === MAIN LOOP ===
+if __name__ == "__main__":
+    posts = load_posts()
+    post_index = 0
+    
+    # Pin welcome message if exists
+    welcome_post = next((p for p in posts if "Welcome" in p.get("text", "")), None)
+    if welcome_post:
+        send_message(welcome_post["text"], pin=True)
+    
+    while True:
+        try:
+            post = posts[post_index % len(posts)]
+            post_index += 1
+            
+            if post["type"] == "text":
+                send_message(post["text"])
+            elif post["type"] == "poll":
+                send_poll(post["question"], post["options"])
+            
+            time.sleep(SLEEP_INTERVAL)
+        except Exception as e:
+            print(f"⚠️ Error occurred: {e}")
+            time.sleep(300)
