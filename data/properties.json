@@ -1,3 +1,5 @@
 [
-  {"id": "001", "name": "Victoria Island Penthouse", "location": "Lagos, Nigeria", "price": "₦150,000,000", "image": "victoria-island.jpg", "tokenized": true},
-  {"id": "002", "name": "Ikoyi
+  {"id":"001","name":"Victoria Island Penthouse","location":"Lagos, Nigeria","price":"₦150,000,000","image":"victoria-island.jpg","tokenized":true},
+  {"id":"002","name":"Ikoyi Luxury Apartment","location":"Lagos, Nigeria","price":"₦95,000,000","image":"ikoyi.jpg","tokenized":true},
+  {"id":"003","name":"Abuja Executive Villa","location":"Abuja, Nigeria","price":"₦120,000,000","image":"abuja-villa.jpg","tokenized":true}
+]
