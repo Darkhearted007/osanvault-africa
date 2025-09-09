@@ -1,0 +1,27 @@
+name: Auto-update Fullmoon
+
+on:
+  schedule:
+    - cron: '0 * * * *'
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Setup Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.x'
+      - name: Install dependencies
+        run: pip install requests beautifulsoup4 matplotlib
+      - name: Generate Live Site
+        run: python3 scripts/fetch-generate-fullmoon.py
+      - name: Commit & Push
+        run: |
+          git config --global user.name "Olugbenga Ajayi"
+          git config --global user.email "olugbenga1000@gmail.com"
+          git add .
+          git commit -m "♻ Auto-update Fullmoon: live properties + charts + NET" || echo "No changes"
+          git push origin main
