@@ -1,0 +1,23 @@
+[
+    {
+        "type": "text",
+        "text": "🌟 Welcome to ÒsánVault Africa! Empowering Africans with fractionalized real estate and tokenized assets. Visit: https://osanvaultafrica.com"
+    },
+    {
+        "type": "text",
+        "text": "🚀 New Investment Opportunity! Stake NET Tokens and earn real on-chain yield. Learn more: https://osanvaultafrica.com/tokenomics.html"
+    },
+    {
+        "type": "text",
+        "text": "📈 Check our roadmap and see upcoming milestones for 2025-2026: https://osanvaultafrica.com/roadmap.html"
+    },
+    {
+        "type": "text",
+        "text": "💡 Did you know? ÒsánVault Africa plans to integrate NFT loans, carbon credits, and cross-chain solutions soon!"
+    },
+    {
+        "type": "poll",
+        "question": "Which feature excites you the most?",
+        "options": ["NET Token Staking", "NFT Loans", "Carbon Credits", "Cross-chain Solutions"]
+    }
+]
