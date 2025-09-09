@@ -1,21 +1,40 @@
-name: Deploy ÒsánVault Africa Website
+name: Auto Deploy ÒsánVault Africa Website
 
 on:
   push:
     branches:
       - main
 
-permissions:
-  contents: write
-
 jobs:
-  deploy:
+  build-and-deploy:
     runs-on: ubuntu-latest
+
     steps:
       - name: Checkout repo
         uses: actions/checkout@v3
 
-      - name: Setup Pages
+      - name: Setup Bash
+        uses: actions/setup-bash@v1
+
+      - name: Run setup script
+        run: |
+          chmod +x setup-website.sh
+          ./setup-website.sh
+
+      - name: Configure Git
+        run: |
+          git config user.name "GitHub Actions"
+          git config user.email "actions@github.com"
+
+      - name: Commit auto-updates
+        run: |
+          git add .
+          git commit -m "⚡ Auto update website with timestamp" || echo "No changes to commit"
+
+      - name: Push changes
+        run: git push origin main
+
+      - name: Deploy to GitHub Pages
         uses: actions/configure-pages@v3
 
       - name: Upload artifact
@@ -23,6 +42,5 @@ jobs:
         with:
           path: .
 
-      - name: Deploy to GitHub Pages
-        id: deployment
+      - name: Deploy Pages
         uses: actions/deploy-pages@v2
