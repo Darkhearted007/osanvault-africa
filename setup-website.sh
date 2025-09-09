@@ -305,3 +305,21 @@ git commit -m "🚀 Auto-generated ÒsánVault Africa website update with NET to
 git push origin main || true
 
 echo "🚀 Deployment complete!"
+# ---------- GitHub Pages Deployment ----------
+echo "🌐 Ensuring GitHub Pages deployment..."
+
+# Use GitHub API to set Pages source to branch 'main' at root
+if [ -n "${GITHUB_TOKEN:-}" ]; then
+  curl -s -X PUT \
+    -H "Authorization: token $GITHUB_TOKEN" \
+    -H "Accept: application/vnd.github.v3+json" \
+    https://api.github.com/repos/Darkhearted007/osanvault-africa/pages \
+    -d '{"source":{"branch":"main","path":"/"}}' >/dev/null 2>&1 \
+    && echo "✅ GitHub Pages auto-deploy triggered!" \
+    || echo "⚠️ Could not configure Pages automatically. Please check your PAT."
+else
+  echo "⚠️ Skipped Pages auto-config. Set GITHUB_TOKEN in your environment to enable."
+fi
+
+echo "🚀 Deployment complete! Visit your live site at:"
+echo "👉 https://darkhearted007.github.io/osanvault-africa/"
