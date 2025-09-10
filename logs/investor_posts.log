@@ -1,2 +1,5 @@
-nohup: ignoring input
-python3: can't open file '/data/data/com.termux/files/home/osanvault-africa/investor/posts_update.py': [Errno 2] No such file or directory
+Traceback (most recent call last):
+  File "/data/data/com.termux/files/home/osanvault-africa/investor/posts_update.py", line 3, in <module>
+    with open('../investor/posts.txt','r') as f:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+FileNotFoundError: [Errno 2] No such file or directory: '../investor/posts.txt'
