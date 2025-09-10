@@ -37,3 +37,8 @@ chmod +x ~/osanvault-africa/osanvault-post.sh
 
 echo "✅ Supermoon bot installed. Run:"
 echo "   ~/osanvault-africa/osanvault-post.sh"
+# Add cronjob for automatic posts every 6 hours
+(crontab -l 2>/dev/null; echo "0 */6 * * * ~/osanvault-africa/osanvault-post.sh >> ~/osanvault-africa/post.log 2>&1") | crontab -
+
+echo "⏳ Auto-posting cronjob installed: every 6 hours"
+echo "   Logs: ~/osanvault-africa/post.log"
