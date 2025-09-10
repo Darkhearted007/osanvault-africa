@@ -1,0 +1,323 @@
+USER         PID %CPU %MEM    VSZ   RSS TTY      STAT START   TIME COMMAND
+root           1  0.1  0.3 102108 13164 ?        Ss   17:57   0:03 /sbin/init
+root           2  0.0  0.0      0     0 ?        S    17:57   0:00 [kthreadd]
+root           3  0.0  0.0      0     0 ?        I<   17:57   0:00 [rcu_gp]
+root           4  0.0  0.0      0     0 ?        I<   17:57   0:00 [rcu_par_gp]
+root           5  0.0  0.0      0     0 ?        I<   17:57   0:00 [slub_flushwq]
+root           6  0.0  0.0      0     0 ?        I<   17:57   0:00 [netns]
+root           8  0.0  0.0      0     0 ?        I<   17:57   0:00 [kworker/0:0H-events_highpri]
+root           9  0.0  0.0      0     0 ?        I    17:57   0:00 [kworker/u2:0-writeback]
+root          10  0.0  0.0      0     0 ?        I<   17:57   0:00 [mm_percpu_wq]
+root          11  0.0  0.0      0     0 ?        S    17:57   0:00 [rcu_tasks_rude_]
+root          12  0.0  0.0      0     0 ?        S    17:57   0:00 [rcu_tasks_trace]
+root          13  0.0  0.0      0     0 ?        S    17:57   0:00 [ksoftirqd/0]
+root          14  0.0  0.0      0     0 ?        I    17:57   0:01 [rcu_sched]
+root          15  0.0  0.0      0     0 ?        S    17:57   0:00 [migration/0]
+root          16  0.0  0.0      0     0 ?        S    17:57   0:00 [idle_inject/0]
+root          18  0.0  0.0      0     0 ?        S    17:57   0:00 [cpuhp/0]
+root          19  0.0  0.0      0     0 ?        S    17:57   0:00 [kdevtmpfs]
+root          20  0.0  0.0      0     0 ?        I<   17:57   0:00 [inet_frag_wq]
+root          21  0.0  0.0      0     0 ?        S    17:57   0:00 [kauditd]
+root          22  0.0  0.0      0     0 ?        S    17:57   0:00 [khungtaskd]
+root          23  0.0  0.0      0     0 ?        S    17:57   0:00 [oom_reaper]
+root          24  0.0  0.0      0     0 ?        I<   17:57   0:00 [writeback]
+root          25  0.0  0.0      0     0 ?        S    17:57   0:00 [kcompactd0]
+root          26  0.0  0.0      0     0 ?        SN   17:57   0:00 [ksmd]
+root          27  0.0  0.0      0     0 ?        SN   17:57   0:00 [khugepaged]
+root          73  0.0  0.0      0     0 ?        I<   17:57   0:00 [kintegrityd]
+root          74  0.0  0.0      0     0 ?        I<   17:57   0:00 [kblockd]
+root          75  0.0  0.0      0     0 ?        I<   17:57   0:00 [blkcg_punt_bio]
+root          76  0.0  0.0      0     0 ?        I<   17:57   0:00 [tpm_dev_wq]
+root          77  0.0  0.0      0     0 ?        I<   17:57   0:00 [ata_sff]
+root          78  0.0  0.0      0     0 ?        I<   17:57   0:00 [md]
+root          79  0.0  0.0      0     0 ?        I<   17:57   0:00 [edac-poller]
+root          80  0.0  0.0      0     0 ?        I<   17:57   0:00 [devfreq_wq]
+root          81  0.0  0.0      0     0 ?        S    17:57   0:00 [watchdogd]
+root          83  0.0  0.0      0     0 ?        I<   17:57   0:00 [kworker/0:1H-kblockd]
+root          85  0.0  0.0      0     0 ?        S    17:57   0:00 [kswapd0]
+root          86  0.0  0.0      0     0 ?        S    17:57   0:00 [ecryptfs-kthrea]
+root          88  0.0  0.0      0     0 ?        I<   17:57   0:00 [kthrotld]
+root          89  0.0  0.0      0     0 ?        I<   17:57   0:00 [acpi_thermal_pm]
+root          91  0.0  0.0      0     0 ?        S    17:57   0:00 [scsi_eh_0]
+root          92  0.0  0.0      0     0 ?        I<   17:57   0:00 [scsi_tmf_0]
+root          93  0.0  0.0      0     0 ?        S    17:57   0:00 [scsi_eh_1]
+root          94  0.0  0.0      0     0 ?        I<   17:57   0:00 [scsi_tmf_1]
+root          96  0.0  0.0      0     0 ?        I<   17:57   0:00 [vfio-irqfd-clea]
+root          97  0.0  0.0      0     0 ?        I<   17:57   0:00 [mld]
+root          98  0.0  0.0      0     0 ?        I<   17:57   0:00 [ipv6_addrconf]
+root         109  0.0  0.0      0     0 ?        I<   17:57   0:00 [kstrp]
+root         112  0.0  0.0      0     0 ?        I<   17:57   0:00 [zswap-shrink]
+root         113  0.0  0.0      0     0 ?        I<   17:57   0:00 [kworker/u3:0]
+root         118  0.0  0.0      0     0 ?        I<   17:57   0:00 [charger_manager]
+root         171  0.0  0.0      0     0 ?        S    17:57   0:00 [scsi_eh_2]
+root         172  0.0  0.0      0     0 ?        I<   17:57   0:00 [cryptd]
+root         174  0.0  0.0      0     0 ?        I<   17:57   0:00 [scsi_tmf_2]
+root         251  0.0  0.0      0     0 ?        I<   17:58   0:00 [raid5wq]
+root         299  0.0  0.0      0     0 ?        S    17:58   0:00 [jbd2/sda1-8]
+root         300  0.0  0.0      0     0 ?        I<   17:58   0:00 [ext4-rsv-conver]
+root         400  0.0  0.0      0     0 ?        I<   17:58   0:00 [kaluad]
+root         402  0.0  0.0      0     0 ?        I<   17:58   0:00 [kmpath_rdacd]
+root         403  0.0  0.0      0     0 ?        I<   17:58   0:00 [kmpathd]
+root         405  0.0  0.0      0     0 ?        I<   17:58   0:00 [kmpath_handlerd]
+root         406  0.0  0.1  11284  6132 ?        Ss   17:58   0:00 /lib/systemd/systemd-udevd
+root         407  0.0  0.6 289348 27096 ?        SLsl 17:58   0:00 /sbin/multipathd -d -s
+systemd+     515  0.0  0.1  89364  6592 ?        Ssl  17:58   0:00 /lib/systemd/systemd-timesyncd
+systemd+     582  0.0  0.1  16128  7972 ?        Ss   17:58   0:00 /lib/systemd/systemd-networkd
+systemd+     584  0.0  0.3  26332 14176 ?        Ss   17:58   0:00 /lib/systemd/systemd-resolved
+root         689  0.0  0.0   7288  2836 ?        Ss   17:58   0:00 /usr/sbin/cron -f -P
+message+     691  0.0  0.1   8712  5028 ?        Ss   17:58   0:00 @dbus-daemon --system --address=systemd: --nofork --nopidfile --systemd-activation --syslog-only
+root         697  0.0  0.4  33072 19164 ?        Ss   17:58   0:00 /usr/bin/python3 /usr/bin/networkd-dispatcher --run-startup-triggers
+root         698  0.0  0.1 153784  4060 ?        Ssl  17:58   0:01 /usr/sbin/qemu-ga
+syslog       699  0.0  0.1 222404  5684 ?        Ssl  17:58   0:00 /usr/sbin/rsyslogd -n -iNONE
+root         702  0.0  0.9 1775392 37824 ?       Ssl  17:58   0:01 /usr/lib/snapd/snapd
+root         704  0.0  0.2  16312  8456 ?        Ss   17:58   0:00 /lib/systemd/systemd-logind
+root         710  0.0  0.0   6220  1076 ttyS0    Ss+  17:58   0:00 /sbin/agetty -o -p -- \u --keep-baud 115200,57600,38400,9600 ttyS0 vt220
+root         712  0.0  0.0   6176  1104 tty1     Ss+  17:58   0:00 /sbin/agetty -o -p -- \u --noclear tty1 linux
+root         754  0.0  0.5 110140 21340 ?        Ssl  17:58   0:00 /usr/bin/python3 /usr/share/unattended-upgrades/unattended-upgrade-shutdown --wait-for-signal
+root         779  0.0  0.3  31332 12292 ?        S<s  17:58   0:00 /lib/systemd/systemd-journald
+root        1527  0.0  0.5 296028 20588 ?        Ssl  17:58   0:00 /usr/libexec/packagekitd
+root        1531  0.0  0.1 234504  6620 ?        Ssl  17:58   0:00 /usr/libexec/polkitd --no-debug
+root        1784  0.0  0.2  15440  9400 ?        Ss   17:58   0:00 sshd: /usr/sbin/sshd -D [listener] 0 of 10-100 startups
+root        3741  1.6  1.0 1243816 41156 ?       SNsl 17:59   0:33 /usr/bin/monarx-agent
+root        3758  0.0  0.0      0     0 ?        I    18:06   0:00 [kworker/0:1-cgroup_destroy]
+root        3852  0.0  0.2  17096  9776 ?        Ss   18:10   0:00 /lib/systemd/systemd --user
+root        3853  0.0  0.1 104872  4924 ?        S    18:10   0:00 (sd-pam)
+root        5868  0.0  0.5 400436 22732 ?        Ssl  18:10   0:00 /usr/bin/python3 /usr/bin/fail2ban-server -xf start
+root        5895  0.0  1.8 162984 72748 ?        S    18:10   0:00 python3 /root/osanvault-africa/ai/dashboard_bot.py
+root        5898  0.0  0.2  17700  8672 ?        S    18:10   0:00 python3 /root/osanvault-africa/nft/properties_update.py
+root        6037  0.0  1.8 162980 72612 ?        S    18:20   0:00 python3 /root/osanvault-africa/ai/dashboard_bot.py
+root        6538  0.0  0.0      0     0 ?        I    18:23   0:00 [kworker/0:2-cgroup_destroy]
+root        7346  0.0  0.0      0     0 ?        I    18:23   0:00 [kworker/u2:4-events_unbound]
+root        7544  0.0  1.8 162976 72552 ?        S    18:23   0:00 python3 /root/osanvault-africa/ai/dashboard_bot.py
+root        7547  0.0  0.2  17700  8664 ?        S    18:23   0:00 python3 /root/osanvault-africa/nft/properties_update.py
+root        7603  0.0  0.1  10724  4284 ?        S    18:30   0:00 /usr/sbin/CRON -f -P
+root        7604  0.0  0.0   2892  1060 ?        Ss   18:30   0:00 /bin/sh -c cd ~/osanvault-africa && git pull && python3 ~/osanvault-africa/ai/dashboard_bot.py >> ~/osanvault-africa/logs/dashboard_bot.log 2>&1
+root        7613  0.1  1.8 162976 72672 ?        S    18:30   0:00 python3 /root/osanvault-africa/ai/dashboard_bot.py
+root        7614  0.0  0.0      0     0 ?        I    18:30   0:00 [kworker/u2:1-ext4-rsv-conversion]
+root        7615  0.0  0.0      0     0 ?        I    18:30   0:00 [kworker/u2:2]
+root        7622  0.0  0.2  17156 11240 ?        Ss   18:33   0:00 sshd: root@notty
+root        7678  0.0  0.0   7764  3468 ?        Ss   18:33   0:00 bash -s
+root        7828  0.0  0.0      0     0 ?        I    18:33   0:00 [kworker/0:0-events]
+root        8386  0.0  0.1  55952  6420 ?        Ss   18:33   0:00 nginx: master process /usr/sbin/nginx -g daemon on; master_process on;
+www-data    8395  0.0  0.1  56260  5728 ?        S    18:33   0:00 nginx: worker process
+root        8486  0.0  0.2  19284 11044 ?        R    18:33   0:00 python3 /root/osanvault-africa/ai/dashboard_bot.py
+root        8487  0.0  0.4  94836 16952 ?        R    18:33   0:00 python3 /root/osanvault-africa/ai/dashboard_public.py
+root        8488  0.0  0.3  27684 15380 ?        R    18:33   0:00 python3 /root/osanvault-africa/ai/oracle_post.py
+root        8489  0.0  0.2  17700  9056 ?        S    18:33   0:00 python3 /root/osanvault-africa/security_monitor.py
+root        8490  0.0  0.1 112152  6576 ?        R    18:33   0:00 git add .
+man         8503  0.0  0.1  10532  5348 ?        DNs  18:33   0:00 /usr/bin/mandb --quiet
+root        8506  0.0  0.0   2892   960 ?        S    18:33   0:00 sh -c ps aux >> /root/osanvault-africa/logs/process_monitor.log
+root        8507  0.0  0.0  10464  3388 ?        R    18:33   0:00 ps aux
+USER         PID %CPU %MEM    VSZ   RSS TTY      STAT START   TIME COMMAND
+root           1  0.1  0.3 102108 13164 ?        Ss   17:57   0:03 /sbin/init
+root           2  0.0  0.0      0     0 ?        S    17:57   0:00 [kthreadd]
+root           3  0.0  0.0      0     0 ?        I<   17:57   0:00 [rcu_gp]
+root           4  0.0  0.0      0     0 ?        I<   17:57   0:00 [rcu_par_gp]
+root           5  0.0  0.0      0     0 ?        I<   17:57   0:00 [slub_flushwq]
+root           6  0.0  0.0      0     0 ?        I<   17:57   0:00 [netns]
+root           8  0.0  0.0      0     0 ?        I<   17:57   0:00 [kworker/0:0H-events_highpri]
+root           9  0.0  0.0      0     0 ?        I    17:57   0:00 [kworker/u2:0-events_unbound]
+root          10  0.0  0.0      0     0 ?        I<   17:57   0:00 [mm_percpu_wq]
+root          11  0.0  0.0      0     0 ?        S    17:57   0:00 [rcu_tasks_rude_]
+root          12  0.0  0.0      0     0 ?        S    17:57   0:00 [rcu_tasks_trace]
+root          13  0.0  0.0      0     0 ?        S    17:57   0:00 [ksoftirqd/0]
+root          14  0.0  0.0      0     0 ?        I    17:57   0:01 [rcu_sched]
+root          15  0.0  0.0      0     0 ?        S    17:57   0:00 [migration/0]
+root          16  0.0  0.0      0     0 ?        S    17:57   0:00 [idle_inject/0]
+root          18  0.0  0.0      0     0 ?        S    17:57   0:00 [cpuhp/0]
+root          19  0.0  0.0      0     0 ?        S    17:57   0:00 [kdevtmpfs]
+root          20  0.0  0.0      0     0 ?        I<   17:57   0:00 [inet_frag_wq]
+root          21  0.0  0.0      0     0 ?        S    17:57   0:00 [kauditd]
+root          22  0.0  0.0      0     0 ?        S    17:57   0:00 [khungtaskd]
+root          23  0.0  0.0      0     0 ?        S    17:57   0:00 [oom_reaper]
+root          24  0.0  0.0      0     0 ?        I<   17:57   0:00 [writeback]
+root          25  0.0  0.0      0     0 ?        S    17:57   0:00 [kcompactd0]
+root          26  0.0  0.0      0     0 ?        SN   17:57   0:00 [ksmd]
+root          27  0.0  0.0      0     0 ?        SN   17:57   0:00 [khugepaged]
+root          73  0.0  0.0      0     0 ?        I<   17:57   0:00 [kintegrityd]
+root          74  0.0  0.0      0     0 ?        I<   17:57   0:00 [kblockd]
+root          75  0.0  0.0      0     0 ?        I<   17:57   0:00 [blkcg_punt_bio]
+root          76  0.0  0.0      0     0 ?        I<   17:57   0:00 [tpm_dev_wq]
+root          77  0.0  0.0      0     0 ?        I<   17:57   0:00 [ata_sff]
+root          78  0.0  0.0      0     0 ?        I<   17:57   0:00 [md]
+root          79  0.0  0.0      0     0 ?        I<   17:57   0:00 [edac-poller]
+root          80  0.0  0.0      0     0 ?        I<   17:57   0:00 [devfreq_wq]
+root          81  0.0  0.0      0     0 ?        S    17:57   0:00 [watchdogd]
+root          83  0.0  0.0      0     0 ?        I<   17:57   0:00 [kworker/0:1H-kblockd]
+root          85  0.0  0.0      0     0 ?        S    17:57   0:00 [kswapd0]
+root          86  0.0  0.0      0     0 ?        S    17:57   0:00 [ecryptfs-kthrea]
+root          88  0.0  0.0      0     0 ?        I<   17:57   0:00 [kthrotld]
+root          89  0.0  0.0      0     0 ?        I<   17:57   0:00 [acpi_thermal_pm]
+root          91  0.0  0.0      0     0 ?        S    17:57   0:00 [scsi_eh_0]
+root          92  0.0  0.0      0     0 ?        I<   17:57   0:00 [scsi_tmf_0]
+root          93  0.0  0.0      0     0 ?        S    17:57   0:00 [scsi_eh_1]
+root          94  0.0  0.0      0     0 ?        I<   17:57   0:00 [scsi_tmf_1]
+root          96  0.0  0.0      0     0 ?        I<   17:57   0:00 [vfio-irqfd-clea]
+root          97  0.0  0.0      0     0 ?        I<   17:57   0:00 [mld]
+root          98  0.0  0.0      0     0 ?        I<   17:57   0:00 [ipv6_addrconf]
+root         109  0.0  0.0      0     0 ?        I<   17:57   0:00 [kstrp]
+root         112  0.0  0.0      0     0 ?        I<   17:57   0:00 [zswap-shrink]
+root         113  0.0  0.0      0     0 ?        I<   17:57   0:00 [kworker/u3:0]
+root         118  0.0  0.0      0     0 ?        I<   17:57   0:00 [charger_manager]
+root         171  0.0  0.0      0     0 ?        S    17:57   0:00 [scsi_eh_2]
+root         172  0.0  0.0      0     0 ?        I<   17:57   0:00 [cryptd]
+root         174  0.0  0.0      0     0 ?        I<   17:57   0:00 [scsi_tmf_2]
+root         251  0.0  0.0      0     0 ?        I<   17:58   0:00 [raid5wq]
+root         299  0.0  0.0      0     0 ?        S    17:58   0:00 [jbd2/sda1-8]
+root         300  0.0  0.0      0     0 ?        I<   17:58   0:00 [ext4-rsv-conver]
+root         400  0.0  0.0      0     0 ?        I<   17:58   0:00 [kaluad]
+root         402  0.0  0.0      0     0 ?        I<   17:58   0:00 [kmpath_rdacd]
+root         403  0.0  0.0      0     0 ?        I<   17:58   0:00 [kmpathd]
+root         405  0.0  0.0      0     0 ?        I<   17:58   0:00 [kmpath_handlerd]
+root         406  0.0  0.1  11284  6132 ?        Ss   17:58   0:00 /lib/systemd/systemd-udevd
+root         407  0.0  0.6 289348 27096 ?        SLsl 17:58   0:00 /sbin/multipathd -d -s
+systemd+     515  0.0  0.1  89364  6592 ?        Ssl  17:58   0:00 /lib/systemd/systemd-timesyncd
+systemd+     582  0.0  0.1  16128  7972 ?        Ss   17:58   0:00 /lib/systemd/systemd-networkd
+systemd+     584  0.0  0.3  26332 14176 ?        Ss   17:58   0:00 /lib/systemd/systemd-resolved
+root         689  0.0  0.0   7288  2836 ?        Ss   17:58   0:00 /usr/sbin/cron -f -P
+message+     691  0.0  0.1   8712  5028 ?        Ss   17:58   0:00 @dbus-daemon --system --address=systemd: --nofork --nopidfile --systemd-activation --syslog-only
+root         697  0.0  0.4  33072 19164 ?        Ss   17:58   0:00 /usr/bin/python3 /usr/bin/networkd-dispatcher --run-startup-triggers
+root         698  0.0  0.1 153784  4060 ?        Ssl  17:58   0:01 /usr/sbin/qemu-ga
+syslog       699  0.0  0.1 222404  5684 ?        Ssl  17:58   0:00 /usr/sbin/rsyslogd -n -iNONE
+root         702  0.0  0.9 1775392 37824 ?       Ssl  17:58   0:01 /usr/lib/snapd/snapd
+root         704  0.0  0.2  16312  8456 ?        Ss   17:58   0:00 /lib/systemd/systemd-logind
+root         710  0.0  0.0   6220  1076 ttyS0    Ss+  17:58   0:00 /sbin/agetty -o -p -- \u --keep-baud 115200,57600,38400,9600 ttyS0 vt220
+root         712  0.0  0.0   6176  1104 tty1     Ss+  17:58   0:00 /sbin/agetty -o -p -- \u --noclear tty1 linux
+root         754  0.0  0.5 110140 21340 ?        Ssl  17:58   0:00 /usr/bin/python3 /usr/share/unattended-upgrades/unattended-upgrade-shutdown --wait-for-signal
+root         779  0.0  0.3  31332 12312 ?        S<s  17:58   0:00 /lib/systemd/systemd-journald
+root        1527  0.0  0.5 296028 20588 ?        Ssl  17:58   0:00 /usr/libexec/packagekitd
+root        1531  0.0  0.1 234504  6620 ?        Ssl  17:58   0:00 /usr/libexec/polkitd --no-debug
+root        1784  0.0  0.2  15440  9400 ?        Ss   17:58   0:00 sshd: /usr/sbin/sshd -D [listener] 0 of 10-100 startups
+root        3741  1.4  1.0 1243816 41236 ?       SNsl 17:59   0:34 /usr/bin/monarx-agent
+root        3758  0.0  0.0      0     0 ?        I    18:06   0:00 [kworker/0:1-cgroup_destroy]
+root        3852  0.0  0.2  17096  9776 ?        Ss   18:10   0:00 /lib/systemd/systemd --user
+root        3853  0.0  0.1 104872  4924 ?        S    18:10   0:00 (sd-pam)
+root        5868  0.0  0.5 400436 22732 ?        Ssl  18:10   0:00 /usr/bin/python3 /usr/bin/fail2ban-server -xf start
+root        5895  0.0  1.8 162984 72748 ?        S    18:10   0:00 python3 /root/osanvault-africa/ai/dashboard_bot.py
+root        5898  0.0  0.2  17700  8672 ?        S    18:10   0:00 python3 /root/osanvault-africa/nft/properties_update.py
+root        6037  0.0  1.8 162980 72612 ?        S    18:20   0:00 python3 /root/osanvault-africa/ai/dashboard_bot.py
+root        7346  0.0  0.0      0     0 ?        I    18:23   0:00 [kworker/u2:4-events_freezable_power_]
+root        7544  0.0  1.8 162976 72552 ?        S    18:23   0:00 python3 /root/osanvault-africa/ai/dashboard_bot.py
+root        7547  0.0  0.2  17700  8664 ?        S    18:23   0:00 python3 /root/osanvault-africa/nft/properties_update.py
+root        7603  0.0  0.1  10724  4284 ?        S    18:30   0:00 /usr/sbin/CRON -f -P
+root        7604  0.0  0.0   2892  1060 ?        Ss   18:30   0:00 /bin/sh -c cd ~/osanvault-africa && git pull && python3 ~/osanvault-africa/ai/dashboard_bot.py >> ~/osanvault-africa/logs/dashboard_bot.log 2>&1
+root        7613  0.0  1.8 162976 72672 ?        S    18:30   0:00 python3 /root/osanvault-africa/ai/dashboard_bot.py
+root        7614  0.0  0.0      0     0 ?        I    18:30   0:00 [kworker/u2:1-events_unbound]
+root        7828  0.0  0.0      0     0 ?        I    18:33   0:00 [kworker/0:0-events]
+root        8386  0.0  0.1  55952  6420 ?        Ss   18:33   0:00 nginx: master process /usr/sbin/nginx -g daemon on; master_process on;
+www-data    8395  0.0  0.1  56260  5728 ?        S    18:33   0:00 nginx: worker process
+root        8486  0.0  1.8 162976 72828 ?        S    18:33   0:00 python3 /root/osanvault-africa/ai/dashboard_bot.py
+root        8489  0.0  0.2  17700  9056 ?        S    18:33   0:00 python3 /root/osanvault-africa/security_monitor.py
+root        8548  0.0  0.0   2892   956 ?        S    18:38   0:00 sh -c ps aux >> /root/osanvault-africa/logs/process_monitor.log
+root        8549  0.0  0.0  10464  3344 ?        R    18:38   0:00 ps aux
+USER         PID %CPU %MEM    VSZ   RSS TTY      STAT START   TIME COMMAND
+root           1  0.1  0.3 102108 13168 ?        Ss   17:57   0:04 /sbin/init
+root           2  0.0  0.0      0     0 ?        S    17:57   0:00 [kthreadd]
+root           3  0.0  0.0      0     0 ?        I<   17:57   0:00 [rcu_gp]
+root           4  0.0  0.0      0     0 ?        I<   17:57   0:00 [rcu_par_gp]
+root           5  0.0  0.0      0     0 ?        I<   17:57   0:00 [slub_flushwq]
+root           6  0.0  0.0      0     0 ?        I<   17:57   0:00 [netns]
+root           8  0.0  0.0      0     0 ?        I<   17:57   0:00 [kworker/0:0H-events_highpri]
+root           9  0.0  0.0      0     0 ?        I    17:57   0:01 [kworker/u2:0-flush-8:0]
+root          10  0.0  0.0      0     0 ?        I<   17:57   0:00 [mm_percpu_wq]
+root          11  0.0  0.0      0     0 ?        S    17:57   0:00 [rcu_tasks_rude_]
+root          12  0.0  0.0      0     0 ?        S    17:57   0:00 [rcu_tasks_trace]
+root          13  0.0  0.0      0     0 ?        S    17:57   0:00 [ksoftirqd/0]
+root          14  0.0  0.0      0     0 ?        I    17:57   0:01 [rcu_sched]
+root          15  0.0  0.0      0     0 ?        S    17:57   0:00 [migration/0]
+root          16  0.0  0.0      0     0 ?        S    17:57   0:00 [idle_inject/0]
+root          18  0.0  0.0      0     0 ?        S    17:57   0:00 [cpuhp/0]
+root          19  0.0  0.0      0     0 ?        S    17:57   0:00 [kdevtmpfs]
+root          20  0.0  0.0      0     0 ?        I<   17:57   0:00 [inet_frag_wq]
+root          21  0.0  0.0      0     0 ?        S    17:57   0:00 [kauditd]
+root          22  0.0  0.0      0     0 ?        S    17:57   0:00 [khungtaskd]
+root          23  0.0  0.0      0     0 ?        S    17:57   0:00 [oom_reaper]
+root          24  0.0  0.0      0     0 ?        I<   17:57   0:00 [writeback]
+root          25  0.0  0.0      0     0 ?        S    17:57   0:00 [kcompactd0]
+root          26  0.0  0.0      0     0 ?        SN   17:57   0:00 [ksmd]
+root          27  0.0  0.0      0     0 ?        SN   17:57   0:00 [khugepaged]
+root          73  0.0  0.0      0     0 ?        I<   17:57   0:00 [kintegrityd]
+root          74  0.0  0.0      0     0 ?        I<   17:57   0:00 [kblockd]
+root          75  0.0  0.0      0     0 ?        I<   17:57   0:00 [blkcg_punt_bio]
+root          76  0.0  0.0      0     0 ?        I<   17:57   0:00 [tpm_dev_wq]
+root          77  0.0  0.0      0     0 ?        I<   17:57   0:00 [ata_sff]
+root          78  0.0  0.0      0     0 ?        I<   17:57   0:00 [md]
+root          79  0.0  0.0      0     0 ?        I<   17:57   0:00 [edac-poller]
+root          80  0.0  0.0      0     0 ?        I<   17:57   0:00 [devfreq_wq]
+root          81  0.0  0.0      0     0 ?        S    17:57   0:00 [watchdogd]
+root          83  0.0  0.0      0     0 ?        I<   17:57   0:00 [kworker/0:1H-kblockd]
+root          85  0.0  0.0      0     0 ?        S    17:57   0:00 [kswapd0]
+root          86  0.0  0.0      0     0 ?        S    17:57   0:00 [ecryptfs-kthrea]
+root          88  0.0  0.0      0     0 ?        I<   17:57   0:00 [kthrotld]
+root          89  0.0  0.0      0     0 ?        I<   17:57   0:00 [acpi_thermal_pm]
+root          91  0.0  0.0      0     0 ?        S    17:57   0:00 [scsi_eh_0]
+root          92  0.0  0.0      0     0 ?        I<   17:57   0:00 [scsi_tmf_0]
+root          93  0.0  0.0      0     0 ?        S    17:57   0:00 [scsi_eh_1]
+root          94  0.0  0.0      0     0 ?        I<   17:57   0:00 [scsi_tmf_1]
+root          96  0.0  0.0      0     0 ?        I<   17:57   0:00 [vfio-irqfd-clea]
+root          97  0.0  0.0      0     0 ?        I<   17:57   0:00 [mld]
+root          98  0.0  0.0      0     0 ?        I<   17:57   0:00 [ipv6_addrconf]
+root         109  0.0  0.0      0     0 ?        I<   17:57   0:00 [kstrp]
+root         112  0.0  0.0      0     0 ?        I<   17:57   0:00 [zswap-shrink]
+root         113  0.0  0.0      0     0 ?        I<   17:57   0:00 [kworker/u3:0]
+root         118  0.0  0.0      0     0 ?        I<   17:57   0:00 [charger_manager]
+root         171  0.0  0.0      0     0 ?        S    17:57   0:00 [scsi_eh_2]
+root         172  0.0  0.0      0     0 ?        I<   17:57   0:00 [cryptd]
+root         174  0.0  0.0      0     0 ?        I<   17:57   0:00 [scsi_tmf_2]
+root         251  0.0  0.0      0     0 ?        I<   17:58   0:00 [raid5wq]
+root         299  0.0  0.0      0     0 ?        S    17:58   0:00 [jbd2/sda1-8]
+root         300  0.0  0.0      0     0 ?        I<   17:58   0:00 [ext4-rsv-conver]
+root         400  0.0  0.0      0     0 ?        I<   17:58   0:00 [kaluad]
+root         402  0.0  0.0      0     0 ?        I<   17:58   0:00 [kmpath_rdacd]
+root         403  0.0  0.0      0     0 ?        I<   17:58   0:00 [kmpathd]
+root         405  0.0  0.0      0     0 ?        I<   17:58   0:00 [kmpath_handlerd]
+root         406  0.0  0.1  11284  6132 ?        Ss   17:58   0:00 /lib/systemd/systemd-udevd
+root         407  0.0  0.6 289348 27096 ?        SLsl 17:58   0:00 /sbin/multipathd -d -s
+systemd+     515  0.0  0.1  89364  6592 ?        Ssl  17:58   0:00 /lib/systemd/systemd-timesyncd
+systemd+     582  0.0  0.1  16128  7972 ?        Ss   17:58   0:00 /lib/systemd/systemd-networkd
+systemd+     584  0.0  0.3  26332 14176 ?        Ss   17:58   0:00 /lib/systemd/systemd-resolved
+root         689  0.0  0.0   7288  2836 ?        Ss   17:58   0:00 /usr/sbin/cron -f -P
+message+     691  0.0  0.1   8712  5028 ?        Ss   17:58   0:00 @dbus-daemon --system --address=systemd: --nofork --nopidfile --systemd-activation --syslog-only
+root         697  0.0  0.4  33072 19164 ?        Ss   17:58   0:00 /usr/bin/python3 /usr/bin/networkd-dispatcher --run-startup-triggers
+root         698  0.0  0.1 153784  4060 ?        Ssl  17:58   0:01 /usr/sbin/qemu-ga
+syslog       699  0.0  0.1 222404  5684 ?        Ssl  17:58   0:00 /usr/sbin/rsyslogd -n -iNONE
+root         702  0.0  0.9 1775392 37824 ?       Ssl  17:58   0:01 /usr/lib/snapd/snapd
+root         704  0.0  0.2  16444  8456 ?        Ss   17:58   0:00 /lib/systemd/systemd-logind
+root         710  0.0  0.0   6220  1076 ttyS0    Ss+  17:58   0:00 /sbin/agetty -o -p -- \u --keep-baud 115200,57600,38400,9600 ttyS0 vt220
+root         712  0.0  0.0   6176  1104 tty1     Ss+  17:58   0:00 /sbin/agetty -o -p -- \u --noclear tty1 linux
+root         754  0.0  0.5 110140 21340 ?        Ssl  17:58   0:00 /usr/bin/python3 /usr/share/unattended-upgrades/unattended-upgrade-shutdown --wait-for-signal
+root         779  0.0  0.3  31332 12368 ?        S<s  17:58   0:00 /lib/systemd/systemd-journald
+root        1527  0.0  0.5 296028 20588 ?        Ssl  17:58   0:00 /usr/libexec/packagekitd
+root        1531  0.0  0.1 234504  6620 ?        Ssl  17:58   0:00 /usr/libexec/polkitd --no-debug
+root        1784  0.0  0.2  15440  9400 ?        Ss   17:58   0:00 sshd: /usr/sbin/sshd -D [listener] 0 of 10-100 startups
+root        3741  1.3  1.0 1243816 41236 ?       SNsl 17:59   0:34 /usr/bin/monarx-agent
+root        3758  0.0  0.0      0     0 ?        I    18:06   0:00 [kworker/0:1-cgroup_destroy]
+root        3852  0.0  0.2  17096  9776 ?        Ss   18:10   0:00 /lib/systemd/systemd --user
+root        3853  0.0  0.1 104872  4924 ?        S    18:10   0:00 (sd-pam)
+root        5868  0.0  0.5 400436 22732 ?        Ssl  18:10   0:00 /usr/bin/python3 /usr/bin/fail2ban-server -xf start
+root        5895  0.0  1.8 162984 72748 ?        S    18:10   0:00 python3 /root/osanvault-africa/ai/dashboard_bot.py
+root        5898  0.0  0.2  17700  8672 ?        S    18:10   0:00 python3 /root/osanvault-africa/nft/properties_update.py
+root        6037  0.0  1.8 162980 72612 ?        S    18:20   0:00 python3 /root/osanvault-africa/ai/dashboard_bot.py
+root        7346  0.0  0.0      0     0 ?        I    18:23   0:00 [kworker/u2:4-events_unbound]
+root        7544  0.0  1.8 162976 72552 ?        S    18:23   0:00 python3 /root/osanvault-africa/ai/dashboard_bot.py
+root        7547  0.0  0.2  17700  8664 ?        S    18:23   0:00 python3 /root/osanvault-africa/nft/properties_update.py
+root        7603  0.0  0.1  10724  4284 ?        S    18:30   0:00 /usr/sbin/CRON -f -P
+root        7604  0.0  0.0   2892  1060 ?        Ss   18:30   0:00 /bin/sh -c cd ~/osanvault-africa && git pull && python3 ~/osanvault-africa/ai/dashboard_bot.py >> ~/osanvault-africa/logs/dashboard_bot.log 2>&1
+root        7613  0.0  1.8 162976 72672 ?        S    18:30   0:00 python3 /root/osanvault-africa/ai/dashboard_bot.py
+root        7614  0.0  0.0      0     0 ?        I    18:30   0:00 [kworker/u2:1-events_unbound]
+root        7828  0.0  0.0      0     0 ?        I    18:33   0:00 [kworker/0:0-cgwb_release]
+root        8486  0.0  1.8 162976 72828 ?        S    18:33   0:00 python3 /root/osanvault-africa/ai/dashboard_bot.py
+root        8489  0.0  0.2  17700  9056 ?        S    18:33   0:00 python3 /root/osanvault-africa/security_monitor.py
+root        8616  0.0  0.0      0     0 ?        I    18:41   0:00 [kworker/0:2-events]
+root        8617  0.0  0.2  17236 11348 ?        Ss   18:41   0:00 sshd: root@notty
+root        8663  0.0  0.0   7764  3516 ?        Ss   18:41   0:00 bash -s
+root        9370  0.0  0.1  55952  6476 ?        Ss   18:41   0:00 nginx: master process /usr/sbin/nginx -g daemon on; master_process on;
+www-data    9379  0.0  0.1  56260  5772 ?        S    18:41   0:00 nginx: worker process
+root        9385  0.0  0.0      0     0 ?        I    18:41   0:00 [kworker/u2:2-writeback]
+root        9471  0.0  0.2  19424 11848 ?        R    18:41   0:00 python3 /root/osanvault-africa/ai/dashboard_bot.py
+root        9472  0.0  0.4  96460 18240 ?        R    18:41   0:00 python3 /root/osanvault-africa/ai/dashboard_public.py
+root        9473  0.0  0.3  27684 15084 ?        R    18:41   0:00 python3 /root/osanvault-africa/ai/oracle_post.py
+root        9474  0.0  0.2  17700  9028 ?        S    18:41   0:00 python3 /root/osanvault-africa/security_monitor.py
+root        9475  0.0  0.1 308496  6604 ?        R    18:41   0:00 git add .
+root        9488  0.0  0.0   2892  1000 ?        S    18:41   0:00 sh -c ps aux >> /root/osanvault-africa/logs/process_monitor.log
+root        9489  0.0  0.0  10464  3348 ?        R    18:41   0:00 ps aux
