@@ -1,3 +1,4 @@
+nohup: ignoring input
 Traceback (most recent call last):
   File "/data/data/com.termux/files/home/osanvault-africa/investor/posts_update.py", line 3, in <module>
     with open('../investor/posts.txt','r') as f:
