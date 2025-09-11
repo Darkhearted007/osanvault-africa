@@ -1,22 +1,17 @@
-# ÒsánVault Africa
+# Òsánvault Africa
+A professional, investor-ready blockchain real estate platform.
 
-Welcome to **ÒsánVault Africa**, a blockchain-powered platform revolutionizing real estate, investments, and digital assets in Africa. 
+## Features
+- Fractional real estate investment
+- Tokenized assets (NET)
+- Real-yield on-chain vaults
+- DAO-lite governance
+- Full DeFi integration
+- SEO & analytics enabled
+- Auto-recovering Nginx server
+- Continuous GitHub sync and deployment
 
-**Official Website:** [osanvaultafrica.com](https://osanvaultafrica.com)
-
-## Key Features
-- Tokenized Real Estate Investment
-- Fractional Ownership of Properties
-- Real On-Chain Yields
-- DAO-lite Governance
-- Cross-Chain Integration
-- Community Dashboard & Voting
-- Secure Wallet & Identity Verification
-
-## Repository Contents
-
-- README.md
-- push-readme.sh
-- sync-osanvault.sh
-
-*Last updated: 2025-09-06 10:05:48*
+## Deployment
+- Termux-ready one-command deploy
+- Cloudflare DNS SSL
+- Cron jobs for SSL renewal and GitHub auto-pull
