@@ -1,1 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ÒsánVault Africa | Tokenized Real Estate</title>
+<link rel="stylesheet" href="assets/style.css">
+<script src="https://cdn.jsdelivr.net/npm/web3/dist/web3.min.js"></script>
+</head>
+<body>
 <h1>Welcome to ÒsánVault Africa</h1>
+<p>Own a piece of Nigeria, one piece at a time.</p>
+<button onclick="connectPhantom()">Connect Phantom Wallet</button>
+<div id="analytics"></div>
+<script>
+async function connectPhantom() {
+    const provider = window.phantom?.solana;
+    if(provider?.isPhantom){
+        const resp = await provider.connect();
+        alert('Connected: ' + resp.publicKey.toString());
+    } else { alert('Phantom wallet not detected!'); }
+}
+
+// Placeholder analytics
+document.getElementById('analytics').innerHTML = '<p>Visitors and blockchain transactions analytics coming soon...</p>';
+</script>
+</body>
+</html>
