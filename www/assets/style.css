@@ -1,4 +1,1 @@
-body { font-family: Arial, sans-serif; text-align: center; padding: 50px; background: #f7f9fc; color: #222; }
-button { padding: 12px 25px; background: #4caf50; color: white; border: none; cursor: pointer; border-radius: 5px; font-size: 1em; }
-button:hover { background: #45a049; }
-#analytics { margin-top: 20px; font-size: 0.9em; color: #555; }
+body{font-family:sans-serif;margin:0;padding:0;}header,h1{background:#0044cc;color:#fff;padding:1em;text-align:center;}nav a{margin:0 5px;text-decoration:none;color:#0044cc;}

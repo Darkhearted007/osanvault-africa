@@ -5,24 +5,29 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>ÒsánVault Africa | Tokenized Real Estate</title>
 <link rel="stylesheet" href="assets/style.css">
-<script src="https://cdn.jsdelivr.net/npm/web3/dist/web3.min.js"></script>
 </head>
 <body>
-<h1>Welcome to ÒsánVault Africa</h1>
-<p>Own a piece of Nigeria, one piece at a time.</p>
-<button onclick="connectPhantom()">Connect Phantom Wallet</button>
-<div id="analytics"></div>
-<script>
-async function connectPhantom() {
-    const provider = window.phantom?.solana;
-    if(provider?.isPhantom){
-        const resp = await provider.connect();
-        alert('Connected: ' + resp.publicKey.toString());
-    } else { alert('Phantom wallet not detected!'); }
-}
-
-// Placeholder analytics
-document.getElementById('analytics').innerHTML = '<p>Visitors and blockchain transactions analytics coming soon...</p>';
-</script>
+<header><h1>ÒsánVault Africa</h1></header>
+<nav>
+<a href="index.html">Home</a> |
+<a href="about.html">About</a> |
+<a href="properties.html">Properties</a> |
+<a href="roadmap.html">Roadmap</a> |
+<a href="tokenomics.html">Tokenomics</a> |
+<a href="contact.html">Contact</a>
+</nav>
+<main>
+<h2>Own a piece of Nigeria, one piece at a time</h2>
+<p>Welcome to Africa's first tokenized real estate platform. Stake NET tokens, invest in properties, and earn real yields.</p>
+<!-- Blockchain & Phantom wallet placeholders -->
+<button onclick="alert('Connect your Phantom wallet to start')">Connect Wallet</button>
+<!-- AI & analytics placeholders -->
+<div id="ai-insights">AI property insights will appear here</div>
+<div id="analytics">Analytics dashboard will appear here</div>
+</main>
+<footer>
+<p>&copy; 2025 ÒsánVault Africa. All rights reserved.</p>
+</footer>
+<script src="assets/main.js"></script>
 </body>
 </html>
