@@ -1,3 +1,1 @@
-// Òsánvault Africa SEO & Analytics
-console.log("SEO & analytics integrated");
-// Add Google Analytics, Meta tags, sitemap generation here
+console.log("SEO & analytics integrated for Òsánvault Africa");
