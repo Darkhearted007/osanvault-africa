@@ -1,0 +1,25 @@
+t=2025-09-10T19:39:30+0000 lvl=warn msg="failed to get home directory, using $HOME instead" err="user: Current requires cgo or $USER set in environment" $HOME=/data/data/com.termux/files/home
+t=2025-09-10T19:39:31+0000 lvl=eror msg="unable to check interfaces" obj=tunnels.session err="route ip+net: netlinkrib: permission denied"
+t=2025-09-10T19:39:31+0000 lvl=eror msg="failed to reconnect session" obj=tunnels.session err="failed to dial ngrok server with address \"connect.us.ngrok-agent.com:443\": dial tcp: lookup connect.us.ngrok-agent.com on [::1]:53: read udp [::1]:37685->[::1]:53: read: connection refused"
+t=2025-09-10T19:39:31+0000 lvl=warn msg="failed to check for update" obj=updater err="Post \"https://update.equinox.io/check\": dial tcp: lookup update.equinox.io on [::1]:53: read udp [::1]:54281->[::1]:53: read: connection refused"
+t=2025-09-10T19:39:31+0000 lvl=eror msg="failed to reconnect session" obj=tunnels.session err="failed to dial ngrok server with address \"connect.us.ngrok-agent.com:443\": dial tcp: lookup connect.us.ngrok-agent.com on [::1]:53: read udp [::1]:44992->[::1]:53: read: connection refused"
+t=2025-09-10T19:39:32+0000 lvl=eror msg="failed to reconnect session" obj=tunnels.session err="failed to dial ngrok server with address \"connect.us.ngrok-agent.com:443\": dial tcp: lookup connect.us.ngrok-agent.com on [::1]:53: read udp [::1]:34569->[::1]:53: read: connection refused"
+t=2025-09-10T19:39:34+0000 lvl=eror msg="failed to reconnect session" obj=tunnels.session err="failed to dial ngrok server with address \"connect.us.ngrok-agent.com:443\": dial tcp: lookup connect.us.ngrok-agent.com on [::1]:53: read udp [::1]:41949->[::1]:53: read: connection refused"
+t=2025-09-10T19:39:38+0000 lvl=eror msg="failed to reconnect session" obj=tunnels.session err="failed to dial ngrok server with address \"connect.us.ngrok-agent.com:443\": dial tcp: lookup connect.us.ngrok-agent.com on [::1]:53: read udp [::1]:58436->[::1]:53: read: connection refused"
+t=2025-09-10T19:39:46+0000 lvl=eror msg="failed to reconnect session" obj=tunnels.session err="failed to dial ngrok server with address \"connect.us.ngrok-agent.com:443\": dial tcp: lookup connect.us.ngrok-agent.com on [::1]:53: read udp [::1]:49934->[::1]:53: read: connection refused"
+Traceback (most recent call last):
+  File "/data/data/com.termux/files/home/osanvault-africa/ai/dashboard_public.py", line 3, in <module>
+    public_url = ngrok.connect(8050)
+                 ^^^^^^^^^^^^^^^^^^^
+  File "/data/data/com.termux/files/usr/lib/python3.12/site-packages/pyngrok/ngrok.py", line 385, in connect
+    api_url = get_ngrok_process(pyngrok_config).api_url
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/data/data/com.termux/files/usr/lib/python3.12/site-packages/pyngrok/ngrok.py", line 203, in get_ngrok_process
+    return process.get_process(pyngrok_config)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/data/data/com.termux/files/usr/lib/python3.12/site-packages/pyngrok/process.py", line 271, in get_process
+    return _start_process(pyngrok_config)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/data/data/com.termux/files/usr/lib/python3.12/site-packages/pyngrok/process.py", line 447, in _start_process
+    raise PyngrokNgrokError(f"The ngrok process errored on start: {ngrok_process.startup_error}.",
+pyngrok.exception.PyngrokNgrokError: The ngrok process errored on start: failed to dial ngrok server with address "connect.us.ngrok-agent.com:443": dial tcp: lookup connect.us.ngrok-agent.com on [::1]:53: read udp [::1]:49934->[::1]:53: read: connection refused.

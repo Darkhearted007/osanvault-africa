@@ -1,66 +1,60 @@
 #!/data/data/com.termux/files/usr/bin/bash
-# ============================================================
-# Ultimate ÒsánVault Africa Termux Deployment Script
-# Features: SSL, Cloudflare DNS, Python bots, logs, auto-update
-# ============================================================
+# Ultimate Termux Deployment for ÒsánVault Africa
 
-echo "[🚀] Starting Ultimate ÒsánVault Africa Deployment..."
+# --- CONFIG ---
+DOMAIN="osanvaultafrica.com"
+WWW_DOMAIN="www.osanvaultafrica.com"
+EMAIL="olugbenga1000@gmail.com"
+CLOUDFLARE_API_TOKEN="AQKE5UXR28KHVT0OR7S982JYGHFCNZK7"
+SSL_DIR="$HOME/osanvault-africa/ssl"
+LANDING_DIR="$HOME/osanvault-africa/landing"
+BOT_DIR="$HOME/osanvault-africa"
 
-# 1️⃣ Set up environment
-mkdir -p ~/osanvault-africa/{logs,ai,ssl,landing,investor,nft,messages}
-export PATH="$HOME/.acme.sh:$PATH"
+# --- FUNCTIONS ---
+echo "[🚀] Starting ÒsánVault Africa Ultimate Deployment..."
 
-# 2️⃣ Install dependencies
-pkg update -y && pkg upgrade -y
-pkg install -y git curl wget nano socat python python3 clang make
+mkdir -p "$SSL_DIR" "$LANDING_DIR"
 
-# 3️⃣ Upgrade pip and install Python packages
-python3 -m ensurepip --upgrade
-pip install --upgrade pip
-pip install openai solana pandas plotly pyngrok requests tqdm pydantic websockets construct solders jsonalias
-
-# 4️⃣ Install acme.sh if not exists
+# --- INSTALL ACME.SH ---
 if [ ! -f "$HOME/.acme.sh/acme.sh" ]; then
+    echo "[1/6] Installing acme.sh..."
     curl https://get.acme.sh | sh
-    echo "[✅] acme.sh installed"
+    source "$HOME/.bashrc"
 fi
 
-# 5️⃣ Export Cloudflare API token
-export CF_Token="AQKE5UXR28KHVT0OR7S982JYGHFCNZK7"
-export CF_Email="your-email@domain.com" # Replace with your Cloudflare email
+# --- REGISTER ACCOUNT ---
+echo "[2/6] Registering ZeroSSL account..."
+~/.acme.sh/acme.sh --register-account -m "$EMAIL" --server zerossl
 
-# 6️⃣ Issue SSL certificate via Cloudflare DNS
-~/.acme.sh/acme.sh --issue --dns dns_cf -d osanvaultafrica.com -d www.osanvaultafrica.com
+# --- ISSUE SSL via Cloudflare DNS ---
+echo "[3/6] Issuing SSL for $DOMAIN and $WWW_DOMAIN..."
+export CF_Token="$CLOUDFLARE_API_TOKEN"
+export CF_AccountEmail="$EMAIL"
 
-# 7️⃣ Install SSL locally
-~/.acme.sh/acme.sh --install-cert -d osanvaultafrica.com \
---key-file ~/osanvault-africa/ssl/osanvaultafrica.com.key \
---fullchain-file ~/osanvault-africa/ssl/osanvaultafrica.com.crt \
---reloadcmd "echo '[✅] SSL deployed for osanvaultafrica.com'"
+~/.acme.sh/acme.sh --issue --dns dns_cf -d "$DOMAIN" -d "$WWW_DOMAIN" --force --debug
 
-# 8️⃣ Prepare Python bot scripts if missing
-touch ~/osanvault-africa/ai/{dashboard_bot.py,dashboard_public.py,oracle_post.py}
-touch ~/osanvault-africa/investor/posts.txt
-touch ~/osanvault-africa/nft/properties.txt
-touch ~/osanvault-africa/landing/index.html
-touch ~/osanvault-africa/messages/index.txt.idx
+# --- INSTALL CERTS LOCALLY ---
+echo "[4/6] Installing certificates..."
+mkdir -p "$SSL_DIR"
+~/.acme.sh/acme.sh --install-cert -d "$DOMAIN" \
+    --key-file "$SSL_DIR/$DOMAIN.key" \
+    --fullchain-file "$SSL_DIR/$DOMAIN.crt" \
+    --reloadcmd "echo '[✅] SSL installed and ready.'"
 
-chmod -R 700 ~/osanvault-africa
+# --- SERVE LANDING PAGE via HTTPS ---
+echo "[5/6] Starting HTTPS Python server for landing page..."
+nohup python3 -m http.server 443 --bind 0.0.0.0 --directory "$LANDING_DIR" \
+    --ssl-keyfile "$SSL_DIR/$DOMAIN.key" \
+    --ssl-certfile "$SSL_DIR/$DOMAIN.crt" &
 
-# 9️⃣ Start Python bots in background
-nohup python3 ~/osanvault-africa/ai/dashboard_bot.py > ~/osanvault-africa/logs/dashboard_bot.log 2>&1 &
-nohup python3 ~/osanvault-africa/ai/dashboard_public.py > ~/osanvault-africa/logs/dashboard_public.log 2>&1 &
-nohup python3 ~/osanvault-africa/ai/oracle_post.py > ~/osanvault-africa/logs/oracle_post.log 2>&1 &
+# --- START BOT SCRIPTS ---
+echo "[6/6] Starting all Python bots..."
+for bot in "$BOT_DIR"/bots/*.py; do
+    nohup python3 "$bot" &
+done
 
-# 1️⃣0️⃣ GitHub auto-sync
-cd ~/osanvault-africa
-git init
-git add .
-git commit -m "Full Termux Deployment $(date '+%Y-%m-%d %H:%M:%S')"
-git remote add origin https://github.com/Darkhearted007/osanvault-africa.git || echo "Remote exists"
-git push -u origin main || echo "✅ GitHub sync complete"
+# --- SETUP AUTO-RENEWAL ---
+echo "[🔄] Installing acme.sh cron job for auto-renewal..."
+~/.acme.sh/acme.sh --install-cronjob
 
-echo "[🚀] ÒsánVault Africa Termux deployment completed successfully!"
-echo "[ℹ️] SSL certificates: ~/osanvault-africa/ssl/"
-echo "[ℹ️] Logs: ~/osanvault-africa/logs/"
-echo "[ℹ️] Python bots running in background."
+echo "[🎯] Deployment complete! ÒsánVault Africa is live with HTTPS and bots running."
