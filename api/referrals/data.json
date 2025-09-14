@@ -1,4 +1,1 @@
-[
-  {"userId":"0x12345","referrals":10,"netEarned":500},
-  {"userId":"0x67890","referrals":5,"netEarned":250}
-]
+{"referrals": []}

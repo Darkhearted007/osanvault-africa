@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+<head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>Properties | ÒsánVault Africa</title><link rel="stylesheet" href="assets/css/style.css"></head>
+<body>
+<header><nav><a href="index.html">Home</a><a href="about.html">About</a><a href="properties.html">Properties</a><a href="roadmap.html">Roadmap</a><a href="tokenomics.html">Tokenomics</a><a href="contact.html">Contact</a></nav></header>
+<main><h1>Available Properties</h1><div id="property-list"></div></main>
+<footer><p>&copy; 2025 ÒsánVault Africa</p></footer>
+<script src="assets/js/main.js"></script>
+<script>
+fetch('/api/properties/data.json').then(res=>res.json()).then(data=>{
+  const list=document.getElementById('property-list');
+  data.properties.forEach(p=>{
+    const div=document.createElement('div');
+    div.className='property-card';
+    div.innerHTML=`<h3>${p.title}</h3><p>${p.description}</p><p>Price: ${p.price}</p>`;
+    list.appendChild(div);
+  });
+});
+</script>
+</body>
+</html>
