@@ -1,0 +1,4 @@
+[
+  {"id":1,"name":"Luxury Lagos Apartment","location":"Lagos, Nigeria","price":5000000,"rentYield":0.08,"image":"assets/images/property1.jpg","tokenized":true},
+  {"id":2,"name":"Ekiti Premium Estate","location":"Ekiti, Nigeria","price":2500000,"rentYield":0.10,"image":"assets/images/property2.jpg","tokenized":true}
+]

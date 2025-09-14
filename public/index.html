@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>ÒsánVault Africa | Dashboard</title>
+<script src="https://cdn.jsdelivr.net/npm/@solana/web3.js@latest/lib/index.iife.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@solana/spl-token@latest/lib/index.iife.min.js"></script>
+<link rel="stylesheet" href="assets/style.css">
+</head>
+<body>
+<header>
+  <img src="assets/logo.png" alt="ÒsánVault Logo" height="80">
+  <h1>ÒsánVault Africa</h1>
+</header>
+
+<nav>
+  <a href="index.html">Dashboard</a>
+  <a href="about.html">About</a>
+  <a href="roadmap.html">Roadmap</a>
+  <a href="tokenomics.html">Tokenomics</a>
+  <a href="contact.html">Contact</a>
+</nav>
+
+<main>
+  <section>
+    <h2>Connect Your Wallet</h2>
+    <button onclick="connectWallet()">Connect Wallet</button>
+    <div id="wallet-address">Wallet: Not connected</div>
+    <div id="net-balance">NET Balance: 0</div>
+    <div id="node-status">Current Node: None</div>
+  </section>
+
+  <section>
+    <h2>Featured Properties</h2>
+    <img src="assets/property-placeholder.jpg" alt="Property 1" width="300">
+    <p>Sample fractional property ready for investment.</p>
+  </section>
+</main>
+
+<script>
+const netMintAddress = new solanaWeb3.PublicKey("2wGmLXiJaNCRhKzpvifTywXWHMgA4FETep57DAcmLv41");
+const rpcNodes = [
+  "http://103.50.32.83:8899",
+  "http://186.233.186.148:8899",
+  "http://15.204.161.219:80"
+];
+let connection;
+let currentNode = 0;
+
+function initConnection() {
+  connection = new solanaWeb3.Connection(rpcNodes[currentNode]);
+  document.getElementById("node-status").innerText = "Current Node: " + rpcNodes[currentNode];
+}
+
+async function switchNode() {
+  currentNode = (currentNode + 1) % rpcNodes.length;
+  initConnection();
+}
+
+async function connectWallet() {
+  try {
+    const resp = await window.solana.connect();
+    const wallet = resp.publicKey;
+    document.getElementById("wallet-address").innerText = "Wallet: " + wallet.toString();
+    initConnection();
+    const tokenAccounts = await connection.getParsedTokenAccountsByOwner(wallet, { mint: netMintAddress });
+    const balance = tokenAccounts.value.length ? tokenAccounts.value[0].account.data.parsed.info.tokenAmount.uiAmount : 0;
+    document.getElementById("net-balance").innerText = "NET Balance: " + balance;
+  } catch (err) {
+    console.error("Error connecting wallet:", err);
+    await switchNode();
+  }
+}
+
+// API Placeholders
+const TELEGRAM_BOT_TOKEN = "7624236697:AAH_WELRZ1sL9f7iGaMNwM4DfLKgFhH3rSI";
+const CLOUDFLARE_API_TOKEN = "9DYEMLE6FXgNCuaPnbD02IlgOm1mxC47EGZ2HeiY";
+const CLOUDFLARE_ZONE_ID = "4ba54edd079497a4ff34fa2d6f8f07a9";
+const CLOUDFLARE_ACCOUNT_ID = "0495acf2003cf86b06054de0d7bf78ce";
+const REAL_ESTATE_API_KEY = "secreta239076407a38bfd574d6ecccfce78d6c11bc9db7a0ed84407be8";
+</script>
+
+<footer>
+  <p>&copy; 2025 <a href="https://osanvaultafrica.com">ÒsánVault Africa</a>. Contact: <a href="mailto:info@osanvaultafrica.com">info@osanvaultafrica.com</a></p>
+</footer>
+</body>
+</html>
