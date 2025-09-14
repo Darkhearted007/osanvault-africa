@@ -1,22 +1,14 @@
-# ÒsánVault Africa
+# Òsánvault Africa
 
-Welcome to **ÒsánVault Africa**, a blockchain-powered platform revolutionizing real estate, investments, and digital assets in Africa. 
+Website: [www.osanvaultafrica.com](https://www.osanvaultafrica.com)  
+Email: info@osanvaultafrica.com  
 
-**Official Website:** [osanvaultafrica.com](https://osanvaultafrica.com)
+Òsánvault Africa is Africa’s first scalable tokenized real estate platform with AI-enhanced property management.
 
-## Key Features
-- Tokenized Real Estate Investment
-- Fractional Ownership of Properties
-- Real On-Chain Yields
-- DAO-lite Governance
-- Cross-Chain Integration
-- Community Dashboard & Voting
-- Secure Wallet & Identity Verification
+## License
+MIT License
 
-## Repository Contents
-
-- README.md
-- push-readme.sh
-- sync-osanvault.sh
-
-*Last updated: 2025-09-06 10:05:48*
+## Contact
+Founder: Olugbenga Ajayi  
+Email: info@osanvaultafrica.com  
+Website: https://www.osanvaultafrica.com
