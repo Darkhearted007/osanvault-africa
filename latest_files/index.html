@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ÒsánVault Africa</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<header>
+  <h1>Welcome to ÒsánVault Africa</h1>
+  <nav>
+    <a href="about.html">About</a>
+    <a href="investor-dashboard.html">Investor Dashboard</a>
+    <a href="token-audit.html">Token Audit</a>
+  </nav>
+</header>
+<main>
+  <section>
+    <h2>Available Properties</h2>
+    <div id="properties"></div>
+  </section>
+</main>
+<footer>
+  <p>© 2025 ÒsánVault Africa | All rights reserved</p>
+</footer>
+<script>
+const PROPERTIES = [];
+const container = document.getElementById('properties');
+if(PROPERTIES && PROPERTIES.length > 0){
+  PROPERTIES.forEach((p) => {
+    const div = document.createElement('div');
+    div.innerHTML = `<h3>${p.name}</h3><p>${p.description}</p><p>Price: $${p.price}</p><p>Fraction available: ${p.fraction}%</p>`;
+    container.appendChild(div);
+  });
+}else{
+  container.innerHTML = '<p>No properties available at the moment.</p>';
+}
+</script>
+</body>
+</html>
