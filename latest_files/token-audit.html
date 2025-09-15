@@ -3,14 +3,18 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Token Audit</title>
+<title>Token Audit - ÒsánVault Africa</title>
 <link rel="stylesheet" href="style.css">
+<script src="dashboard.js" defer></script>
 </head>
 <body>
-<header><h1>Token Audit</h1></header>
+<header><h1>NET Token Audit</h1></header>
 <main>
-<p>View the token audit here: <a href="https://osanvaultafrica.com/token-audit/7rDzXgyZhNEZT9KFoNowL7fo8cbdryg8RnVUhuN2MjXd" target="_blank">Token Audit</a></p>
+  <p>View NET token transactions for transparency:</p>
+  <input type="text" id="audit-wallet" placeholder="Enter wallet address">
+  <button onclick="fetchTokenAudit()">View Audit</button>
+  <pre id="audit-results"></pre>
 </main>
-<footer><p>© ÒsánVault Africa</p></footer>
+<footer>© 2025 ÒsánVault Africa</footer>
 </body>
 </html>
