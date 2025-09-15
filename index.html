@@ -1,44 +1,37 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>ÒsánVault Africa | Tokenized Real Estate</title>
-<meta name="description" content="Invest in African real estate with ÒsánVault Africa using blockchain, fractional property ownership, and real-yield vaults.">
-<link rel="stylesheet" href="assets/css/style.css">
+  <meta charset="UTF-8">
+  <title>Home | ÒsánVault Africa</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  
+  <!-- Google Tag Manager -->
+  <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({"gtm.start":
+  new Date().getTime(),event:"gtm.js"});var f=d.getElementsByTagName(s)[0],
+  j=d.createElement(s),dl=l!="dataLayer"?"&l="+l:"";j.async=true;j.src=
+  "https://www.googletagmanager.com/gtm.js?id=GTM-KBNFDZML"+dl;f.parentNode.insertBefore(j,f);
+  })(window,document,"script","dataLayer","GTM-KBNFDZML");</script>
+  <!-- End Google Tag Manager -->
+
+  <!-- Google Analytics -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-96LEYX1WZG"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag("js", new Date());
+    gtag("config", "G-96LEYX1WZG");
+  </script>
+  <!-- End Google Analytics -->
+
 </head>
 <body>
-<header>
-<nav>
-<a href="index.html">Home</a><a href="about.html">About</a><a href="properties.html">Properties</a><a href="roadmap.html">Roadmap</a><a href="tokenomics.html">Tokenomics</a><a href="contact.html">Contact</a>
-</nav>
-</header>
-<section id="hero">
-<h1>Own a Piece of Africa with ÒsánVault</h1>
-<p>Invest in tokenized real estate, fractional property ownership, and real-yield vaults across Africa.</p>
-<a href="properties.html" class="cta-button">Explore Properties</a>
-</section>
-<section id="featured-properties">
-<h2>Featured Properties</h2>
-<div id="property-list"></div>
-</section>
-<footer>
-<p>&copy; 2025 ÒsánVault Africa</p>
-</footer>
-<script src="assets/js/main.js"></script>
-<script>
-fetch('/api/properties/data.json')
-.then(res=>res.json())
-.then(data=>{
-  const list=document.getElementById('property-list');
-  data.properties.forEach(p=>{
-    const div=document.createElement('div');
-    div.className='property-card';
-    div.innerHTML=`<h3>${p.title}</h3><p>${p.description}</p><p>Price: ${p.price}</p>`;
-    list.appendChild(div);
-  });
-});
-</script>
-<footer><a href="https://www.linkedin.com/in/olugbenga1000" target="_blank">LinkedIn</a></footer>
+  
+  <!-- Google Tag Manager (noscript) -->
+  <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-KBNFDZML"
+  height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+  <!-- End Google Tag Manager (noscript) -->
+
+  <h1>Home</h1>
+  <p>Welcome to ÒsánVault Africa: Tokenized Real Estate & Minerals.</p>
 </body>
 </html>

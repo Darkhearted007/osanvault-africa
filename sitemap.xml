@@ -1,9 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-  <url><loc>https://osanvaultafrica.com/index.html</loc></url>
-  <url><loc>https://osanvaultafrica.com/about.html</loc></url>
-  <url><loc>https://osanvaultafrica.com/properties.html</loc></url>
-  <url><loc>https://osanvaultafrica.com/roadmap.html</loc></url>
-  <url><loc>https://osanvaultafrica.com/tokenomics.html</loc></url>
-  <url><loc>https://osanvaultafrica.com/contact.html</loc></url>
+<url><loc>https://osanvaultafrica.com/</loc></url>
+<url><loc>https://osanvaultafrica.com/about.html</loc></url>
+<url><loc>https://osanvaultafrica.com/roadmap.html</loc></url>
+<url><loc>https://osanvaultafrica.com/tokenomics.html</loc></url>
+<url><loc>https://osanvaultafrica.com/contact.html</loc></url>
 </urlset>
