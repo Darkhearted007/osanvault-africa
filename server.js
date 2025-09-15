@@ -1,84 +1,60 @@
-require('dotenv').config();
 const express = require('express');
 const cors = require('cors');
-const bodyParser = require('body-parser');
-const { Connection, PublicKey, Keypair, Transaction, SystemProgram } = require('@solana/web3.js');
-const { Token, TOKEN_PROGRAM_ID } = require('@solana/spl-token');
+const dotenv = require('dotenv');
+const path = require('path');
+const { Connection, clusterApiUrl, PublicKey } = require('@solana/web3.js');
+const { getAccount } = require('@solana/spl-token');
+
+dotenv.config();
 const app = express();
 app.use(cors());
-app.use(bodyParser.json());
+app.use(express.json());
+app.use(express.static(path.join(__dirname, 'latest_files')));
 
-const port = process.env.PORT || 3000;
-const connection = new Connection(process.env.SOLANA_RPC, 'confirmed');
-const netMint = new PublicKey(process.env.NET_TOKEN_MINT);
-const ownerWallet = new PublicKey(process.env.OWNER_WALLET);
+const connection = new Connection(clusterApiUrl('devnet'), 'confirmed');
+const NET_MINT = new PublicKey(process.env.NET_MINT_ADDRESS);
 
-// On-chain simulation store
-const staking = {};
-const investments = {};
-const votes = {};
-const vaults = {};
-
-// Health check
-app.get('/', (req, res) => res.send('ÒsánVault Africa Devnet backend running'));
-
-// Wallet balance
-app.get('/balance/:pubkey', async (req, res) => {
-  try {
-    const pubkey = new PublicKey(req.params.pubkey);
-    const balance = await connection.getBalance(pubkey);
-    res.json({ wallet: pubkey.toBase58(), lamports: balance });
-  } catch (err) {
-    res.status(400).json({ error: err.message });
-  }
+// Token audit endpoint
+app.get('/token-audit/:wallet', async (req, res) => {
+    try {
+        const wallet = new PublicKey(req.params.wallet);
+        const tokenAccounts = await connection.getTokenAccountsByOwner(wallet, { mint: NET_MINT });
+        const balances = await Promise.all(tokenAccounts.value.map(async (ta) => {
+            const acc = await getAccount(connection, ta.pubkey);
+            return { pubkey: ta.pubkey.toBase58(), amount: acc.amount };
+        }));
+        res.json({ wallet: wallet.toBase58(), balances });
+    } catch (err) {
+        console.error(err);
+        res.status(500).json({ error: err.message });
+    }
 });
 
-// Stake NET tokens on-chain
-app.post('/stake', async (req, res) => {
-  try {
-    const { wallet, amount } = req.body;
-    staking[wallet] = (staking[wallet] || 0) + amount;
-    // Placeholder: Here you can integrate real SPL token transfer
-    res.json({ wallet, amount, totalStaked: staking[wallet], status: 'staked', timestamp: Date.now() });
-  } catch (err) {
-    res.status(400).json({ error: err.message });
-  }
+// Investor dashboard endpoint (example data)
+app.get('/investor-dashboard/:wallet', async (req, res) => {
+    try {
+        const wallet = req.params.wallet;
+        // Example: Fetch transaction history, token balances, referral points, etc.
+        // Replace with real data source
+        res.json({
+            wallet,
+            total_invested: 1000,
+            total_tokens: 5000,
+            referrals: 12,
+            transaction_history: [
+                { date: '2025-09-01', amount: 100, type: 'buy' },
+                { date: '2025-09-05', amount: 50, type: 'sell' }
+            ]
+        });
+    } catch(err) {
+        res.status(500).json({ error: err.message });
+    }
 });
 
-// Fractional property investment (tokenized)
-app.post('/invest', async (req, res) => {
-  try {
-    const { wallet, propertyId, amount } = req.body;
-    investments[propertyId] = investments[propertyId] || {};
-    investments[propertyId][wallet] = (investments[propertyId][wallet] || 0) + amount;
-    res.json({ wallet, propertyId, amount, totalInvested: investments[propertyId][wallet], status: 'invested', timestamp: Date.now() });
-  } catch (err) {
-    res.status(400).json({ error: err.message });
-  }
+// SPA fallback
+app.get('*', (req, res) => {
+  res.sendFile(path.join(__dirname, 'latest_files', 'index.html'));
 });
 
-// DAO-lite voting
-app.post('/vote', async (req, res) => {
-  try {
-    const { wallet, proposalId, vote } = req.body;
-    votes[proposalId] = votes[proposalId] || {};
-    votes[proposalId][wallet] = vote;
-    res.json({ wallet, proposalId, vote, status: 'recorded', timestamp: Date.now() });
-  } catch (err) {
-    res.status(400).json({ error: err.message });
-  }
-});
-
-// Vault deposit with yield
-app.post('/vault/deposit', async (req, res) => {
-  try {
-    const { wallet, amount } = req.body;
-    vaults[wallet] = (vaults[wallet] || 0) + amount;
-    const yieldAmount = vaults[wallet] * 0.02; // 2% simulated yield
-    res.json({ wallet, deposited: amount, total: vaults[wallet], yield: yieldAmount, timestamp: Date.now() });
-  } catch (err) {
-    res.status(400).json({ error: err.message });
-  }
-});
-
-app.listen(port, () => console.log(`ÒsánVault Africa Devnet backend running at http://localhost:${port}`));
+const PORT = process.env.PORT || 3000;
+app.listen(PORT, () => console.log(`🚀 ÒsánVault Africa running at http://localhost:${PORT}`));
