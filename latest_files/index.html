@@ -15,27 +15,18 @@
     <a href="token-audit.html">Token Audit</a>
   </nav>
 </header>
+
 <main>
   <section>
-    <h2>Available Properties</h2>
-    <div id="properties"></div>
+    <h2>Featured Properties</h2>
+    <ul>
+      <li><strong>Sample Property 1</strong>: Beautiful estate in Lagos - ₦1000000</li>
+      <li><strong>Sample Property 2</strong>: Modern apartment in Abuja - ₦1500000</li>
+    </ul>
   </section>
 </main>
 <footer>
-  <p>© 2025 ÒsánVault Africa | All rights reserved</p>
+  <p>© ÒsánVault Africa</p>
 </footer>
-<script>
-const PROPERTIES = [];
-const container = document.getElementById('properties');
-if(PROPERTIES && PROPERTIES.length > 0){
-  PROPERTIES.forEach((p) => {
-    const div = document.createElement('div');
-    div.innerHTML = `<h3>${p.name}</h3><p>${p.description}</p><p>Price: $${p.price}</p><p>Fraction available: ${p.fraction}%</p>`;
-    container.appendChild(div);
-  });
-}else{
-  container.innerHTML = '<p>No properties available at the moment.</p>';
-}
-</script>
 </body>
 </html>

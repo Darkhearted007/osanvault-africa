@@ -1,5 +1,7 @@
-body{font-family:Arial,sans-serif;margin:0;padding:0;}
-header,footer{background:#1a1a1a;color:white;padding:1rem;text-align:center;}
-nav a{margin:0 1rem;color:white;text-decoration:none;}
-main{padding:1rem;}
-#properties div, #dashboard div{border:1px solid #ccc;padding:1rem;margin:0.5rem 0;}
+body { font-family: Arial, sans-serif; margin:0; padding:0; }
+header { background:#004080; color:white; padding:1rem; }
+nav a { color:white; margin-right:1rem; text-decoration:none; }
+main { padding:1rem; }
+footer { background:#eee; padding:1rem; text-align:center; margin-top:2rem; }
+ul { list-style:none; padding:0; }
+li { margin-bottom:0.5rem; }
