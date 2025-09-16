@@ -1,7 +1,7 @@
 #!/bin/bash
 set -e
 
-echo "🚀 Starting Òsánvault Africa Website Auto-Update..."
+echo "🚀 Starting Òsánvault Africa Website Auto-Update with Analytics..."
 
 # Ensure backup folder exists
 mkdir -p backup
@@ -13,10 +13,19 @@ echo "📦 Old scripts moved to backup/"
 # Ensure templates folder exists
 mkdir -p templates
 
-# Write new website files
-echo "📝 Rebuilding website files..."
+# Define Analytics script
+GA_TAG='<script async src="https://www.googletagmanager.com/gtag/js?id=G-96LEYX1WZG"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag("js", new Date());
+  gtag("config", "G-96LEYX1WZG");
+</script>'
 
-cat > templates/index.html <<'EOF'
+# Write new website files
+echo "📝 Rebuilding website files with GA..."
+
+cat > templates/index.html <<EOF
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -24,6 +33,7 @@ cat > templates/index.html <<'EOF'
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Òsánvault Africa | Tokenized Real Estate Investment</title>
   <meta name="description" content="Òsánvault Africa - Africa's #1 Tokenized Real Estate Investment Web3 Platform. Invest in fractional properties using the NigeriaEstate Token (NET).">
+  $GA_TAG
 </head>
 <body>
   <h1>Welcome to Òsánvault Africa</h1>
@@ -38,12 +48,13 @@ cat > templates/index.html <<'EOF'
 </html>
 EOF
 
-cat > templates/about.html <<'EOF'
+cat > templates/about.html <<EOF
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
   <title>About Òsánvault Africa</title>
+  $GA_TAG
 </head>
 <body>
   <h1>About Òsánvault Africa</h1>
@@ -52,12 +63,13 @@ cat > templates/about.html <<'EOF'
 </html>
 EOF
 
-cat > templates/roadmap.html <<'EOF'
+cat > templates/roadmap.html <<EOF
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
   <title>Òsánvault Africa Roadmap</title>
+  $GA_TAG
 </head>
 <body>
   <h1>Roadmap</h1>
@@ -71,12 +83,13 @@ cat > templates/roadmap.html <<'EOF'
 </html>
 EOF
 
-cat > templates/tokenomics.html <<'EOF'
+cat > templates/tokenomics.html <<EOF
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
   <title>Òsánvault Africa Tokenomics</title>
+  $GA_TAG
 </head>
 <body>
   <h1>Tokenomics</h1>
@@ -87,12 +100,13 @@ cat > templates/tokenomics.html <<'EOF'
 </html>
 EOF
 
-cat > templates/contact.html <<'EOF'
+cat > templates/contact.html <<EOF
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
   <title>Contact Òsánvault Africa</title>
+  $GA_TAG
 </head>
 <body>
   <h1>Contact Us</h1>
@@ -102,11 +116,11 @@ cat > templates/contact.html <<'EOF'
 </html>
 EOF
 
-echo "✅ Website files updated!"
+echo "✅ Website files updated with Google Analytics!"
 
 # Commit and push
 git add .
-git commit -m "🚀 Auto-update: Òsánvault Africa website latest build"
+git commit -m "🚀 Auto-update: Òsánvault Africa website latest build + GA tracking"
 git push origin main
 
-echo "🎯 Update complete! Òsánvault Africa is now synced as Africa’s #1 Web3 Real Estate platform."
+echo "🎯 Update complete! Òsánvault Africa is now synced & tracking traffic with GA."
