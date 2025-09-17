@@ -1,0 +1,30 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <title>Roadmap | ÒsánVault Africa</title>
+  
+  <style>
+    body{font-family:Inter,Arial,Helvetica,sans-serif;color:#0f172a;background:#fbfcfd;margin:0}
+    header{background:#fff;border-bottom:1px solid #eee;padding:18px}
+    .container{max-width:1100px;margin:0 auto;padding:18px}
+    a{color:#065f46}
+    footer{padding:24px;text-align:center;color:#64748b}
+    .hero{background:#ecfdf5;padding:28px;border-radius:8px}
+  </style>
+</head>
+<body>
+  <header><div class="container"><h1 style="margin:0">ÒsánVault Africa</h1></div></header>
+  <main class="container">
+    <article>
+  <h2>Roadmap</h2>
+  <ul>
+    <li><strong>Q3 2025:</strong> NET creation, pilot properties, community launch.</li>
+    <li><strong>Q4 2025:</strong> Mineral tokenization pilots with state partners.</li>
+    <li><strong>2026:</strong> Real-yield vaults, fiat on-ramp, REITs.</li>
+    <li><strong>2027+:</strong> DAO-lite governance and pan-African expansion.</li>
+  </ul>
+</article>
+  </main>
+  <footer><div class="container">© 2025 ÒsánVault Africa — <a href="/privacy.html">Privacy</a> | <a href="/terms.html">Terms</a></div></footer>
+</body>
+</html>

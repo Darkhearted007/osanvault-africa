@@ -1,0 +1,27 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <title>Contact | ÒsánVault Africa</title>
+  
+  <style>
+    body{font-family:Inter,Arial,Helvetica,sans-serif;color:#0f172a;background:#fbfcfd;margin:0}
+    header{background:#fff;border-bottom:1px solid #eee;padding:18px}
+    .container{max-width:1100px;margin:0 auto;padding:18px}
+    a{color:#065f46}
+    footer{padding:24px;text-align:center;color:#64748b}
+    .hero{background:#ecfdf5;padding:28px;border-radius:8px}
+  </style>
+</head>
+<body>
+  <header><div class="container"><h1 style="margin:0">ÒsánVault Africa</h1></div></header>
+  <main class="container">
+    <article>
+  <h2>Contact</h2>
+  <p>Email: <a href="mailto:$FOUNDER_EMAIL">$FOUNDER_EMAIL</a></p>
+  <p>Telegram: <a href="$TELEGRAM" target="_blank" rel="noopener">Join Community</a></p>
+  <p>For developer collaborations, token negotiations, and investor inquiries — use the email above.</p>
+</article>
+  </main>
+  <footer><div class="container">© 2025 ÒsánVault Africa — <a href="/privacy.html">Privacy</a> | <a href="/terms.html">Terms</a></div></footer>
+</body>
+</html>

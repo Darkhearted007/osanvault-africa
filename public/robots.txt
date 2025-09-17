@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://osanvaultafrica.com/sitemap.xml
