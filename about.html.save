@@ -1,0 +1,23 @@
+#!/bin/bash
+# Update ÒsánVault bio and auto-commit
+
+set -e
+
+cd ~/osanvault-africa
+
+# Ensure about.html exists
+if [ ! -f "about.html" ]; then
+  echo "about.html not found! Creating new one..."
+  echo "<p>ÒsánVault Africa is a Web3 real estate and minerals platform using blockchain to power property investment, resource tokenization, and on-chain governance.</p>" > about.html
+fi
+
+# Add changes
+git add about.html
+
+# Commit only if there are changes
+if git diff --cached --quiet; then
+  echo "No changes to commit."
+else
+  git commit -m "Update about.html via update-about-bio.sh"
+  git push origin main
+fi

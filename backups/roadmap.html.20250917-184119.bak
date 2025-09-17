@@ -1,8 +1,6 @@
 <!doctype html>
 <html lang="en">
 <head>
-<script>window.dataLayer = window.dataLayer || []; function gtag(){dataLayer.push(arguments);} gtag('js', new Date()); gtag('config', 'G-96LEYX1WZG');</script>
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-96LEYX1WZG"></script>
   <meta name="description" content="ÒsánVault Africa – Own a piece of Nigeria, one piece at a time. Tokenized real estate, land banking, REITs, lending, and mineral resources."> 
   <meta property="og:title" content="ÒsánVault Africa"> 
   <meta property="og:description" content="Fractional property investment and Web3 real estate infrastructure for Africa."> 
@@ -20,7 +18,7 @@
   <meta property="og:description" content="Fractional property investment and Web3 real estate infrastructure for Africa."> 
   <meta property="og:image" content="/images/osanvault-cover.svg"> 
   <meta property="og:type" content="website">
-  <title>ÒsánVault Africa | Tokenized Real Estate & Minerals</title>
+  <title>Roadmap | ÒsánVault Africa</title>
   
   <style>
     body{font-family:Inter,Arial,Helvetica,sans-serif;color:#0f172a;background:#fbfcfd;margin:0}
@@ -34,19 +32,15 @@
 <body>
   <header><div class="container"><h1 style="margin:0">ÒsánVault Africa</h1></div></header>
   <main class="container">
-    <section class="hero">
-  <h2>Own a Piece of Africa, One Token at a Time</h2>
-  <p>ÒsánVault Africa tokenizes real estate, minerals, and carbon credits using blockchain to unlock fractional ownership and real yield.</p>
-  <p><a href="/about.html">About</a> • <a href="/roadmap.html">Roadmap</a> • <a href="/tokenomics.html">Tokenomics</a> • <a href="/contact.html">Contact</a></p>
-</section>
-<section style="margin-top:20px">
-  <h3>Features</h3>
+    <article>
+  <h2>Roadmap</h2>
   <ul>
-    <li>Tokenized property ownership (NET Token)</li>
-    <li>Mineral tokenization partnerships with state governments</li>
-    <li>Real-yield vaults, staking, and DAO-lite governance</li>
+    <li><strong>Q3 2025:</strong> NET creation, pilot properties, community launch.</li>
+    <li><strong>Q4 2025:</strong> Mineral tokenization pilots with state partners.</li>
+    <li><strong>2026:</strong> Real-yield vaults, fiat on-ramp, REITs.</li>
+    <li><strong>2027+:</strong> DAO-lite governance and pan-African expansion.</li>
   </ul>
-</section>
+</article>
   </main>
   <footer><div class="container">© 2025 ÒsánVault Africa — <a href="/privacy.html">Privacy</a> | <a href="/terms.html">Terms</a></div></footer>
 </body>

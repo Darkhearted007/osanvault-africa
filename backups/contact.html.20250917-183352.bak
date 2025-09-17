@@ -1,15 +1,6 @@
 <!doctype html>
 <html lang="en">
 <head>
-<script>window.dataLayer = window.dataLayer || []; function gtag(){dataLayer.push(arguments);} gtag('js', new Date()); gtag('config', 'G-96LEYX1WZG');</script>
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-96LEYX1WZG"></script>
-  <meta name="description" content="ÒsánVault Africa – Own a piece of Nigeria, one piece at a time. Tokenized real estate, land banking, REITs, lending, and mineral resources."> 
-  <meta property="og:title" content="ÒsánVault Africa"> 
-  <meta property="og:description" content="Fractional property investment and Web3 real estate infrastructure for Africa."> 
-  <meta property="og:image" content="/images/osanvault-cover.svg"> 
-  <meta property="og:type" content="website">
-<script>window.dataLayer = window.dataLayer || []; function gtag(){dataLayer.push(arguments);} gtag('js', new Date()); gtag('config', 'G-96LEYX1WZG');</script>
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-96LEYX1WZG"></script>
   <meta name="description" content="ÒsánVault Africa – Own a piece of Nigeria, one piece at a time. Tokenized real estate, land banking, REITs, lending, and mineral resources."> 
   <meta property="og:title" content="ÒsánVault Africa"> 
   <meta property="og:description" content="Fractional property investment and Web3 real estate infrastructure for Africa."> 
@@ -20,7 +11,7 @@
   <meta property="og:description" content="Fractional property investment and Web3 real estate infrastructure for Africa."> 
   <meta property="og:image" content="/images/osanvault-cover.svg"> 
   <meta property="og:type" content="website">
-  <title>Roadmap | ÒsánVault Africa</title>
+  <title>Contact | ÒsánVault Africa</title>
   
   <style>
     body{font-family:Inter,Arial,Helvetica,sans-serif;color:#0f172a;background:#fbfcfd;margin:0}
@@ -35,13 +26,10 @@
   <header><div class="container"><h1 style="margin:0">ÒsánVault Africa</h1></div></header>
   <main class="container">
     <article>
-  <h2>Roadmap</h2>
-  <ul>
-    <li><strong>Q3 2025:</strong> NET creation, pilot properties, community launch.</li>
-    <li><strong>Q4 2025:</strong> Mineral tokenization pilots with state partners.</li>
-    <li><strong>2026:</strong> Real-yield vaults, fiat on-ramp, REITs.</li>
-    <li><strong>2027+:</strong> DAO-lite governance and pan-African expansion.</li>
-  </ul>
+  <h2>Contact</h2>
+  <p>Email: <a href="mailto:$FOUNDER_EMAIL">$FOUNDER_EMAIL</a></p>
+  <p>Telegram: <a href="$TELEGRAM" target="_blank" rel="noopener">Join Community</a></p>
+  <p>For developer collaborations, token negotiations, and investor inquiries — use the email above.</p>
 </article>
   </main>
   <footer><div class="container">© 2025 ÒsánVault Africa — <a href="/privacy.html">Privacy</a> | <a href="/terms.html">Terms</a></div></footer>
