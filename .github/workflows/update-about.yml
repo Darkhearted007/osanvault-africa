@@ -1,0 +1,47 @@
+name: Update About Page (auto)
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - 'scripts/**'
+      - 'bio/**'
+  workflow_dispatch: {}
+  schedule:
+    - cron: '0 9 * * *' # runs daily at 09:00 UTC
+
+permissions:
+  contents: write
+
+jobs:
+  update-about:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+          fetch-depth: 0
+
+      - name: Make update script executable
+        run: chmod +x scripts/update-about-bio.sh || true
+
+      - name: Run update-about script
+        run: ./scripts/update-about-bio.sh
+
+      - name: Check for changes and commit
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+
+          git status --porcelain
+
+          if [ -n "$(git status --porcelain)" ]; then
+            git add -A
+            git commit -m "ci: auto-update about.html via update-about-bio.sh"
+            git push origin main
+            echo "Changes pushed."
+          else
+            echo "No changes to commit."
+          fi
