@@ -56,8 +56,4 @@ if grep -q "ÒsánVault Africa" "$ABOUT_FILE"; then
   echo "✅ About page updated successfully with schema.org JSON-LD."
 else
   echo "❌ Update failed, restoring backup."
-  mv "$BACKUP_FILE" "$ABOUT_FILE"
-  exit 1
-fi
-
-rm -f "$BACKUP_FILE"
+  mv "$BACKUP_FILE" "$ABO
