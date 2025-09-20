@@ -1,3 +1,9 @@
+# ÒsánVault Africa
+
+[![CI](https://github.com/osanvaultafrica/osanvault-clean/actions/workflows/ci.yml/badge.svg)](https://github.com/osanvaultafrica/osanvault-clean/actions/workflows/ci.yml)
+[![CodeQL](https://github.com/osanvaultafrica/osanvault-clean/actions/workflows/codeql.yml/badge.svg)](https://github.com/osanvaultafrica/osanvault-clean/actions/workflows/codeql.yml)
+[![Security: Secret Scan](https://github.com/osanvaultafrica/osanvault-clean/actions/workflows/secret-scan.yml/badge.svg)](https://github.com/osanvaultafrica/osanvault-clean/actions/workflows/secret-scan.yml)
+
 # Òsánvault Africa
 
 Website: [www.osanvaultafrica.com](https://www.osanvaultafrica.com)  
