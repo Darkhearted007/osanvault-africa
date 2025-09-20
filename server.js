@@ -1,60 +1,97 @@
-const express = require('express');
-const cors = require('cors');
-const dotenv = require('dotenv');
-const path = require('path');
-const { Connection, clusterApiUrl, PublicKey } = require('@solana/web3.js');
-const { getAccount } = require('@solana/spl-token');
+require('dotenv').config(); // Load .env
 
-dotenv.config();
+const express = require('express');
+const fs = require('fs');
+const path = require('path');
+const { PublicKey, Connection, clusterApiUrl, Keypair } = require('@solana/web3.js');
+const TelegramBot = require('node-telegram-bot-api');
+const OpenAI = require('openai');
+const fetch = require('node-fetch');
+
 const app = express();
-app.use(cors());
-app.use(express.json());
-app.use(express.static(path.join(__dirname, 'latest_files')));
+const PORT = process.env.PORT || 3000;
+
+// ===== SOLANA SETUP =====
+const NET_MINT_ADDRESS = new PublicKey(process.env.NET_TOKEN_MINT);
+const NET_WALLET_PATH = path.resolve(__dirname, 'net-wallet.json');
+
+let NET_WALLET;
+if (fs.existsSync(NET_WALLET_PATH)) {
+  const secretKey = JSON.parse(fs.readFileSync(NET_WALLET_PATH));
+  NET_WALLET = Keypair.fromSecretKey(new Uint8Array(secretKey));
+} else {
+  console.error('NET wallet file not found. Please create net-wallet.json');
+  process.exit(1);
+}
 
 const connection = new Connection(clusterApiUrl('devnet'), 'confirmed');
-const NET_MINT = new PublicKey(process.env.NET_MINT_ADDRESS);
 
-// Token audit endpoint
-app.get('/token-audit/:wallet', async (req, res) => {
-    try {
-        const wallet = new PublicKey(req.params.wallet);
-        const tokenAccounts = await connection.getTokenAccountsByOwner(wallet, { mint: NET_MINT });
-        const balances = await Promise.all(tokenAccounts.value.map(async (ta) => {
-            const acc = await getAccount(connection, ta.pubkey);
-            return { pubkey: ta.pubkey.toBase58(), amount: acc.amount };
-        }));
-        res.json({ wallet: wallet.toBase58(), balances });
-    } catch (err) {
-        console.error(err);
-        res.status(500).json({ error: err.message });
-    }
+// ===== TELEGRAM BOT SETUP =====
+const bot = new TelegramBot(process.env.TELEGRAM_BOT_TOKEN, { polling: true });
+
+// ===== OPENAI SETUP =====
+const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
+
+// ===== EXPRESS SETUP =====
+app.use(express.json());
+app.use(express.static(path.join(__dirname, 'public')));
+
+// ===== ROUTES =====
+app.get('/', (req, res) => {
+  res.sendFile(path.join(__dirname, 'index.html'));
 });
 
-// Investor dashboard endpoint (example data)
-app.get('/investor-dashboard/:wallet', async (req, res) => {
-    try {
-        const wallet = req.params.wallet;
-        // Example: Fetch transaction history, token balances, referral points, etc.
-        // Replace with real data source
-        res.json({
-            wallet,
-            total_invested: 1000,
-            total_tokens: 5000,
-            referrals: 12,
-            transaction_history: [
-                { date: '2025-09-01', amount: 100, type: 'buy' },
-                { date: '2025-09-05', amount: 50, type: 'sell' }
-            ]
-        });
-    } catch(err) {
-        res.status(500).json({ error: err.message });
-    }
+app.get('/wallet', async (req, res) => {
+  const balance = await connection.getBalance(NET_WALLET.publicKey);
+  res.json({ publicKey: NET_WALLET.publicKey.toBase58(), balance });
 });
 
-// SPA fallback
-app.get('*', (req, res) => {
-  res.sendFile(path.join(__dirname, 'latest_files', 'index.html'));
+app.post('/ai', async (req, res) => {
+  try {
+    const prompt = req.body.prompt;
+    if (!prompt) return res.status(400).json({ error: 'Prompt is required' });
+
+    const response = await openai.chat.completions.create({
+      model: "gpt-5-mini",
+      messages: [{ role: "user", content: prompt }]
+    });
+
+    res.json({ reply: response.choices[0].message.content });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: 'OpenAI request failed' });
+  }
 });
 
-const PORT = process.env.PORT || 3000;
-app.listen(PORT, () => console.log(`🚀 ÒsánVault Africa running at http://localhost:${PORT}`));
+app.get('/real-estate', async (req, res) => {
+  try {
+    const apiKey = process.env.REAL_ESTATE_API_KEY;
+    const response = await fetch(`https://api.example.com/properties?apiKey=${apiKey}`);
+    const data = await response.json();
+    res.json(data);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: 'Failed to fetch real estate data' });
+  }
+});
+
+// ===== TELEGRAM MESSAGE ROUTE =====
+app.post('/notify', async (req, res) => {
+  const message = req.body.message || 'No message provided';
+  const chatId = process.env.TELEGRAM_CHAT_ID;
+
+  if (!chatId) return res.status(400).json({ error: 'TELEGRAM_CHAT_ID not set in .env' });
+
+  try {
+    await bot.sendMessage(chatId, message);
+    res.json({ status: 'Message sent' });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: 'Telegram message failed' });
+  }
+});
+
+// ===== START SERVER =====
+app.listen(PORT, () => {
+  console.log(`ÒsánVault Africa server running on port ${PORT}`);
+});
