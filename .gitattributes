@@ -1,0 +1,10 @@
+# Treat sensitive files as binary, no diff
+*.env      -diff
+*.pem      -diff
+*.key      -diff
+*.crt      -diff
+*.json     -diff
+ssh-key*   -diff
+id_rsa*    -diff
+id_ed25519* -diff
+.vps_pass.enc -diff
