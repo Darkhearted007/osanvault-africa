@@ -1,0 +1,43 @@
+{
+  "name": "osanvault-bot",
+  "version": "1.0.0",
+  "description": "Website: [www.osanvaultafrica.com](https://www.osanvaultafrica.com)   Email: info@osanvaultafrica.com",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "dependencies": {
+    "@hapi/boom": "^10.0.1",
+    "@solana/spl-token": "^0.1.8",
+    "@solana/web3.js": "^1.98.4",
+    "@whiskeysockets/baileys": "^6.7.19",
+    "axios": "^1.12.2",
+    "baileys": "^6.7.19",
+    "cors": "^2.8.5",
+    "csv-stringify": "^6.6.0",
+    "dotenv": "^17.2.2",
+    "express": "^5.1.0",
+    "fs-extra": "^11.3.1",
+    "googleapis": "^159.0.0",
+    "node-fetch": "^3.3.2",
+    "node-schedule": "^2.1.1",
+    "node-telegram-bot-api": "^0.66.0",
+    "openai": "^5.22.0",
+    "pm2": "^6.0.11",
+    "qrcode-terminal": "^0.12.0",
+    "serve-static": "^2.2.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://Darkhearted007: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@github.com/Darkhearted007/osanvault-africa.git"
+  },
+  "bugs": {
+    "url": "https://github.com/Darkhearted007/osanvault-africa/issues"
+  },
+  "homepage": "https://github.com/Darkhearted007/osanvault-africa#readme"
+}
