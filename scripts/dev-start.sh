@@ -34,7 +34,7 @@ sleep 1
 cd /data/data/com.termux/files/home/osanvault/apps/api
 nohup ./node_modules/.bin/tsx src/index.ts < /dev/null > ~/api.log 2>&1 &
 echo $! > ~/osanvault.api.pid
-sleep 5
+sleep 8
 
 if curl -s http://localhost:3001/health | grep -q '"api":"ok"'; then
   echo "✅ API ready at http://localhost:3001"
