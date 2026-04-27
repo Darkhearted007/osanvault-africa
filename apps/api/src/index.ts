@@ -12,26 +12,26 @@ import healthRouter from './routes/health'
 import propertiesRouter from './routes/properties'
 import tokensRouter from './routes/tokens'
 import lendRouter from './routes/lend'
+import milestonesRouter from './routes/milestones'
+import dashboardRouter from './routes/dashboard'
 
 const app = express()
 const PORT = process.env.PORT || 3001
 
-// Middleware
 app.use(helmet())
 app.use(cors({ origin: process.env.CORS_ORIGIN || 'http://localhost:5173' }))
 app.use(express.json())
 app.use(requestLogger)
 
-// Routes
 app.use('/health', healthRouter)
 app.use('/api/properties', propertiesRouter)
+app.use('/api/properties/:id/milestones', milestonesRouter)
 app.use('/api/tokens', tokensRouter)
 app.use('/api/lend', lendRouter)
+app.use('/api/dashboard', dashboardRouter)
 
-// Error handler
 app.use(errorHandler)
 
-// Boot
 async function bootstrap() {
   try {
     await connectDB()

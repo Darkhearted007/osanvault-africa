@@ -90,3 +90,42 @@ INSERT INTO token_config (key, value) VALUES
   ('aum_fee', '0.005'),
   ('secondary_market_fee', '0.003')
 ON CONFLICT (key) DO NOTHING;
+
+-- Construction Milestones
+CREATE TABLE IF NOT EXISTS construction_milestones (
+  id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+  property_id UUID REFERENCES properties(id) ON DELETE CASCADE,
+  name VARCHAR(100) NOT NULL,
+  description TEXT,
+  percentage_of_total NUMERIC(5,2) NOT NULL,
+  budget NUMERIC(18,2) NOT NULL,
+  paid_amount NUMERIC(18,2) DEFAULT 0,
+  status VARCHAR(20) DEFAULT 'not_started'
+    CHECK (status IN ('not_started','planning','in_progress','completed','verified')),
+  sequence_order INTEGER NOT NULL,
+  started_at TIMESTAMPTZ,
+  completed_at TIMESTAMPTZ,
+  verified_at TIMESTAMPTZ,
+  verified_by UUID REFERENCES users(id),
+  escrow_released BOOLEAN DEFAULT FALSE,
+  escrow_released_at TIMESTAMPTZ,
+  notes TEXT,
+  created_at TIMESTAMPTZ DEFAULT NOW(),
+  updated_at TIMESTAMPTZ DEFAULT NOW()
+);
+
+-- Platform Summary View
+CREATE OR REPLACE VIEW platform_summary AS
+SELECT
+  (SELECT COUNT(*) FROM properties WHERE status = 'active') as active_properties,
+  (SELECT COUNT(*) FROM properties) as total_properties,
+  (SELECT COALESCE(SUM(total_value), 0) FROM properties) as total_tvl,
+  (SELECT COUNT(DISTINCT user_id) FROM investments WHERE status = 'confirmed') as total_investors,
+  (SELECT COALESCE(SUM(amount_paid), 0) FROM investments WHERE status = 'confirmed') as total_invested,
+  (SELECT COALESCE(SUM(amount), 0) FROM dividends) as total_dividends_paid,
+  (SELECT COUNT(*) FROM construction_milestones WHERE status = 'completed') as completed_milestones,
+  (SELECT COUNT(*) FROM construction_milestones WHERE status = 'in_progress') as active_milestones;
+
+-- Milestone Indexes
+CREATE INDEX IF NOT EXISTS idx_milestones_property ON construction_milestones(property_id);
+CREATE INDEX IF NOT EXISTS idx_milestones_status ON construction_milestones(status);
