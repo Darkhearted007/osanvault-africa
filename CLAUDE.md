@@ -1,0 +1,211 @@
+CLAUDE.md — Òsánvault Africa Project Context
+This file is the persistent system context for all AI-assisted development on the Òsánvault Africa platform.
+Place this file at the root of the monorepo. Claude Code will automatically load it on every session.
+Last updated: April 2026
+1. PROJECT OVERVIEW
+Òsánvault Africa is a compliance-first, blockchain-based real estate tokenization and investment platform targeting pan-African markets — Nigeria, Ghana, Kenya, and South Africa — built primarily on Solana.
+Mission: Enable fractional real estate investment from $10 equivalent, with on-chain dividend distribution and compliance-first architecture that respects African regulatory environments.
+Core Differentiators:
+Fractional investment entry from $10 equivalent
+On-chain dividend distribution
+Compliance-first architecture (Nigeria SEC ARIP Sandbox pathway)
+African cultural identity embedded in UX and brand
+Community wealth retention model
+2. FOUNDER & LEADERSHIP
+Founder & CEO: Olugbenga Ajayi
+Background: Nigerian Navy (11 years of service), Advanced Diploma in Security & Safety Management
+Focus: Community development + blockchain entrepreneurship
+Jurisdiction: Nigeria (primary), pan-African expansion
+3. OFFICIAL TOKEN
+Attribute
+Value
+Token Name
+OSANV
+Blockchain
+Solana (SPL Token)
+Total Supply
+500,000,000 (500M)
+Status
+✅ ACTIVE — sole official token
+⚠️ CRITICAL: The NigeriaEstate Token (NET) is fully deprecated and retired.
+Never reference NET in any contract, document, pitch deck, config, or code comment.
+All references must use OSANV exclusively.
+OSANV Six-Tranche Allocation
+Tranche
+Purpose
+1
+Public Sale
+2
+Ecosystem & Rewards
+3
+Team & Advisors
+4
+Treasury & Reserve
+5
+Strategic Partners
+6
+Liquidity
+4. TECH STACK
+Frontend
+Framework: React + Vite + TypeScript
+Styling: Dark African fintech aesthetic
+Wallet Integration: Phantom, Backpack (Solana-native)
+Monorepo: pnpm + Turborepo
+Smart Contracts (9 total)
+Solana-native: Rust + Anchor framework (primary)
+EVM-compatible layer: Solidity + Vyper (hybrid split)
+Use Anchor/Rust by default unless EVM is explicitly required
+Security Architecture
+Gnosis Safe 3-of-5 multisig treasury
+ERC-1400 property security tokens
+EMV cryptogram compliance protocol (TC/ARQC/AAC decision tree)
+RBAC (Role-Based Access Control) across all contracts
+Oracle strategy: Pyth Network (primary) + Switchboard (fallback)
+Liquidation engine for ÒsánVault Lend vertical
+Backend
+Runtime: Node.js / TypeScript
+Database: PostgreSQL + Redis
+Containerization: Docker Compose (local dev) → Kubernetes-ready configs (production)
+All services requiring containers must use Docker Compose locally
+Tooling & Integrations
+MCP Servers: GitHub MCP, Brave Search MCP
+Local AI: Ollama
+Pitch Deck System: pptxgenjs (living deck generator)
+IDE Extension: Claude Code (terminal), Cursor (frontend)
+5. PLATFORM VERTICALS (6)
+#
+Vertical
+Description
+1
+Tokenized Real Estate
+Core product — fractional property ownership on-chain
+2
+ÒsánVault Lend
+DeFi lending with collateral monitoring + liquidation engine
+3
+REITs
+On-chain real estate investment trusts
+4
+ÒsánVault Minerals
+Tokenized mineral and natural resource assets
+5
+ÒsánCarbon
+Carbon credit tokenization and trading
+6
+LandBank
+Land banking and acquisition pooling
+6. AUTOIVEST BOT SUITE (4 Bots)
+Bot
+Function
+LP Manager
+Automated liquidity pool management
+DCA Bot
+Dollar-cost averaging execution
+Dividend DRIP
+Automatic dividend reinvestment
+Portfolio Rebalancer
+On-chain portfolio rebalancing
+7. REVENUE MODEL
+Stream
+Rate
+Platform fees
+1.5%
+AUM fees
+0.5%
+Secondary market fees
+0.3%
+Property onboarding fees
+Fixed per listing
+8. KNOWN SECURITY GAPS (Must Be Resolved)
+These 4 critical gaps were identified in the security audit. All new work must not worsen these, and all PRs should move toward resolving them:
+Absent RBAC architecture → Implement role-based access control across all smart contracts
+No oracle strategy → Integrate Pyth Network (primary) + Switchboard (fallback)
+No liquidation engine → Build collateral monitoring + liquidation trigger for ÒsánVault Lend
+Exposed VPS IP → Implement reverse proxy, firewall rules, fail2ban
+9. REGULATORY STRATEGY
+Primary pathway: Nigeria SEC ARIP Sandbox
+Compliance Element
+Status/Target
+SCUML Registration
+Required
+DAOP Classification
+Digital Asset Offering Platform
+Fidelity Bond Compliance
+Required
+Phased Regulatory Engagement
+Pre-sandbox → Sandbox entry → Post-sandbox
+All code, architecture decisions, and data handling must be written with compliance-first principles. Regulatory narrative must be defensible to Nigerian SEC examiners.
+10. INVESTOR & GROWTH STRATEGY
+Grant Targets
+Superteam Nigeria
+Gitcoin
+African Development Bank (AfDB)
+Pre-Seed Targets
+Ventures Platform
+Future Africa
+Colosseum
+Outlier Ventures
+Binance Labs
+Token Launch
+Jupiter LFG
+Streamflow IDO
+Key Conference
+Korea Blockchain Week 2026 (KBW 2026)
+Seoul, South Korea
+September 29 – October 1, 2026
+Target: Investor engagement + platform visibility
+11. AI WORKFLOW (Asymmetric)
+This project uses a structured multi-AI workflow. Do not deviate from this assignment of responsibilities.
+AI
+Responsibilities
+Claude
+Architecture decisions, security reviews, regulatory narrative, continuity, validation
+Gemini
+Contract scaffolding, bot implementation, DevOps configs, frontend boilerplate
+Claude
+Validates ALL Gemini output before merge
+Claude is the source of truth for architectural decisions. Gemini output is treated as a draft that requires Claude review and sign-off.
+12. MONOREPO STRUCTURE
+osanvault-africa/
+├── CLAUDE.md
+├── apps/
+│   ├── web/                   # React + Vite + TypeScript frontend
+│   └── api/                   # Node.js / TypeScript backend
+├── programs/                  # Anchor/Rust smart contracts (Solana)
+│   ├── tokenized-real-estate/
+│   ├── osanvault-lend/
+│   ├── reits/
+│   ├── minerals/
+│   ├── carbon/
+│   └── landbank/
+├── contracts/                 # Solidity + Vyper (EVM layer)
+├── bots/
+│   ├── lp-manager/
+│   ├── dca-bot/
+│   ├── dividend-drip/
+│   └── portfolio-rebalancer/
+├── infra/
+│   ├── docker-compose.yml
+│   └── k8s/
+├── decks/                     # pptxgenjs pitch deck system
+└── packages/                  # Shared libraries
+13. CODING STANDARDS & RULES
+Default to Solana/Anchor — use Solidity/Vyper only when EVM is explicitly required
+All containerized services must have a docker-compose.yml (local) and Kubernetes manifests (prod)
+Never introduce NET or any reference to NigeriaEstate Token — use OSANV exclusively
+Write production-grade, security-conscious code — assume regulatory audit is always possible
+RBAC must be implemented on every contract that handles user funds or property data
+Oracle calls must use Pyth as primary with Switchboard fallback — never use a single oracle source
+All PRs must include a brief security consideration note in the PR description
+Respect the monorepo structure — do not create files outside the defined directory tree without explicit instruction
+Docker Compose first — never assume a service will be run bare-metal in production
+Compliance-first — when in doubt, err on the side of auditability and access logging
+14. QUICK REFERENCE COMMANDS
+pnpm install                   # Install dependencies
+pnpm --filter web dev          # Run frontend dev server
+cd programs && anchor build    # Build Anchor programs
+pnpm test                      # Run all tests
+docker-compose up -d           # Docker local stack
+node decks/generate.js         # Generate pitch deck
+This file is maintained by Olugbenga Ajayi and updated in coordination with Claude (Anthropic).
+For questions on architecture decisions, refer to session history or open a discussion in the repo.
