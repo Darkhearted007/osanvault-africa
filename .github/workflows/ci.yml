@@ -1,0 +1,98 @@
+name: CI
+
+on:
+  push:
+    branches: [main, dev]
+  pull_request:
+    branches: [main]
+
+jobs:
+  lint-and-type-check:
+    name: Lint & Type Check
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 8
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: pnpm
+
+      - name: Install dependencies
+        run: pnpm install
+
+      - name: Type check API
+        run: cd apps/api && pnpm exec tsc --noEmit
+
+      - name: Type check Web
+        run: cd apps/web && pnpm exec tsc --noEmit
+
+  api-test:
+    name: API Health
+    runs-on: ubuntu-latest
+
+    services:
+      postgres:
+        image: postgres:16-alpine
+        env:
+          POSTGRES_USER: osanvault
+          POSTGRES_PASSWORD: osanvault_dev
+          POSTGRES_DB: osanvault_db
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+
+      redis:
+        image: redis:7-alpine
+        ports:
+          - 6379:6379
+        options: >-
+          --health-cmd "redis-cli ping"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 8
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: pnpm
+
+      - name: Install dependencies
+        run: pnpm install
+
+      - name: Load schema
+        run: psql -U osanvault -d osanvault_db -f infra/init.sql
+        env:
+          PGPASSWORD: osanvault_dev
+          PGHOST: localhost
+
+      - name: Start API and test health
+        run: |
+          cd apps/api
+          cp .env.example .env
+          nohup ./node_modules/.bin/tsx src/index.ts &
+          sleep 8
+          curl -f http://localhost:3001/health
+          curl -f http://localhost:3001/api/tokens/osanv
+          curl -f http://localhost:3001/api/properties
+        env:
+          DATABASE_URL: postgresql://osanvault:osanvault_dev@localhost:5432/osanvault_db
+          REDIS_URL: redis://localhost:6379
+          PORT: 3001
+          NODE_ENV: test
