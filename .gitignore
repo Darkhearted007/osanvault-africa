@@ -1,0 +1,33 @@
+# Dependencies
+node_modules/
+.pnpm-store/
+
+# Environment & Secrets
+.env
+.env.*
+*.pem
+*.key
+ssl/
+webhook_secret.txt
+
+# Build outputs
+dist/
+build/
+.turbo/
+target/
+
+# Anchor/Solana
+programs/*/target/
+.anchor/
+
+# Logs
+*.log
+logs/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# IDEs
+.vscode/
+.idea/
