@@ -33,3 +33,34 @@ Thumbs.db
 .vscode/
 .idea/
 .env.example
+
+# dependencies
+node_modules
+
+# env files
+.env
+.env.*
+
+# logs
+*.log
+runtime/logs
+runtime/state
+
+# OS / system
+.DS_Store
+
+# postgres / redis local artifacts
+*.pid
+*.lock
+
+# build outputs
+dist
+build
+# Redis dump
+dump.rdb
+
+# npm lockfile (using pnpm)
+package-lock.json
+
+# Legacy
+_legacy_archive/
