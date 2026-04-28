@@ -1,28 +1,44 @@
 import { Router } from "express"
-import { Queue } from "bullmq"
-import { redis } from "../db/redis"
+import { verifyQueueAuth } from "../middleware/verifyQueueAuth"
+import { enqueuePayoutJob } from "../services/queue"
 
 const router = Router()
 
-const payoutQueue = new Queue("payout-queue", {
-  connection: redis,
+// ❌ PUBLIC ENDPOINT DISABLED (safe guard)
+router.post("/payout", async (req, res) => {
+  return res.status(403).json({
+    error: "Disabled external access"
+  })
 })
 
-router.post("/payout", async (req, res) => {
-  const { userId, balance, apy, liabilities, liquidity } = req.body
+// ✅ INTERNAL SECURE ENDPOINT
+router.post("/request-payout", verifyQueueAuth, async (req, res) => {
+  try {
+    const { userId, balance, apy } = req.body
 
-  await payoutQueue.add("payout-job", {
-    userId,
-    balance,
-    apy,
-    liabilities,
-    liquidity,
-  })
+    if (!userId || !balance) {
+      return res.status(400).json({
+        error: "userId and balance are required"
+      })
+    }
 
-  res.json({
-    success: true,
-    message: "Payout job queued",
-  })
+    const job = await enqueuePayoutJob({
+      userId,
+      balance,
+      apy: apy || 12,
+    })
+
+    return res.json({
+      success: true,
+      message: "Payout job queued",
+      jobId: job.id,
+    })
+
+  } catch (err) {
+    return res.status(500).json({
+      error: "Failed to queue payout"
+    })
+  }
 })
 
 export default router

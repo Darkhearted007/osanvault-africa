@@ -11,3 +11,6 @@ export async function getHealth() {
   const res = await fetch(BASE_URL + API_ROUTES.health)
   return res.json()
 }
+function signPayload(payload: any, secret: string) {
+  return crypto.subtle
+}
