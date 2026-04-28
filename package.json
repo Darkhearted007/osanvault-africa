@@ -1,11 +1,19 @@
 {
-  "name": "osanvault-africa",
-  "version": "0.1.0",
+  "name": "osanvault",
+  "version": "1.0.0",
   "private": true,
+  "packageManager": "pnpm@8.15.0",
   "scripts": {
-    "dev": "node apps/api/dist/index.js",
-    "build": "echo \"No build step yet\"",
-    "lint": "echo \"Lint not configured\"",
-    "test": "echo \"No tests yet\""
+    "dev": "bash scripts/dev-all.sh",
+    "build": "echo \"build handled by apps\"",
+    "lint": "echo \"lint handled per app\"",
+    "test": "echo \"test handled per app\""
+  },
+  "dependencies": {
+    "@prisma/client": "^7.8.0"
+  },
+  "devDependencies": {
+    "prisma": "^7.8.0",
+    "tsx": "^4.19.0"
   }
 }

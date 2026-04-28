@@ -1,39 +1,79 @@
-@import "tailwindcss";
-
-:root {
-  --gold: #C9A84C;
-  --gold-light: #E2C27D;
-  --obsidian: #0A0A0F;
-  --surface: #111118;
-  --surface-2: #1A1A24;
-  --surface-3: #22222F;
-  --border: #2A2A3A;
-  --text-primary: #F0EDE8;
-  --text-muted: #8A8799;
-  --green: #2ECC71;
-  --red: #E74C3C;
-}
-
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-}
-
 body {
-  background-color: var(--obsidian);
-  color: var(--text-primary);
-  font-family: 'Inter', system-ui, sans-serif;
-  -webkit-font-smoothing: antialiased;
+  margin: 0;
+  font-family: system-ui;
+  background: #0b0b0b;
+  color: #f5f5f5;
 }
 
-::-webkit-scrollbar {
-  width: 4px;
+.app {
+  padding: 20px;
 }
-::-webkit-scrollbar-track {
-  background: var(--surface);
+
+.topbar {
+  display: flex;
+  justify-content: space-between;
+  padding: 16px;
+  border-bottom: 1px solid #222;
 }
-::-webkit-scrollbar-thumb {
-  background: var(--border);
-  border-radius: 2px;
+
+.nav a {
+  margin-left: 12px;
+  color: #aaa;
+  text-decoration: none;
+}
+
+.hero {
+  padding: 40px 0;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 12px;
+}
+
+.card {
+  background: #151515;
+  padding: 16px;
+  border-radius: 8px;
+}
+
+.value {
+  font-size: 20px;
+  font-weight: bold;
+}
+
+.section {
+  margin-top: 40px;
+}
+
+.gridCards {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+}
+
+.propertyCard {
+  background: #151515;
+  padding: 16px;
+  border-radius: 8px;
+}
+
+.propertyStats {
+  font-size: 12px;
+  margin: 10px 0;
+}
+
+button {
+  padding: 10px;
+  width: 100%;
+  border: none;
+  background: gold;
+  cursor: pointer;
+}
+
+.alignment {
+  margin-top: 40px;
+  padding: 20px;
+  border: 1px solid #333;
 }

@@ -1,14 +1,22 @@
-import Redis from 'ioredis'
+import IORedis from 'ioredis'
 import { logger } from '../logger'
 
-export const redis = new Redis(process.env.REDIS_URL || 'redis://localhost:6379', {
-  lazyConnect: true,
-  retryStrategy: (times) => Math.min(times * 50, 2000),
+export const redis = new IORedis({
+  host: '127.0.0.1',
+  port: 6379,
+  maxRetriesPerRequest: null,
 })
 
-redis.on('connect', () => logger.info('Redis connected successfully'))
-redis.on('error', (err) => logger.error(`Redis error: ${err}`))
+export async function connectRedis() {
+  return new Promise<void>((resolve, reject) => {
+    redis.once('connect', () => {
+      logger.info('🟢 Redis connected successfully')
+      resolve()
+    })
 
-export async function connectRedis(): Promise<void> {
-  await redis.connect()
+    redis.once('error', (err) => {
+      logger.error('🔴 Redis connection failed')
+      reject(err)
+    })
+  })
 }
