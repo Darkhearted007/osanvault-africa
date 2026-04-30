@@ -17,7 +17,7 @@ import { requestLogger } from "./middleware/requestLogger"
 import { errorHandler } from "./middleware/errorHandler"
 import { apiLimiter, authLimiter, propertyLimiter, investmentLimiter, verifyLimiter } from "./middleware/rateLimit"
 import { inputValidator } from "./middleware/inputValidator"
-import { requireAdmin } from "./middleware/rbac"
+import { requireAdmin, requireAuthenticated } from "./middleware/rbac"
 import { logger } from "./logger"
 
 import healthRouter from "./routes/health"
@@ -30,6 +30,10 @@ import authRouter from "./routes/auth"
 import queueRouter from "./routes/queues"
 import oracleRouter from "./routes/oracle"
 import treasuryRouter from "./routes/treasury"
+import lpManagerRouter from "./routes/lpManager"
+import dcaRouter from "./routes/dca"
+import dividendDripRouter from "./routes/dividendDrip"
+import portfolioRebalancerRouter from "./routes/portfolioRebalancer"
 
 const app = express()
 const PORT = parseInt(process.env.PORT || "3001", 10)
@@ -56,6 +60,10 @@ app.use("/api/dashboard", apiLimiter, dashboardRouter)
 app.use("/api/queue", apiLimiter, queueRouter)
 app.use("/api/oracle", apiLimiter, oracleRouter)
 app.use("/api/treasury", requireAdmin(), treasuryRouter)
+app.use("/api/lp", requireAdmin(), lpManagerRouter)
+app.use("/api/dca", requireAuthenticated(), dcaRouter)
+app.use("/api/dividends", requireAdmin(), dividendDripRouter)
+app.use("/api/portfolio", requireAuthenticated(), portfolioRebalancerRouter)
 
 // Webhook routes need stricter limits
 app.use(express.json({

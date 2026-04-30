@@ -212,3 +212,71 @@ CREATE TABLE IF NOT EXISTS liquidation_events (
 CREATE INDEX IF NOT EXISTS idx_liq_position ON liquidation_events(position_id);
 CREATE INDEX IF NOT EXISTS idx_liq_status ON liquidation_events(status);
 CREATE INDEX IF NOT EXISTS idx_liq_user ON liquidation_events(user_id);
+
+-- Lending Positions (ÒsánVault Lend)
+CREATE TABLE IF NOT EXISTS lending_positions (
+  id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+  user_id UUID REFERENCES users(id),
+  collateral_amount NUMERIC(18, 6) NOT NULL,
+  collateral_token VARCHAR(20) NOT NULL,
+  debt_amount NUMERIC(18, 6) NOT NULL,
+  debt_token VARCHAR(20) NOT NULL,
+  health_factor NUMERIC(18, 8) NOT NULL,
+  liquidation_bonus NUMERIC(5, 4) DEFAULT 0.05,
+  status VARCHAR(20) DEFAULT 'active'
+    CHECK (status IN ('active', 'liquidated', 'closed')),
+  created_at TIMESTAMPTZ DEFAULT NOW(),
+  updated_at TIMESTAMPTZ DEFAULT NOW()
+);
+
+CREATE INDEX IF NOT EXISTS idx_lend_user ON lending_positions(user_id);
+CREATE INDEX IF NOT EXISTS idx_lend_health ON lending_positions(health_factor);
+CREATE INDEX IF NOT EXISTS idx_lend_status ON lending_positions(status);
+
+-- DCA Plans
+CREATE TABLE IF NOT EXISTS dca_plans (
+  id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+  user_id UUID REFERENCES users(id),
+  wallet_address VARCHAR(64) NOT NULL,
+  asset VARCHAR(20) NOT NULL,
+  amount_per_trade NUMERIC(18, 6) NOT NULL,
+  frequency_hours INTEGER NOT NULL,
+  total_trades INTEGER NOT NULL,
+  remaining_trades INTEGER NOT NULL,
+  status VARCHAR(20) DEFAULT 'active'
+    CHECK (status IN ('active', 'completed', 'cancelled')),
+  created_at TIMESTAMPTZ DEFAULT NOW(),
+  updated_at TIMESTAMPTZ DEFAULT NOW()
+);
+
+CREATE INDEX IF NOT EXISTS idx_dca_user ON dca_plans(user_id);
+CREATE INDEX IF NOT EXISTS idx_dca_status ON dca_plans(status);
+
+-- LP Manager Positions
+CREATE TABLE IF NOT EXISTS lp_positions (
+  id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+  pool_address VARCHAR(64) NOT NULL,
+  target_ratio NUMERIC(5, 4) NOT NULL,
+  min_trade NUMERIC(18, 6) NOT NULL,
+  max_trade NUMERIC(18, 6) NOT NULL,
+  status VARCHAR(20) DEFAULT 'active',
+  created_at TIMESTAMPTZ DEFAULT NOW(),
+  updated_at TIMESTAMPTZ DEFAULT NOW()
+);
+
+CREATE INDEX IF NOT EXISTS idx_lp_pool ON lp_positions(pool_address);
+
+-- Portfolio Rebalancing Log
+CREATE TABLE IF NOT EXISTS portfolio_rebalance_log (
+  id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+  user_id UUID REFERENCES users(id),
+  action VARCHAR(50) NOT NULL,
+  property_id UUID REFERENCES properties(id),
+  tokens_before INTEGER NOT NULL,
+  tokens_after INTEGER NOT NULL,
+  rebalance_type VARCHAR(20) DEFAULT 'manual',
+  created_at TIMESTAMPTZ DEFAULT NOW()
+);
+
+CREATE INDEX IF NOT EXISTS idx_rebal_user ON portfolio_rebalance_log(user_id);
+CREATE INDEX IF NOT EXISTS idx_rebal_created ON portfolio_rebalance_log(created_at);

@@ -2,6 +2,7 @@ import { Router, Request, Response } from 'express'
 import { pool } from '../db'
 import { z } from 'zod'
 import { requireAdmin, requirePropertyManager } from '../middleware/rbac'
+import { verifyQueueAuth } from '../middleware/verifyQueueAuth'
 import { logger } from '../logger'
 
 const router = Router()
@@ -158,8 +159,8 @@ router.patch('/:id/status', requireAdmin(), async (req: Request, res: Response) 
   }
 })
 
-// POST /api/properties/ingest - Requires Admin only (batch operation)
-router.post('/ingest', requireAdmin(), async (req: Request, res: Response) => {
+// POST /api/properties/ingest - Requires Admin + Queue signature (internal bot auth)
+router.post('/ingest', verifyQueueAuth, requireAdmin(), async (req: Request, res: Response) => {
   try {
     const ScrapedPropertySchema = z.object({
       title: z.string(),
