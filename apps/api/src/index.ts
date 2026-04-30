@@ -17,6 +17,7 @@ import { requestLogger } from "./middleware/requestLogger"
 import { errorHandler } from "./middleware/errorHandler"
 import { apiLimiter, authLimiter, propertyLimiter, investmentLimiter, verifyLimiter } from "./middleware/rateLimit"
 import { inputValidator } from "./middleware/inputValidator"
+import { requireAdmin } from "./middleware/rbac"
 import { logger } from "./logger"
 
 import healthRouter from "./routes/health"
@@ -27,6 +28,8 @@ import milestonesRouter from "./routes/milestones"
 import dashboardRouter from "./routes/dashboard"
 import authRouter from "./routes/auth"
 import queueRouter from "./routes/queues"
+import oracleRouter from "./routes/oracle"
+import treasuryRouter from "./routes/treasury"
 
 const app = express()
 const PORT = parseInt(process.env.PORT || "3001", 10)
@@ -51,6 +54,8 @@ app.use("/api/tokens", apiLimiter, tokensRouter)
 app.use("/api/lend", investmentLimiter, lendRouter)
 app.use("/api/dashboard", apiLimiter, dashboardRouter)
 app.use("/api/queue", apiLimiter, queueRouter)
+app.use("/api/oracle", apiLimiter, oracleRouter)
+app.use("/api/treasury", requireAdmin(), treasuryRouter)
 
 // Webhook routes need stricter limits
 app.use(express.json({
