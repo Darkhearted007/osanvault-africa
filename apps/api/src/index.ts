@@ -15,6 +15,8 @@ import { startWorkers } from "./workers"
 
 import { requestLogger } from "./middleware/requestLogger"
 import { errorHandler } from "./middleware/errorHandler"
+import { apiLimiter, authLimiter, propertyLimiter, investmentLimiter, verifyLimiter } from "./middleware/rateLimit"
+import { inputValidator } from "./middleware/inputValidator"
 import { logger } from "./logger"
 
 import healthRouter from "./routes/health"
@@ -27,7 +29,7 @@ import authRouter from "./routes/auth"
 import queueRouter from "./routes/queues"
 
 const app = express()
-const PORT = process.env.PORT || 3001
+const PORT = parseInt(process.env.PORT || "3001", 10)
 
 app.use(helmet())
 app.use(cors({
@@ -37,15 +39,20 @@ app.use(cors({
 app.use(express.json())
 app.use(requestLogger)
 
-// routes
+// Global security middleware
+app.use(inputValidator)
+
+// Apply rate limiters to routes
 app.use("/health", healthRouter)
-app.use("/api/auth", authRouter)
-app.use("/api/properties", propertiesRouter)
-app.use("/api/properties/:id/milestones", milestonesRouter)
-app.use("/api/tokens", tokensRouter)
-app.use("/api/lend", lendRouter)
-app.use("/api/dashboard", dashboardRouter)
-app.use("/api/queue", queueRouter)
+app.use("/api/auth", authLimiter, authRouter)
+app.use("/api/properties", propertyLimiter, propertiesRouter)
+app.use("/api/properties/:id/milestones", apiLimiter, milestonesRouter)
+app.use("/api/tokens", apiLimiter, tokensRouter)
+app.use("/api/lend", investmentLimiter, lendRouter)
+app.use("/api/dashboard", apiLimiter, dashboardRouter)
+app.use("/api/queue", apiLimiter, queueRouter)
+
+// Webhook routes need stricter limits
 app.use(express.json({
   verify: (req: any, res, buf) => {
     req.rawBody = buf.toString()

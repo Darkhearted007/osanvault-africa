@@ -1,10 +1,39 @@
 import { Request, Response, NextFunction } from 'express'
-import { logger } from '../logger'
+import { logger, securityAlert } from '../logger'
 
-export function errorHandler(err: Error, _req: Request, res: Response, _next: NextFunction) {
-  logger.error(`Unhandled error: ${err.message}`)
-  res.status(500).json({
-    error: 'Internal server error',
-    message: process.env.NODE_ENV === 'development' ? err.message : undefined,
+export function errorHandler(
+  err: Error & { statusCode?: number },
+  req: Request,
+  res: Response,
+  next: NextFunction
+) {
+  const ip = req.ip || 'unknown'
+  const statusCode = err.statusCode || 500
+
+  if (statusCode >= 500 || statusCode === 403 || statusCode === 401) {
+    securityAlert('api_error', {
+      error: err.message,
+      stack: err.stack?.slice(0, 500),
+      path: req.path,
+      method: req.method,
+      statusCode,
+      ip,
+    })
+  }
+
+  logger.error(`Error: ${err.message}`, {
+    path: req.path,
+    method: req.method,
+    statusCode,
+    ip,
   })
+
+  if (statusCode === 500 && process.env.NODE_ENV === 'production') {
+    res.status(500).json({ error: 'Internal server error' })
+  } else {
+    res.status(statusCode).json({
+      error: err.message,
+      ...(process.env.NODE_ENV !== 'production' ? { statusCode } : {}),
+    })
+  }
 }

@@ -1,6 +1,7 @@
 import { Router } from 'express'
 import { pool } from '../db'
 import { redis } from '../db/redis'
+import { listCircuits } from '../middleware/circuitBreaker'
 
 const router = Router()
 
@@ -32,6 +33,10 @@ router.get('/', async (_req, res) => {
 
   const allOk = Object.values(checks.services).every(s => s === 'ok')
   res.status(allOk ? 200 : 503).json(checks)
+})
+
+router.get('/circuits', (_req, res) => {
+  res.json({ data: listCircuits() })
 })
 
 export default router

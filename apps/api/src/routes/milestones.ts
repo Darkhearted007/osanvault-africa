@@ -1,8 +1,16 @@
 import { Router, Request, Response } from 'express'
 import { pool } from '../db'
 import { z } from 'zod'
+import { requireAdmin, requirePropertyManager } from '../middleware/rbac'
+import { logger } from '../logger'
 
 const router = Router({ mergeParams: true })
+
+const MilestoneStatusSchema = z.object({
+  status: z.enum(['not_started', 'planning', 'in_progress', 'completed', 'verified']),
+  notes: z.string().max(1000).optional(),
+  paid_amount: z.number().min(0).optional(),
+})
 
 // GET /api/properties/:id/milestones
 router.get('/', async (req: Request, res: Response) => {
@@ -20,54 +28,73 @@ router.get('/', async (req: Request, res: Response) => {
 })
 
 // PATCH /api/properties/:id/milestones/:milestoneId
-router.patch('/:milestoneId', async (req: Request, res: Response) => {
+router.patch('/:milestoneId', requirePropertyManager(), async (req: Request, res: Response) => {
+  const client = await pool.connect()
   try {
-    const StatusSchema = z.object({
-      status: z.enum(['not_started','planning','in_progress','completed','verified']),
-      notes: z.string().optional(),
-      paid_amount: z.number().optional(),
-    })
+    const body = MilestoneStatusSchema.parse(req.body)
 
-    const body = StatusSchema.parse(req.body)
-    const now = new Date().toISOString()
+    await client.query('BEGIN')
 
-    let extraFields = ''
+    let statusField = 'status = $1'
     const params: any[] = [body.status, req.params.milestoneId, req.params.id]
+    let paramIdx = 4
 
     if (body.status === 'in_progress') {
-      extraFields = ', started_at = NOW()'
+      statusField += ', started_at = NOW()'
     } else if (body.status === 'completed') {
-      extraFields = ', completed_at = NOW()'
+      statusField += ', completed_at = NOW()'
     } else if (body.status === 'verified') {
-      extraFields = ', verified_at = NOW(), escrow_released = TRUE, escrow_released_at = NOW()'
+      statusField += ', verified_at = NOW(), escrow_released = TRUE, escrow_released_at = NOW()'
     }
 
-    if (body.notes) {
-      extraFields += `, notes = '${body.notes.replace(/'/g, "''")}'`
+    if (body.notes !== undefined) {
+      statusField += `, notes = $${paramIdx}`
+      params.push(body.notes)
+      paramIdx++
     }
 
     if (body.paid_amount !== undefined) {
-      extraFields += `, paid_amount = ${body.paid_amount}`
+      statusField += `, paid_amount = $${paramIdx}`
+      params.push(body.paid_amount)
+      paramIdx++
     }
 
-    const { rows } = await pool.query(
+    statusField += ', updated_at = NOW()'
+
+    const { rows } = await client.query(
       `UPDATE construction_milestones
-       SET status = $1, updated_at = NOW() ${extraFields}
+       SET ${statusField}
        WHERE id = $2 AND property_id = $3
        RETURNING *`,
       params
     )
 
     if (!rows.length) {
+      await client.query('ROLLBACK')
       return res.status(404).json({ error: 'Milestone not found' })
+    }
+
+    await client.query('COMMIT')
+
+    const userId = req.headers['x-user-id']
+    if (userId) {
+      await pool.query(
+        `INSERT INTO audit_log (user_id, action, entity_type, entity_id, metadata, ip_address)
+         VALUES ($1, 'milestone_update', 'milestone', $2, $3, $4)`,
+        [userId, rows[0].id, JSON.stringify(body), req.ip || 'unknown']
+      )
     }
 
     res.json({ data: rows[0] })
   } catch (err) {
+    await client.query('ROLLBACK')
     if (err instanceof z.ZodError) {
       return res.status(400).json({ error: 'Validation failed', details: err.errors })
     }
+    logger.error(`Milestone update error: ${err}`)
     res.status(500).json({ error: 'Failed to update milestone' })
+  } finally {
+    client.release()
   }
 })
 

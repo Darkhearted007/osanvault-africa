@@ -2,6 +2,7 @@ import { Router, Request, Response } from 'express'
 import { pool } from '../db'
 import { z } from 'zod'
 import { logger } from '../logger'
+import { verifyLimiter } from '../middleware/rateLimit'
 import crypto from 'crypto'
 
 const router = Router()
@@ -64,7 +65,7 @@ router.post('/nonce', async (req: Request, res: Response) => {
  * Verify wallet signature ownership
  * CRITICAL SECURITY: This replaces the insecure wallet accept
  */
-router.post('/verify', async (req: Request, res: Response) => {
+router.post('/verify', verifyLimiter, async (req: Request, res: Response) => {
   try {
     const Schema = z.object({
       wallet_address: z.string().min(32).max(44),

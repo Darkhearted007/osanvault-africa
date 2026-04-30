@@ -73,6 +73,9 @@ CREATE INDEX IF NOT EXISTS idx_investments_user ON investments(user_id);
 CREATE INDEX IF NOT EXISTS idx_investments_property ON investments(property_id);
 CREATE INDEX IF NOT EXISTS idx_audit_user ON audit_log(user_id);
 CREATE INDEX IF NOT EXISTS idx_audit_created ON audit_log(created_at);
+CREATE INDEX IF NOT EXISTS idx_audit_action ON audit_log(action);
+CREATE INDEX IF NOT EXISTS idx_audit_ip ON audit_log(ip_address);
+CREATE INDEX IF NOT EXISTS idx_audit_entity ON audit_log(entity_type, entity_id);
 
 -- Seed: OSANV token metadata
 CREATE TABLE IF NOT EXISTS token_config (
@@ -129,3 +132,83 @@ SELECT
 -- Milestone Indexes
 CREATE INDEX IF NOT EXISTS idx_milestones_property ON construction_milestones(property_id);
 CREATE INDEX IF NOT EXISTS idx_milestones_status ON construction_milestones(status);
+
+-- Security Audit Indexes
+CREATE INDEX IF NOT EXISTS idx_audit_action ON audit_log(action);
+CREATE INDEX IF NOT EXISTS idx_audit_ip ON audit_log(ip_address);
+CREATE INDEX IF NOT EXISTS idx_audit_entity ON audit_log(entity_type, entity_id);
+
+-- Row-Level Security (RLS) for compliance
+ALTER TABLE investments ENABLE ROW LEVEL SECURITY;
+ALTER TABLE dividends ENABLE ROW LEVEL SECURITY;
+ALTER TABLE audit_log ENABLE ROW LEVEL SECURITY;
+
+-- Users can only see their own data
+CREATE POLICY IF NOT EXISTS users_own_data_investments ON investments
+  FOR ALL USING (user_id::text = current_setting('app.current_user_id', true));
+
+CREATE POLICY IF NOT EXISTS users_own_data_dividends ON dividends
+  FOR ALL USING (user_id::text = current_setting('app.current_user_id', true));
+
+-- Admins can see all audit logs
+CREATE POLICY IF NOT EXISTS admins_see_all_audit ON audit_log
+  FOR ALL USING (
+    current_setting('app.current_user_role', true) = 'admin'
+    OR user_id::text = current_setting('app.current_user_id', true)
+  );
+
+-- Prevent direct role escalation
+CREATE POLICY IF NOT EXISTS no_role_escalation ON users
+  FOR UPDATE USING (
+    CASE
+      WHEN current_setting('app.current_user_role', true) = 'admin'
+      THEN TRUE
+      ELSE role = COALESCE(
+        (SELECT role FROM users WHERE id::text = current_setting('app.current_user_id', true)),
+        'investor'
+      )
+    END
+  );
+
+-- Rate Limiting Table (anti-abuse)
+CREATE TABLE IF NOT EXISTS rate_limit_log (
+  id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+  ip_address INET NOT NULL,
+  endpoint VARCHAR(100) NOT NULL,
+  request_count INTEGER DEFAULT 1,
+  window_start TIMESTAMPTZ DEFAULT NOW(),
+  created_at TIMESTAMPTZ DEFAULT NOW()
+);
+
+CREATE INDEX IF NOT EXISTS idx_rl_ip_endpoint ON rate_limit_log(ip_address, endpoint, window_start);
+CREATE INDEX IF NOT EXISTS idx_rl_window ON rate_limit_log(window_start);
+
+-- Anti-CSRF: nonce tracking table
+CREATE TABLE IF NOT EXISTS nonce_tracker (
+  wallet_address VARCHAR(64) PRIMARY KEY,
+  nonce VARCHAR(64) NOT NULL,
+  expires_at TIMESTAMPTZ NOT NULL,
+  used BOOLEAN DEFAULT FALSE,
+  created_at TIMESTAMPTZ DEFAULT NOW()
+);
+
+CREATE INDEX IF NOT EXISTS idx_nonce_expires ON nonce_tracker(expires_at);
+
+-- Liquidation Events (ÒsánVault Lend)
+CREATE TABLE IF NOT EXISTS liquidation_events (
+  id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+  position_id UUID NOT NULL,
+  user_id UUID REFERENCES users(id),
+  collateral_value NUMERIC(18, 2) NOT NULL,
+  debt_value NUMERIC(18, 2) NOT NULL,
+  liquidation_price NUMERIC(18, 6) NOT NULL,
+  status VARCHAR(20) DEFAULT 'pending'
+    CHECK (status IN ('pending', 'executed', 'refunded')),
+  executed_by UUID REFERENCES users(id),
+  executed_at TIMESTAMPTZ,
+  created_at TIMESTAMPTZ DEFAULT NOW()
+);
+
+CREATE INDEX IF NOT EXISTS idx_liq_position ON liquidation_events(position_id);
+CREATE INDEX IF NOT EXISTS idx_liq_status ON liquidation_events(status);
+CREATE INDEX IF NOT EXISTS idx_liq_user ON liquidation_events(user_id);
