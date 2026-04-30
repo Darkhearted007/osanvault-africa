@@ -1,8 +1,19 @@
 export const API_ROUTES = {
   health: "/api/health",
+  healthCircuits: "/api/health/circuits",
   properties: "/api/properties",
   tokens: "/api/tokens",
   lend: "/api/lend",
   milestones: "/api/milestones",
-  dashboard: "/api/dashboard"
-}
+  dashboard: "/api/dashboard",
+  auth: "/api/auth",
+  authNonce: "/api/auth/nonce",
+  authVerify: "/api/auth/verify",
+  oracle: "/api/oracle",
+  treasury: "/api/treasury",
+  dividends: "/api/dividends",
+  dca: "/api/dca",
+  portfolio: "/api/portfolio",
+  lp: "/api/lp",
+  queue: "/api/queue",
+} as const
