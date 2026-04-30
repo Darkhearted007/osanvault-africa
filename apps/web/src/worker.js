@@ -1,16 +1,16 @@
 /*
  * ÒsánVault Africa — Puter Serverless Worker
- * Deploy: puter workers create osanvault-api --file worker.js
+ * Deploy: puter workers create osanvault-api --file apps/web/src/worker.js
  *
  * Routes:
- * GET  /health             — Platform health check
- * GET  /api/tokens/osanv   — OSANV token metadata
- * GET  /api/properties    — Property listings
- * GET  /api/properties/:id — Single property
- * POST /api/auth/nonce    — Wallet nonce generation
- * POST /api/auth/verify   — Wallet signature verification
- * GET  /api/oracle/:asset — Price oracle
- * GET  /api/dashboard     — Dashboard stats
+ * GET  /health              — Platform health check
+ * GET  /api/tokens/osanv     — OSANV token metadata
+ * GET  /api/properties      — Property listings
+ * GET  /api/properties/:id  — Single property
+ * POST /api/auth/nonce      — Wallet nonce generation
+ * POST /api/auth/verify     — Wallet signature verification
+ * GET  /api/oracle/:asset   — Price oracle (BTC/ETH/SOL/OSANV)
+ * GET  /api/dashboard       — Dashboard stats
  */
 
 const CORS_HEADERS = {
@@ -74,6 +74,8 @@ const PROPERTIES = [
   },
 ]
 
+// In-memory nonce store (per worker instance)
+// For production: use puter.kv with TTL
 const nonceStore = {}
 
 async function handle(event) {
@@ -112,7 +114,8 @@ async function handle(event) {
     }
 
     if (path === "/api/auth/nonce" && req.method === "POST") {
-      const body = JSON.parse(await req.text())
+      let body
+      try { body = JSON.parse(await req.text()) } catch { body = {} }
       if (!body.wallet_address || body.wallet_address.length < 32) {
         return new Response(JSON.stringify({ error: "Invalid wallet address" }), { status: 400, headers: CORS_HEADERS })
       }
@@ -127,7 +130,8 @@ async function handle(event) {
     }
 
     if (path === "/api/auth/verify" && req.method === "POST") {
-      const body = JSON.parse(await req.text())
+      let body
+      try { body = JSON.parse(await req.text()) } catch { body = {} }
       if (!body.wallet_address || body.wallet_address.length < 32) {
         return new Response(JSON.stringify({ error: "Invalid wallet address" }), { status: 400, headers: CORS_HEADERS })
       }
@@ -148,6 +152,17 @@ async function handle(event) {
         return new Response(JSON.stringify({ error: "Invalid nonce." }), { status: 400, headers: CORS_HEADERS })
       }
       stored.used = true
+
+      // Persist user to Puter KV for compliance
+      try {
+        await puter.kv.set(`user:${body.wallet_address}`, {
+          wallet_address: body.wallet_address,
+          role: "investor",
+          kyc_status: "pending",
+          created_at: Date.now(),
+        }, 0)
+      } catch (_) { /* non-blocking */ }
+
       return new Response(JSON.stringify({
         data: { wallet_address: body.wallet_address, role: "investor", kyc_status: "pending" },
       }), { headers: CORS_HEADERS })
@@ -157,8 +172,15 @@ async function handle(event) {
     if (oracleMatch) {
       const asset = oracleMatch[1].toUpperCase()
       const prices = { BTC: 67500, ETH: 3450, SOL: 178, USDC: 1, OSANV: 0.12 }
+      const price = prices[asset] || 0
+
+      // Cache in Puter KV for 30s
+      try {
+        await puter.kv.set(`price:${asset}`, { price, ts: Date.now() }, 30)
+      } catch (_) { /* non-blocking */ }
+
       return new Response(JSON.stringify({
-        data: { asset, price: prices[asset] || 0, source: "puter-oracle", staleness_seconds: 0 },
+        data: { asset, price, source: "puter-oracle", staleness_seconds: 0 },
       }), { headers: CORS_HEADERS })
     }
 

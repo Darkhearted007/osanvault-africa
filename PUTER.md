@@ -8,6 +8,14 @@ Puter is a free, serverless cloud platform with Workers (serverless functions) a
 - KV store for caching and state
 - "User Pays" model — infrastructure is free for developers
 
+## Source Reference
+
+Puter source: `../puter/` (cloned from https://github.com/HeyPuter/puter)
+- Worker API: `src/puter-js/src/`
+- KV module types: `src/puter-js/types/modules/kv.d.ts`
+- Worker types: `src/puter-js/types/modules/workers.d.ts`
+- Worker handler: `puter.listen(handle)` pattern
+
 ## Deploy the Worker
 
 ### Option 1: CLI
