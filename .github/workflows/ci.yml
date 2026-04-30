@@ -6,13 +6,19 @@ on:
   pull_request:
     branches: [main]
 
+# SECURITY: Limit permissions
+permissions:
+  contents: read
+  checks: write
+  pull-requests: write
+
 env:
   FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
 
 jobs:
   lint-and-type-check:
     name: Lint & Type Check
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-22.04
 
     steps:
       - uses: actions/checkout@v4
@@ -24,9 +30,10 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: 24
+          cache: 'pnpm'
 
       - name: Install dependencies
-        run: pnpm install --no-frozen-lockfile
+        run: pnpm install --frozen-lockfile
 
       - name: Type check API
         run: cd apps/api && pnpm exec tsc --noEmit
@@ -34,16 +41,19 @@ jobs:
       - name: Type check Web
         run: cd apps/web && pnpm exec tsc --noEmit
 
+      - name: Security audit
+        run: pnpm audit --audit-level=high || true
+
   api-test:
     name: API Health
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-22.04
 
     services:
       postgres:
         image: postgres:16-alpine
         env:
           POSTGRES_USER: osanvault
-          POSTGRES_PASSWORD: osanvault_dev
+          POSTGRES_PASSWORD: ${{ secrets.POSTGRES_PASSWORD }}
           POSTGRES_DB: osanvault_db
         ports:
           - 5432:5432
@@ -73,25 +83,27 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: 24
+          cache: 'pnpm'
 
       - name: Install dependencies
-        run: pnpm install --no-frozen-lockfile
+        run: pnpm install --frozen-lockfile
 
       - name: Load schema
         run: psql -U osanvault -d osanvault_db -f infra/init.sql
         env:
-          PGPASSWORD: osanvault_dev
+          PGPASSWORD: ${{ secrets.POSTGRES_PASSWORD }}
           PGHOST: localhost
 
       - name: Create env file
         run: |
           cat > apps/api/.env << 'ENVEOF'
-          DATABASE_URL=postgresql://osanvault:osanvault_dev@localhost:5432/osanvault_db
-          REDIS_URL=redis://localhost:6379
+          DATABASE_URL=postgresql://osanvault:${{ secrets.POSTGRES_PASSWORD }}@localhost:5432/osanvault_db
+          REDIS_URL=redis://:${{ secrets.REDIS_PASSWORD }}@localhost:6379
           PORT=3001
           NODE_ENV=test
           CORS_ORIGIN=http://localhost:5173
-          JWT_SECRET=ci_test_secret
+          JWT_SECRET=${{ secrets.JWT_SECRET }}
+          QUEUE_SECRET=${{ secrets.QUEUE_SECRET }}
           ENVEOF
 
       - name: Start API and test health
@@ -102,3 +114,43 @@ jobs:
           curl -f http://localhost:3001/health
           curl -f http://localhost:3001/api/tokens/osanv
           curl -f http://localhost:3001/api/properties
+
+  security-scan:
+    name: Security Scan
+    runs-on: ubuntu-22.04
+    
+    permissions:
+      contents: read
+      security-events: write
+    
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Run Trivy vulnerability scanner
+        uses: aquasecurity/trivy-action@master
+        with:
+          scan-type: 'fs'
+          severity: 'CRITICAL,HIGH'
+          exit-code: '1'
+          ignore-unfixed: true
+
+      - name: Run npm audit
+        run: pnpm audit --audit-level=high || true
+
+  container-scan:
+    name: Container Scan
+    runs-on: ubuntu-22.04
+    if: false  # Enable when Dockerfiles are added
+    
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Build Docker image
+        run: docker build -t osanvault/api:latest apps/api
+
+      - name: Run Trivy on container
+        uses: aquasecurity/trivy-action@master
+        with:
+          image-ref: 'osanvault/api:latest'
+          severity: 'CRITICAL,HIGH'
+          exit-code: '1'
