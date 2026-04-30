@@ -1,16 +1,19 @@
 version: '3.9'
 
+# ÒSÁNVAULT AFRICA - Production-Ready Docker Compose
+# SECURITY: Uses environment variables for all secrets
+
 services:
   postgres:
     image: postgres:16-alpine
     container_name: osanvault_postgres
     restart: unless-stopped
     environment:
-      POSTGRES_USER: osanvault
-      POSTGRES_PASSWORD: osanvault_dev
-      POSTGRES_DB: osanvault_db
+      POSTGRES_USER: ${POSTGRES_USER:-osanvault}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-change_this_password}
+      POSTGRES_DB: ${POSTGRES_DB:-osanvault_db}
     ports:
-      - "5432:5432"
+      - "127.0.0.1:5432:5432"
     volumes:
       - postgres_data:/var/lib/postgresql/data
       - ./init.sql:/docker-entrypoint-initdb.d/init.sql
@@ -19,21 +22,81 @@ services:
       interval: 10s
       timeout: 5s
       retries: 5
+    # SECURITY: Resource limits
+    deploy:
+      resources:
+        limits:
+          cpus: '1'
+          memory: 1G
+        reservations:
+          cpus: '0.5'
+          memory: 512M
+    # SECURITY: Read-only filesystem where possible
+    read_only: true
+    tmpfs:
+      - /tmp:size=64m,mode=1777
 
   redis:
     image: redis:7-alpine
     container_name: osanvault_redis
     restart: unless-stopped
+    # SECURITY: Require password authentication
+    command: redis-server --appendonly yes --requirepass ${REDIS_PASSWORD:-change_this_password} --maxmemory 256mb --maxmemory-policy allkeys-lru
     ports:
-      - "6379:6379"
+      - "127.0.0.1:6379:6379"
     volumes:
       - redis_data:/data
     healthcheck:
-      test: ["CMD", "redis-cli", "ping"]
+      test: ["CMD", "redis-cli", "-a", "${REDIS_PASSWORD}", "ping"]
       interval: 10s
       timeout: 5s
       retries: 5
+    # SECURITY: Resource limits
+    deploy:
+      resources:
+        limits:
+          cpus: '0.5'
+          memory: 512M
+    # SECURITY: Read-only filesystem
+    read_only: true
+    tmpfs:
+      - /tmp:size=32m,mode=1777
+
+  nginx:
+    image: nginx:1.25-alpine
+    container_name: osanvault_proxy
+    restart: unless-stopped
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./nginx.conf:/etc/nginx/conf.d/default.conf:ro
+      # - ./ssl:/etc/ssl:ro  # Uncomment when TLS certs are added
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    # SECURITY: Health check
+    healthcheck:
+      test: ["CMD", "wget", "--spider", "-q", "http://localhost/health"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+    # SECURITY: Resource limits
+    deploy:
+      resources:
+        limits:
+          cpus: '0.5'
+          memory: 256M
+    # SECURITY: Read-only access
+    read_only: true
 
 volumes:
   postgres_data:
   redis_data:
+
+# SECURITY: Custom network for isolation
+networks:
+  default:
+    driver: bridge
+    name: osanvault_internal
+    driver_opts:
+      com.docker.network.bridge.name: br-osanvault

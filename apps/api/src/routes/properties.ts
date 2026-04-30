@@ -1,40 +1,55 @@
 import { Router, Request, Response } from 'express'
 import { pool } from '../db'
 import { z } from 'zod'
+import { requireAdmin, requirePropertyManager } from '../middleware/rbac'
+import { logger } from '../logger'
 
 const router = Router()
 
+// Input validation schema
 const PropertySchema = z.object({
-  title: z.string().min(1),
-  location: z.string().min(1),
-  country: z.string().min(1),
+  title: z.string().min(1).max(255),
+  location: z.string().min(1).max(255),
+  country: z.string().min(1).max(100),
   total_value: z.number().positive(),
   token_price: z.number().positive(),
   total_tokens: z.number().int().positive(),
-  annual_yield: z.number().optional(),
-  ipfs_hash: z.string().optional(),
+  annual_yield: z.number().min(0).max(100).optional(),
+  ipfs_hash: z.string().max(100).optional(),
 })
 
-// GET /api/properties
+// Query validation - prevent SQL injection
+const CountrySchema = z.enum(['Nigeria', 'Ghana', 'Kenya', 'SouthAfrica'])
+
+// GET /api/properties - Publicly accessible
 router.get('/', async (req: Request, res: Response) => {
   try {
-    const page = parseInt(req.query.page as string) || 1
-    const limit = parseInt(req.query.limit as string) || 20
+    // Validate and sanitize pagination
+    const page = Math.max(1, parseInt(req.query.page as string) || 1)
+    const limit = Math.min(200, Math.max(1, parseInt(req.query.limit as string) || 20))
     const offset = (page - 1) * limit
-    const country = req.query.country as string
-
-    let query = `SELECT * FROM properties`
+    
+    // Validate country filter to prevent SQL injection
+    let countryFilter = ''
     const params: any[] = []
-
-    if (country) {
-      query += ` WHERE country = $1`
-      params.push(country)
+    
+    if (req.query.country) {
+      try {
+        CountrySchema.parse(req.query.country)
+        countryFilter = ' WHERE country = $1'
+        params.push(req.query.country)
+      } catch {
+        // Invalid country, ignore it
+        logger.warn(`Invalid country filter: ${req.query.country}`)
+      }
     }
 
-    const countQuery = `SELECT COUNT(*) FROM properties${country ? ' WHERE country = $1' : ''}`
+    const countQuery = `SELECT COUNT(*) FROM properties${countryFilter}`
     const [rows, count] = await Promise.all([
-      pool.query(`${query} ORDER BY created_at DESC LIMIT $${params.length + 1} OFFSET $${params.length + 2}`,
-        [...params, limit, offset]),
+      pool.query(
+        `SELECT * FROM properties${countryFilter} ORDER BY created_at DESC LIMIT $${params.length + 1} OFFSET $${params.length + 2}`,
+        [...params, limit, offset]
+      ),
       pool.query(countQuery, params)
     ])
 
@@ -48,11 +63,12 @@ router.get('/', async (req: Request, res: Response) => {
       }
     })
   } catch (err) {
+    logger.error(`Property fetch error: ${err}`)
     res.status(500).json({ error: 'Failed to fetch properties' })
   }
 })
 
-// GET /api/properties/:id
+// GET /api/properties/:id - Publicly accessible
 router.get('/:id', async (req: Request, res: Response) => {
   try {
     const { rows } = await pool.query(
@@ -68,14 +84,16 @@ router.get('/:id', async (req: Request, res: Response) => {
     if (!rows.length) return res.status(404).json({ error: 'Property not found' })
     res.json({ data: rows[0] })
   } catch (err) {
+    logger.error(`Property fetch error: ${err}`)
     res.status(500).json({ error: 'Failed to fetch property' })
   }
 })
 
-// POST /api/properties
-router.post('/', async (req: Request, res: Response) => {
+// POST /api/properties - Requires Admin or Property Manager
+router.post('/', requirePropertyManager(), async (req: Request, res: Response) => {
   try {
     const body = PropertySchema.parse(req.body)
+    
     const { rows } = await pool.query(
       `INSERT INTO properties
         (title, location, country, total_value, token_price, total_tokens, annual_yield, ipfs_hash)
@@ -85,31 +103,123 @@ router.post('/', async (req: Request, res: Response) => {
        body.token_price, body.total_tokens, body.annual_yield ?? null,
        body.ipfs_hash ?? null]
     )
+    
+    const userId = req.headers['x-user-id']
+    if (userId) {
+      await pool.query(
+        `INSERT INTO audit_log (user_id, action, entity_type, entity_id, metadata, ip_address)
+         VALUES ($1, 'property_create', 'property', $2, $3, $4)`,
+        [userId, rows[0].id, JSON.stringify({ title: body.title }), req.ip || 'unknown']
+      )
+    }
+    
     res.status(201).json({ data: rows[0] })
   } catch (err) {
     if (err instanceof z.ZodError) {
       return res.status(400).json({ error: 'Validation failed', details: err.errors })
     }
+    logger.error(`Property creation error: ${err}`)
     res.status(500).json({ error: 'Failed to create property' })
   }
 })
 
-// PATCH /api/properties/:id/status
-router.patch('/:id/status', async (req: Request, res: Response) => {
+// PATCH /api/properties/:id/status - Requires Admin only
+router.patch('/:id/status', requireAdmin(), async (req: Request, res: Response) => {
   try {
     const { status } = req.body
     const valid = ['pending', 'active', 'fully_funded', 'closed']
-    if (!valid.includes(status)) {
+    
+    if (!status || !valid.includes(status)) {
       return res.status(400).json({ error: `Status must be one of: ${valid.join(', ')}` })
     }
+    
     const { rows } = await pool.query(
       `UPDATE properties SET status = $1, updated_at = NOW() WHERE id = $2 RETURNING *`,
       [status, req.params.id]
     )
-    if (!rows.length) return res.status(404).json({ error: 'Property not found' })
+    
+    if (!rows.length) {
+      return res.status(404).json({ error: 'Property not found' })
+    }
+    
+    const userId = req.headers['x-user-id']
+    if (userId) {
+      await pool.query(
+        `INSERT INTO audit_log (user_id, action, entity_type, entity_id, metadata, ip_address)
+         VALUES ($1, 'property_status_change', 'property', $2, $3, $4)`,
+        [userId, rows[0].id, JSON.stringify({ old_status: 'unknown', new_status: status }), req.ip || 'unknown']
+      )
+    }
+    
     res.json({ data: rows[0] })
   } catch (err) {
+    logger.error(`Property status update error: ${err}`)
     res.status(500).json({ error: 'Failed to update property status' })
+  }
+})
+
+// POST /api/properties/ingest - Requires Admin only (batch operation)
+router.post('/ingest', requireAdmin(), async (req: Request, res: Response) => {
+  try {
+    const ScrapedPropertySchema = z.object({
+      title: z.string(),
+      location: z.string(),
+      country: z.string(),
+      total_value_usd: z.number(),
+    })
+    
+    const body = z.array(ScrapedPropertySchema).parse(req.body)
+    
+    // Use transaction for batch insert
+    const client = await pool.connect()
+    
+    try {
+      await client.query('BEGIN')
+      
+      const results = []
+      
+      for (const item of body) {
+        const tokenPrice = 10
+        const totalTokens = Math.floor(item.total_value_usd / tokenPrice)
+        
+        const { rows } = await client.query(
+          `INSERT INTO properties
+            (title, location, country, total_value, token_price, total_tokens, status)
+           VALUES ($1,$2,$3,$4,$5,$6,'pending')
+           RETURNING id, title, status`,
+          [item.title, item.location, item.country, item.total_value_usd, tokenPrice, totalTokens]
+        )
+        results.push(rows[0])
+      }
+      
+      await client.query('COMMIT')
+      
+      const userId = req.headers['x-user-id']
+      if (userId) {
+        await pool.query(
+          `INSERT INTO audit_log (user_id, action, entity_type, metadata, ip_address)
+           VALUES ($1, 'property_batch_ingest', 'property', NULL, $2, $3)`,
+          [userId, JSON.stringify({ count: results.length }), req.ip || 'unknown']
+        )
+      }
+      
+      res.status(201).json({ 
+        success: true, 
+        ingested_count: results.length,
+        data: results 
+      })
+    } catch (err) {
+      await client.query('ROLLBACK')
+      throw err
+    } finally {
+      client.release()
+    }
+  } catch (err) {
+    if (err instanceof z.ZodError) {
+      return res.status(400).json({ error: 'Validation failed', details: err.errors })
+    }
+    logger.error(`Property ingest error: ${err}`)
+    res.status(500).json({ error: 'Failed to ingest properties' })
   }
 })
 
