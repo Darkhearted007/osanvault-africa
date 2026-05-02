@@ -1,10 +1,7 @@
-import { useWallet } from '@solana/wallet-adapter-react'
 import { WalletMultiButton } from '@solana/wallet-adapter-react-ui'
 import { Link } from './Link'
 
 export function Nav() {
-  const { connected } = useWallet()
-
   return (
     <nav className="nav">
       <Link href="/" className="nav-logo">
