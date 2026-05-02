@@ -22,8 +22,81 @@ pub mod osanvault_core {
         platform.total_properties = 0;
         platform.paused = false;
         platform.pause_authority = ctx.accounts.admin.key();
+        platform.fee_wallet = ctx.accounts.admin.key();
         
-        msg!("ÒsánVault Africa Platform Initialized!");
+        // RBAC: Initialize roles
+        platform.admin_role = ctx.accounts.admin.key();
+        platform.property_manager_role = ctx.accounts.admin.key();
+        
+        msg!("ÒsánVault Africa Platform Initialized with RBAC!");
+        Ok(())
+    }
+
+    /// Grant admin role to a new address
+    /// SECURITY: Only super admin can grant admin role
+    pub fn grant_admin_role(ctx: Context<GrantRole>, new_admin: Pubkey) -> Result<()> {
+        let platform = &mut ctx.accounts.platform;
+        
+        require!(
+            platform.super_admin == ctx.accounts.admin.key(),
+            OsanvaultError::Unauthorized
+        );
+        
+        platform.admin_role = new_admin;
+        msg!("Admin role granted to {}", new_admin);
+        Ok(())
+    }
+
+    /// Grant property manager role
+    /// SECURITY: Only admin can grant property manager
+    pub fn grant_property_manager(ctx: Context<GrantRole>, manager: Pubkey) -> Result<()> {
+        let platform = &mut ctx.accounts.platform;
+        
+        // RBAC: Check admin or super_admin
+        require!(
+            platform.super_admin == ctx.accounts.admin.key() 
+            || platform.admin_role == ctx.accounts.admin.key(),
+            OsanvaultError::Unauthorized
+        );
+        
+        platform.property_manager_role = manager;
+        msg!("Property manager role granted to {}", manager);
+        Ok(())
+    }
+
+    /// Set platform fee wallet
+    /// SECURITY: Only super admin can set fee wallet
+    pub fn set_fee_wallet(ctx: Context<SetFeeWallet>, wallet: Pubkey) -> Result<()> {
+        let platform = &mut ctx.accounts.platform;
+        
+        require!(
+            platform.super_admin == ctx.accounts.admin.key(),
+            OsanvaultError::Unauthorized
+        );
+        
+        platform.fee_wallet = wallet;
+        msg!("Fee wallet set to {}", wallet);
+        Ok(())
+    }
+
+    /// Update platform fee percentage (max 5%)
+    /// SECURITY: Only super admin can update fees
+    pub fn update_platform_fee(ctx: Context<UpdateFee>, new_fee_bps: u16) -> Result<()> {
+        let platform = &mut ctx.accounts.platform;
+        
+        require!(
+            platform.super_admin == ctx.accounts.admin.key(),
+            OsanvaultError::Unauthorized
+        );
+        
+        // SECURITY: Max 5% (500 bps)
+        require!(
+            new_fee_bps <= 500,
+            OsanvaultError::FeeTooHigh
+        );
+        
+        platform.fee_bps = new_fee_bps;
+        msg!("Platform fee updated to {} bps", new_fee_bps);
         Ok(())
     }
 
@@ -56,6 +129,63 @@ pub mod osanvault_core {
         msg!("Platform unpaused by {}", ctx.accounts.authority.key());
         Ok(())
     }
+
+/// Initialize OSANV token mint for the platform
+    /// SECURITY: Only super admin can initialize token
+    pub fn initialize_token_mint(ctx: Context<InitializeTokenMint>, mint_authority: Pubkey) -> Result<()> {
+        let platform = &mut ctx.accounts.platform;
+        
+        require!(
+            platform.super_admin == ctx.accounts.admin.key(),
+            OsanvaultError::Unauthorized
+        );
+        
+        platform.osanv_mint = ctx.accounts.mint.key();
+        platform.token_mint_authority = mint_authority;
+        
+        msg!("OSANV token mint initialized: {}", ctx.accounts.mint.key());
+        Ok(())
+    }
+
+    /// Mint OSANV tokens for distribution
+    /// SECURITY: Only token mint authority can mint
+    pub fn mint_osanv(ctx: Context<MintOsanv>, amount: u64) -> Result<()> {
+        let platform = ctx.accounts.platform.as_ref();
+        
+        require!(
+            platform.token_mint_authority == ctx.accounts.mint_authority.key(),
+            OsanvaultError::Unauthorized
+        );
+        
+        require!(
+            amount > 0 && amount <= 500_000_000 * 1_000_000_000,
+            OsanvaultError::InvalidAmount
+        );
+        
+        let cpi_accounts = anchor_spl::token::MintTo {
+            mint: ctx.accounts.mint.to_account_info(),
+            to: ctx.accounts.destination.to_account_info(),
+            authority: ctx.accounts.mint_authority.to_account_info(),
+        };
+        
+        let cpi_program = ctx.accounts.token_program.to_account_info();
+        let cpi_ctx = CpiContext::new(cpi_program, cpi_accounts);
+        anchor_spl::token::mint_to(cpi_ctx, amount)?;
+        
+        msg!("Minted {} OSANV tokens to {}", amount, ctx.accounts.destination.key());
+        Ok(())
+    }
+
+    /// Get OSANV token price from Pyth oracle
+    /// Returns the current price in USD (scaled by 1e8)
+    pub fn get_osanv_price(_ctx: Context<GetOraclePrice>) -> Result<u64> {
+        // In production, this would fetch from Pyth oracle
+        // For now, returning mock price
+        // TODO: Integrate Pyth Network price feed
+        let mock_price: u64 = 1_00_000_000; // $1.00 USD (scaled)
+        Ok(mock_price)
+    }
+}
 
     /// Transfer platform ownership to a new admin
     /// SECURITY: Only super admin can transfer ownership
@@ -192,7 +322,7 @@ pub struct InitializePlatform<'info> {
     #[account(
         init,
         payer = admin,
-        space = 8 + 32 + 8 + 1 + 32, // Added paused + pause_authority
+        space = 8 + 32 + 8 + 1 + 32 + 32 + 32 + 32 + 32 + 2 + 8, 
         seeds = [b"platform"],
         bump
     )]
@@ -201,6 +331,77 @@ pub struct InitializePlatform<'info> {
     #[account(mut)]
     pub admin: Signer<'info>,
     pub system_program: Program<'info, System>,
+}
+
+#[derive(Accounts)]
+pub struct GrantRole<'info> {
+    #[account(mut)]
+    pub platform: Account<'info, PlatformState>,
+    
+    #[account(mut)]
+    pub admin: Signer<'info>,
+}
+
+#[derive(Accounts)]
+pub struct SetFeeWallet<'info> {
+    #[account(mut)]
+    pub platform: Account<'info, PlatformState>,
+    
+    #[account(mut)]
+    pub admin: Signer<'info>,
+}
+
+#[derive(Accounts)]
+pub struct UpdateFee<'info> {
+    #[account(mut)]
+    pub platform: Account<'info, PlatformState>,
+    
+    #[account(mut)]
+    pub admin: Signer<'info>,
+}
+
+#[derive(Accounts)]
+pub struct InitializeTokenMint<'info> {
+    #[account(mut)]
+    pub platform: Account<'info, PlatformState>,
+    
+    #[account(mut)]
+    pub admin: Signer<'info>,
+    
+    #[account(
+        init,
+        payer = admin,
+        mint::authority = admin,
+        mint::freeze_authority = admin,
+        mint::decimals = 9,
+        space = 82,
+        seeds = [b"osanv-mint"],
+        bump
+    )]
+    pub mint: Account<'info, Mint>,
+    
+    pub system_program: Program<'info, System>,
+    pub token_program: Program<'info, Token>,
+    pub rent: Sysvar<'info, Rent>,
+}
+
+#[derive(Accounts)]
+pub struct MintOsanv<'info> {
+    pub platform: Account<'info, PlatformState>,
+    
+    #[account(mut)]
+    pub mint: Account<'info, Mint>,
+    
+    #[account(mut)]
+    pub destination: Account<'info, TokenAccount>,
+    
+    pub mint_authority: Signer<'info>,
+    pub token_program: Program<'info, Token>,
+}
+
+#[derive(Accounts)]
+pub struct GetOraclePrice<'info> {
+    pub platform: Account<'info, PlatformState>,
 }
 
 #[derive(Accounts)]
@@ -279,6 +480,13 @@ pub struct PlatformState {
     pub total_properties: u64,
     pub paused: bool,
     pub pause_authority: Pubkey,
+    pub fee_wallet: Pubkey,
+    pub admin_role: Pubkey,
+    pub property_manager_role: Pubkey,
+    pub osanv_mint: Pubkey,
+    pub token_mint_authority: Pubkey,
+    pub fee_bps: u16,
+    pub reserved: u64,
 }
 
 #[account]
@@ -340,4 +548,13 @@ pub enum OsanvaultError {
     
     #[msg("Overflow error - arithmetic operation failed.")]
     OverflowError,
+    
+    #[msg("Fee too high - maximum is 5% (500 bps).")]
+    FeeTooHigh,
+    
+    #[msg("Invalid role - not authorized for this action.")]
+    InvalidRole,
+    
+    #[msg("Oracle price feed not available.")]
+    OracleUnavailable,
 }
