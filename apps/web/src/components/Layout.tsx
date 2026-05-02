@@ -1,16 +1,10 @@
-import { FC, ReactNode } from 'react'
+import type { FC } from 'react'
+import { Outlet } from 'react-router-dom'
 import { Nav } from './Nav'
-import { BottomNavBar } from './BottomNavBar'
 
 const SUPPORT_EMAIL = 'Olugbenga1000@gmail.com'
 const SUPPORT_PHONE = '+2347065056103'
 const WEBSITE = 'https://osanvaultafrica.com'
-
-interface LayoutProps {
-  children: ReactNode
-  title?: string
-  hideNav?: boolean
-}
 
 export const SUPPORT_CONTACT = {
   email: SUPPORT_EMAIL,
@@ -20,7 +14,12 @@ export const SUPPORT_CONTACT = {
   telegram: '@OsanvaultAfrica'
 }
 
-export const Layout: FC<LayoutProps> = ({ children, title, hideNav }) => {
+interface LayoutProps {
+  title?: string
+  hideNav?: boolean
+}
+
+export const Layout: FC<LayoutProps> = ({ title, hideNav }) => {
   if (title) {
     document.title = `${title} — ÒsánVault Africa`
   }
@@ -29,9 +28,8 @@ export const Layout: FC<LayoutProps> = ({ children, title, hideNav }) => {
     <div className="app-shell">
       {!hideNav && <Nav />}
       <main className="main-content">
-        {children}
+        <Outlet />
       </main>
-      <BottomNavBar />
       <footer className="footer">
         <div className="footer-inner">
           <div className="footer-brand">

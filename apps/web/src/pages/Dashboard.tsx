@@ -8,7 +8,7 @@ export default function DashboardPage() {
   const { connected, publicKey } = useWallet()
   const [stats, setStats] = useState<DashboardStats | null>(null)
   const [investments, setInvestments] = useState<Investment[]>([])
-  const [dividends, setDividends] = useState<Dividend[]>([])
+  const [dividends] = useState<Dividend[]>([])
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
@@ -20,11 +20,12 @@ export default function DashboardPage() {
       ]).then(([summary, properties]) => {
         if (summary) setStats(summary as DashboardStats)
         if (properties && Array.isArray(properties)) {
-          const props = properties as Investment[]
-          setInvestments(props)
+          setInvestments(properties as Investment[])
         }
         setLoading(false)
       }).catch(() => setLoading(false))
+    } else {
+      setLoading(false)
     }
   }, [connected, publicKey])
 
@@ -77,9 +78,7 @@ export default function DashboardPage() {
           <div className="empty-state__icon">📊</div>
           <h2>No Investments Yet</h2>
           <p>Browse our asset marketplace to start building your portfolio.</p>
-          <a href="/assets" className="btn btn--primary">
-            Explore Assets
-          </a>
+          <a href="/assets" className="btn btn--primary">Explore Assets</a>
         </div>
       ) : (
         <div className="investments-list">
@@ -87,9 +86,7 @@ export default function DashboardPage() {
             <div key={inv.id} className="investment-row">
               <div className="investment-row__info">
                 <span className="investment-row__property">{inv.property_id}</span>
-                <span className="investment-row__date">
-                  {new Date(inv.created_at).toLocaleDateString()}
-                </span>
+                <span className="investment-row__date">{new Date(inv.created_at).toLocaleDateString()}</span>
               </div>
               <div className="investment-row__tokens">{inv.tokens_purchased} tokens</div>
               <div className="investment-row__amount">${inv.amount_paid.toFixed(2)}</div>
