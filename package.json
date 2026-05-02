@@ -1,33 +1,29 @@
 {
-  "name": "@osanvault/api",
+  "name": "@osanvault/root",
   "version": "0.1.0",
   "private": true,
-  "type": "module",
   "scripts": {
-    "dev": "tsx watch src/index.ts",
-    "build": "tsc -p tsconfig.json",
-    "start": "node dist/index.js",
-    "test": "vitest"
-  },
-  "dependencies": {
-    "bullmq": "^5.76.2",
-    "cors": "^2.8.5",
-    "dotenv": "^16.4.0",
-    "express": "^4.21.0",
-    "express-rate-limit": "^8.4.1",
-    "helmet": "^8.0.0",
-    "ioredis": "^5.10.1",
-    "pg": "^8.13.0",
-    "winston": "^3.17.0",
-    "zod": "^3.23.0"
+    "dev": "turbo run dev",
+    "build": "turbo run build",
+    "test": "turbo run test",
+    "lint": "turbo run lint",
+    "dev:api": "pnpm --filter @osanvault/api dev",
+    "dev:web": "pnpm --filter web dev",
+    "build:api": "pnpm --filter @osanvault/api build",
+    "build:web": "pnpm --filter web build"
   },
   "devDependencies": {
-    "@types/cors": "^2.8.17",
-    "@types/express": "^5.0.0",
-    "@types/node": "^22.0.0",
-    "@types/pg": "^8.11.0",
-    "tsx": "^4.21.0",
-    "typescript": "^5.6.0",
-    "vitest": "^2.1.0"
+    "turbo": "^2.0.0",
+    "typescript": "^5.6.0"
+  },
+  "pnpm": {
+    "overrides": {
+      "uuid": "^14.0.0",
+      "file-type": ">=21.3.2"
+    }
+  },
+  "engines": {
+    "node": ">=18.0.0",
+    "pnpm": ">=8.0.0"
   }
 }
