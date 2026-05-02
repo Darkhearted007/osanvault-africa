@@ -1,12 +1,15 @@
 import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
+
 import { SolanaWalletProvider } from './WalletProvider'
 import { Layout } from './components/Layout'
+
 import HomePage from './pages/Home'
 import AssetsPage from './pages/Assets'
 import PropertyDetailPage from './pages/PropertyDetail'
 import DashboardPage from './pages/Dashboard'
+
 import './index.css'
 
 createRoot(document.getElementById('root')!).render(
@@ -14,7 +17,7 @@ createRoot(document.getElementById('root')!).render(
     <SolanaWalletProvider>
       <BrowserRouter>
         <Routes>
-          <Route path="/" element={<Layout />} >
+          <Route element={<Layout />}>
             <Route index element={<HomePage />} />
             <Route path="assets" element={<AssetsPage />} />
             <Route path="assets/:id" element={<PropertyDetailPage />} />
@@ -24,5 +27,5 @@ createRoot(document.getElementById('root')!).render(
         </Routes>
       </BrowserRouter>
     </SolanaWalletProvider>
-  </StrictMode>,
+  </StrictMode>
 )
