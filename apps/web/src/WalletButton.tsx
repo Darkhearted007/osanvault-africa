@@ -1,7 +1,6 @@
 import { useWallet } from '@solana/wallet-adapter-react'
 import { useWalletModal } from '@solana/wallet-adapter-react-ui'
 import { useEffect, useState, useCallback } from 'react'
-import { Connection, PublicKey, Transaction } from '@solana/web3.js'
 
 interface UserProfile {
   id: string
@@ -15,21 +14,12 @@ interface WalletAuth {
   message: string
 }
 
-/**
- * SECURITY: Wallet signature verification hook
- * This implements the secure authentication flow:
- * 1. Server generates a nonce
- * 2. User signs a message containing the nonce
- * 3. Server verifies the signature
- */
 function useWalletAuth() {
-  const { connection } = useWallet()
-  const { publicKey, signMessage } = useWallet()
+  const { publicKey, signMessage, connection } = useWallet()
   const [user, setUser] = useState<UserProfile | null>(null)
   const [authError, setAuthError] = useState<string | null>(null)
   const [isAuthenticating, setIsAuthenticating] = useState(false)
 
-  // Generate a nonce for secure authentication
   const generateNonce = useCallback(async (walletAddress: string): Promise<WalletAuth | null> => {
     try {
       const res = await fetch(`${import.meta.env.VITE_API_URL || 'http://localhost:3001'}/api/auth/nonce`, {
@@ -46,7 +36,6 @@ function useWalletAuth() {
     }
   }, [])
 
-  // Verify wallet ownership by signing a message
   const verifyWallet = useCallback(async (walletAddress: string): Promise<boolean> => {
     if (!signMessage || !publicKey || !connection) {
       setAuthError('Wallet or signing not available')
@@ -57,18 +46,15 @@ function useWalletAuth() {
     setAuthError(null)
 
     try {
-      // Step 1: Get nonce from server
       const auth = await generateNonce(walletAddress)
       if (!auth) {
         setAuthError('Failed to get authentication challenge')
         return false
       }
 
-      // Step 2: Sign the message with the wallet
       const messageBytes = new TextEncoder().encode(auth.message)
       const signature = await signMessage(messageBytes)
 
-      // Step 3: Send to server for verification
       const res = await fetch(`${import.meta.env.VITE_API_URL || 'http://localhost:3001'}/api/auth/verify`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -97,7 +83,6 @@ function useWalletAuth() {
     }
   }, [signMessage, publicKey, connection, generateNonce])
 
-  // Logout user
   const logout = useCallback(() => {
     setUser(null)
     setAuthError(null)
@@ -110,100 +95,89 @@ function truncate(address: string) {
   return `${address.slice(0, 4)}...${address.slice(-4)}`
 }
 
-/**
- * SECURITY: Hardened WalletButton
- * - REMOVED: Mock wallet bypass (CRITICAL security vulnerability)
- * - REQUIRED: Cryptographic signature verification
- * - PROTECTED: Server-side nonce + signature verification
- */
 export function WalletButton() {
   const { connected, publicKey, disconnect } = useWallet()
   const { setVisible } = useWalletModal()
   const { user, verifyWallet, logout, isAuthenticating, authError } = useWalletAuth()
   const [showMenu, setShowMenu] = useState(false)
-  const [needsAuth, setNeedsAuth] = useState(false)
+  const [needsAuth, setNeedsAuth] = useState(true)
 
   const walletAddress = publicKey?.toBase58() || null
 
-  // Trigger authentication when wallet connects
+  // Auto-trigger auth when wallet connects
   useEffect(() => {
     if (connected && walletAddress && needsAuth) {
       verifyWallet(walletAddress).then((success) => {
-        if (success) {
-          setNeedsAuth(false)
-        }
+        if (success) setNeedsAuth(false)
       })
     }
   }, [connected, walletAddress, needsAuth, verifyWallet])
 
-  const handleConnect = () => {
-    setVisible(true)
-  }
+  // Reset auth state on disconnect
+  useEffect(() => {
+    if (!connected) setNeedsAuth(true)
+  }, [connected])
+
+  const handleConnect = () => setVisible(true)
 
   const handleDisconnect = async () => {
     await disconnect()
     logout()
     setShowMenu(false)
+    setNeedsAuth(true)
   }
 
-  // Not connected - show connect button
   if (!connected) {
     return (
-      <div style={{ display: 'flex', gap: '8px', alignItems: 'center' }}>
-        <button
-          onClick={handleConnect}
-          style={{
-            padding: '8px 16px',
-            borderRadius: '20px',
-            border: '1px solid var(--brand-primary)',
-            background: 'transparent',
-            color: 'var(--brand-primary)',
-            fontSize: '12px',
-            fontWeight: '600',
-            cursor: 'pointer',
-            transition: 'all 0.15s ease',
-          }}
-          onMouseEnter={e => {
-            e.currentTarget.style.background = 'var(--brand-primary)'
-            e.currentTarget.style.color = '#000'
-          }}
-          onMouseLeave={e => {
-            e.currentTarget.style.background = 'transparent'
-            e.currentTarget.style.color = 'var(--brand-primary)'
-          }}
-        >
-          🔌 Connect Wallet
-        </button>
-      </div>
+      <button
+        onClick={handleConnect}
+        style={{
+          padding: '8px 16px',
+          borderRadius: '20px',
+          border: '1px solid var(--brand-primary)',
+          background: 'transparent',
+          color: 'var(--brand-primary)',
+          fontSize: '12px',
+          fontWeight: '600',
+          cursor: 'pointer',
+          transition: 'all 0.15s ease',
+        }}
+        onMouseEnter={e => {
+          e.currentTarget.style.background = 'var(--brand-primary)'
+          e.currentTarget.style.color = '#000'
+        }}
+        onMouseLeave={e => {
+          e.currentTarget.style.background = 'transparent'
+          e.currentTarget.style.color = 'var(--brand-primary)'
+        }}
+      >
+        🔌 Connect Wallet
+      </button>
     )
   }
 
-  // Connected but needs authentication
   if (needsAuth || isAuthenticating) {
     return (
-      <div style={{ display: 'flex', gap: '8px', alignItems: 'center' }}>
-        <button
-          disabled={isAuthenticating}
-          onClick={() => setNeedsAuth(true)}
-          style={{
-            padding: '8px 16px',
-            borderRadius: '20px',
-            border: '1px solid var(--brand-primary)',
-            background: 'var(--brand-primary)',
-            color: '#000',
-            fontSize: '12px',
-            fontWeight: '600',
-            cursor: isAuthenticating ? 'wait' : 'pointer',
-            opacity: isAuthenticating ? 0.7 : 1,
-          }}
-        >
-          {isAuthenticating ? '⏳ Verifying...' : 'Verify Ownership'}
-        </button>
-      </div>
+      <button
+        disabled={isAuthenticating}
+        onClick={() => !isAuthenticating && verifyWallet(walletAddress!)}
+        style={{
+          padding: '8px 16px',
+          borderRadius: '20px',
+          border: '1px solid var(--brand-primary)',
+          background: 'var(--brand-primary)',
+          color: '#000',
+          fontSize: '12px',
+          fontWeight: '600',
+          cursor: isAuthenticating ? 'wait' : 'pointer',
+          opacity: isAuthenticating ? 0.7 : 1,
+        }}
+      >
+        {isAuthenticating ? '⏳ Verifying...' : '✍️ Sign to Verify'}
+      </button>
     )
   }
 
-  // Connected and authenticated - show wallet menu
   return (
     <div style={{ position: 'relative' }}>
       <button
@@ -244,11 +218,6 @@ export function WalletButton() {
             {user && (
               <>
                 <div style={{ fontSize: '11px', color: 'var(--text-muted)', marginTop: '8px' }}>
-                  ID: <span style={{ color: 'var(--text-main)' }}>
-                    {user.id.slice(0, 8)}...
-                  </span>
-                </div>
-                <div style={{ fontSize: '11px', color: 'var(--text-muted)' }}>
                   Role: <span style={{ color: 'var(--text-main)' }}>{user.role}</span>
                 </div>
                 <div style={{ fontSize: '11px', color: 'var(--text-muted)' }}>
@@ -261,15 +230,10 @@ export function WalletButton() {
           </div>
           {authError && (
             <div style={{
-              padding: '8px 12px',
-              borderBottom: '1px solid var(--border-light)',
-              marginBottom: '4px',
-              background: 'rgba(239, 68, 68, 0.1)',
-              borderRadius: '4px',
+              padding: '8px 12px', marginBottom: '4px',
+              background: 'rgba(239, 68, 68, 0.1)', borderRadius: '4px',
             }}>
-              <div style={{ fontSize: '11px', color: '#EF4444' }}>
-                ⚠️ {authError}
-              </div>
+              <div style={{ fontSize: '11px', color: '#EF4444' }}>⚠️ {authError}</div>
             </div>
           )}
           <button
