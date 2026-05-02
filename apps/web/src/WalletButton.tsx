@@ -1,4 +1,4 @@
-import { useWallet } from '@solana/wallet-adapter-react'
+import { useWallet, useConnection } from '@solana/wallet-adapter-react'
 import { useWalletModal } from '@solana/wallet-adapter-react-ui'
 import { useEffect, useState, useCallback } from 'react'
 
@@ -15,7 +15,8 @@ interface WalletAuth {
 }
 
 function useWalletAuth() {
-  const { publicKey, signMessage, connection } = useWallet()
+  const { publicKey, signMessage } = useWallet()
+  const { connection } = useConnection()
   const [user, setUser] = useState<UserProfile | null>(null)
   const [authError, setAuthError] = useState<string | null>(null)
   const [isAuthenticating, setIsAuthenticating] = useState(false)
