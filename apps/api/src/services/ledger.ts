@@ -1,35 +1,31 @@
-import { pool } from "../db"
-import crypto from "crypto"
+import { pool } from "../db/index.js";
+import crypto from "crypto";
 
 export type LedgerEntry = {
-  userId: string
-  type: "CREDIT" | "DEBIT"
-  token: string
-  amount: number
-  reason: string
-  timestamp: number
-}
+  userId: string;
+  type: "CREDIT" | "DEBIT";
+  token: string;
+  amount: number;
+  reason: string;
+  timestamp: number;
+};
 
 async function getLastHash(): Promise<string | null> {
   const res = await pool.query(
     "SELECT hash FROM ledger ORDER BY id DESC LIMIT 1"
-  )
-  return res.rows[0]?.hash || null
+  );
+  return res.rows[0]?.hash || null;
 }
 
 function createHash(data: string) {
-  return crypto.createHash("sha256").update(data).digest("hex")
+  return crypto.createHash("sha256").update(data).digest("hex");
 }
 
 export async function addLedger(entry: LedgerEntry) {
-  const prevHash = await getLastHash()
+  const prevHash = await getLastHash();
 
-  const payload = JSON.stringify({
-    ...entry,
-    prevHash
-  })
-
-  const hash = createHash(payload)
+  const payload = JSON.stringify({ ...entry, prevHash });
+  const hash = createHash(payload);
 
   await pool.query(
     `
@@ -55,10 +51,7 @@ export async function addLedger(entry: LedgerEntry) {
       prevHash,
       hash
     ]
-  )
+  );
 
-  console.log("📒 Ledger committed (immutable):", {
-    ...entry,
-    hash
-  })
+  return hash;
 }

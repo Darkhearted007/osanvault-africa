@@ -76,17 +76,17 @@ app.use(errorHandler)
 
 async function bootstrap() {
   try {
-    await bootstrapCore()
+    await bootstrapCore();
 
-    startWorkers()
-
-    app.listen(PORT, "0.0.0.0", () => {
-      logger.info(`ÒsánVault API running on http://localhost:${PORT}`)
-      logger.info(`Environment: ${process.env.NODE_ENV || "development"}`)
-    })
+    app.listen(Number(PORT), "0.0.0.0", () => {
+      logger.info(`ÒsánVault API running on http://localhost:${PORT}`);
+      logger.info(
+        `Environment: ${process.env.NODE_ENV || "development"}`
+      );
+    });
   } catch (err) {
-    console.error("❌ BOOT ERROR:", err)
+    console.error("❌ BOOT ERROR:", err);
   }
 }
 
-bootstrap()
+bootstrap();

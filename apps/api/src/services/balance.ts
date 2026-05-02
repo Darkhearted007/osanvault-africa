@@ -1,10 +1,9 @@
-import { getLedger } from "./ledger"
+import { getLedger, LedgerEntry } from "./ledger.js";
 
-export function getUserBalance(userId: string) {
-  const entries = getLedger(userId)
-
-  return entries.reduce((sum, entry) => {
-    if (entry.type === "CREDIT") return sum + entry.amount
-    return sum - entry.amount
-  }, 0)
+export function calculateBalance(entries: LedgerEntry[]) {
+  return entries.reduce((sum: number, entry: LedgerEntry) => {
+    return entry.type === "CREDIT"
+      ? sum + entry.amount
+      : sum - entry.amount;
+  }, 0);
 }

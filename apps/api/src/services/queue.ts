@@ -1,18 +1,20 @@
-import { Queue } from "bullmq"
-import { redis } from "../db/redis"
+import { Queue } from "bullmq";
+import { redis } from "../db/redis";
 
-export const payoutQueue = new Queue("payout-queue", {
+export type PayoutJobData = {
+  userId: string;
+  balance: number;
+  apy: number;
+  liabilities?: number;
+  liquidity?: number;
+};
+
+export const payoutQueue = new Queue<PayoutJobData>("payout-queue", {
   connection: redis,
-})
+});
 
-// helper to add jobs cleanly
-export async function addPayoutJob(data: {
-  userId: string
-  balance: number
-  apy: number
-  liabilities?: number
-  liquidity?: number
-}) {
+// main safe API (use this everywhere)
+export function enqueuePayoutJob(data: PayoutJobData) {
   return payoutQueue.add("daily-payout", data, {
     attempts: 3,
     backoff: {
@@ -21,5 +23,5 @@ export async function addPayoutJob(data: {
     },
     removeOnComplete: true,
     removeOnFail: false,
-  })
+  });
 }

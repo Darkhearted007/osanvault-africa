@@ -1,18 +1,18 @@
-import { Router } from 'express'
-import { yieldQueue } from '../services/queues'
+import { Router } from "express";
+import { payoutQueue } from "../services/queue";
 
-const router = Router()
+const router = Router();
 
-router.post('/yield', async (req, res) => {
-  const job = await yieldQueue.add('calculate', {
+router.post("/yield", async (req, res) => {
+  const job = await payoutQueue.add("calculate", {
     amount: 1000,
     apy: 12,
-  })
+  });
 
   res.json({
-    message: 'Yield job queued',
+    message: "Yield job queued",
     jobId: job.id,
-  })
-})
+  });
+});
 
-export default router
+export default router;

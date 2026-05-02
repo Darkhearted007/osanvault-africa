@@ -2,9 +2,10 @@
   "name": "@osanvault/api",
   "version": "0.1.0",
   "private": true,
+  "type": "module",
   "scripts": {
     "dev": "tsx watch src/index.ts",
-    "build": "tsc",
+    "build": "tsc -p tsconfig.json",
     "start": "node dist/index.js",
     "test": "vitest"
   },
@@ -21,11 +22,13 @@
     "zod": "^3.23.0"
   },
   "devDependencies": {
+    "@esbuild/android-arm64": "^0.28.0",
     "@types/cors": "^2.8.17",
     "@types/express": "^5.0.0",
     "@types/node": "^22.0.0",
     "@types/pg": "^8.11.0",
-    "tsx": "^4.19.0",
+    "esbuild": "0.28.0",
+    "tsx": "^4.21.0",
     "typescript": "^5.6.0",
     "vitest": "^2.1.0"
   }
