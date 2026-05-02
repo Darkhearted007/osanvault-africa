@@ -1,5 +1,5 @@
 import { FC } from 'react'
-import { useNavigate } from 'react-router'
+import { useNavigate } from 'react-router-dom'
 import { useWallet } from '@solana/wallet-adapter-react'
 import type { Property } from '../types'
 

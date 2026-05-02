@@ -50,6 +50,16 @@ export async function getDashboard() {
   return data
 }
 
+export async function getDashboardSummary() {
+  const { data } = await apiFetch("/api/dashboard/summary")
+  return data
+}
+
+export async function getDashboardProperties() {
+  const { data } = await apiFetch("/api/dashboard/properties-overview")
+  return data
+}
+
 export async function requestNonce(wallet_address: string) {
   const { status, data } = await apiFetch("/api/auth/nonce", {
     method: "POST",

@@ -1,4 +1,4 @@
-import { useNavigate as useRouterNavigate, useLocation } from 'react-router'
+import { useNavigate as useRouterNavigate, useLocation } from 'react-router-dom'
 
 interface LinkProps {
   href: string

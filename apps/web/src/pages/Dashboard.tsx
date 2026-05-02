@@ -1,24 +1,32 @@
 import { useEffect, useState } from 'react'
 import { useWallet } from '@solana/wallet-adapter-react'
 import { StatCard } from '../components/StatCard'
+import { getDashboardSummary, getDashboardProperties } from '../api'
 import type { DashboardStats, Investment, Dividend } from '../types'
-
-const MOCK_STATS: DashboardStats = {
-  totalProperties: 3,
-  activeProperties: 2,
-  totalInvestors: 342,
-  totalTvl: 4_800_000,
-  totalDividendsPaid: 142_000,
-  completedMilestones: 24,
-}
-
-const MOCK_INVESTMENTS: Investment[] = []
 
 export default function DashboardPage() {
   const { connected, publicKey } = useWallet()
-  const [stats] = useState<DashboardStats>(MOCK_STATS)
-  const [investments, setInvestments] = useState<Investment[]>(MOCK_INVESTMENTS)
-  const [dividends] = useState<Dividend[]>([])
+  const [stats, setStats] = useState<DashboardStats | null>(null)
+  const [investments, setInvestments] = useState<Investment[]>([])
+  const [dividends, setDividends] = useState<Dividend[]>([])
+  const [loading, setLoading] = useState(true)
+
+  useEffect(() => {
+    if (connected && publicKey) {
+      setLoading(true)
+      Promise.all([
+        getDashboardSummary(),
+        getDashboardProperties()
+      ]).then(([summary, properties]) => {
+        if (summary) setStats(summary as DashboardStats)
+        if (properties && Array.isArray(properties)) {
+          const props = properties as Investment[]
+          setInvestments(props)
+        }
+        setLoading(false)
+      }).catch(() => setLoading(false))
+    }
+  }, [connected, publicKey])
 
   if (!connected) {
     return (
@@ -33,8 +41,17 @@ export default function DashboardPage() {
     )
   }
 
-  const totalInvested = investments.reduce((s, i) => s + i.amount_paid, 0)
-  const totalTokens = investments.reduce((s, i) => s + i.tokens_purchased, 0)
+  const totalInvested = investments.reduce((s, i) => s + (i.amount_paid || 0), 0)
+  const totalTokens = investments.reduce((s, i) => s + (i.tokens_purchased || 0), 0)
+  const totalDividends = dividends.reduce((s, d) => s + d.amount, 0)
+
+  if (loading) {
+    return (
+      <div className="page page--dashboard page--loading">
+        <div className="loading-spinner">Loading portfolio...</div>
+      </div>
+    )
+  }
 
   return (
     <div className="page page--dashboard">
@@ -47,11 +64,13 @@ export default function DashboardPage() {
         </div>
       </div>
 
-      <div className="stats-grid stats-grid--3">
-        <StatCard label="Total Invested" value={`$${totalInvested.toLocaleString()}`} />
-        <StatCard label="OSANV Tokens" value={totalTokens.toLocaleString()} />
-        <StatCard label="Dividends Earned" value="$0" sub="No dividends yet" />
-      </div>
+      {stats && (
+        <div className="stats-grid stats-grid--3">
+          <StatCard label="Total Invested" value={`$${totalInvested.toLocaleString()}`} sub={`$${stats.totalTvl?.toLocaleString() || 0} TVL`} />
+          <StatCard label="OSANV Tokens" value={totalTokens.toLocaleString()} />
+          <StatCard label="Dividends Earned" value={`$${totalDividends.toLocaleString()}`} sub={`${stats.totalDividendsPaid?.toLocaleString() || 0} total paid`} />
+        </div>
+      )}
 
       {investments.length === 0 ? (
         <div className="empty-state">
@@ -89,6 +108,18 @@ export default function DashboardPage() {
               <span className="gradient-text">${d.amount.toFixed(2)}</span>
             </div>
           ))}
+        </div>
+      )}
+
+      {stats && (
+        <div className="section">
+          <h2 className="section-title">Platform Overview</h2>
+          <div className="stats-grid stats-grid--2">
+            <StatCard label="Properties" value={stats.totalProperties?.toString() || '0'} sub={`${stats.activeProperties || 0} active`} />
+            <StatCard label="Investors" value={stats.totalInvestors?.toLocaleString() || '0'} />
+            <StatCard label="Milestones" value={stats.completedMilestones?.toString() || '0'} />
+            <StatCard label="TVL" value={`$${(stats.totalTvl || 0).toLocaleString()}`} />
+          </div>
         </div>
       )}
     </div>

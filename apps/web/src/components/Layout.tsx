@@ -1,5 +1,6 @@
 import { FC, ReactNode } from 'react'
 import { Nav } from './Nav'
+import { BottomNavBar } from './BottomNavBar'
 
 interface LayoutProps {
   children: ReactNode
@@ -18,6 +19,7 @@ export const Layout: FC<LayoutProps> = ({ children, title, hideNav }) => {
       <main className="main-content">
         {children}
       </main>
+      <BottomNavBar />
       <footer className="footer">
         <div className="footer-inner">
           <div className="footer-brand">
