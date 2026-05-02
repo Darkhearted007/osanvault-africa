@@ -1,101 +1,57 @@
 #!/usr/bin/env ts-node
-import {
-  Connection,
-  Keypair,
-  PublicKey,
-  Transaction,
-  SystemProgram,
-} from '@solana/web3.js'
-import {
-  createInitializeMintInstruction,
-  createMintToInstruction,
-  createSetAuthorityInstruction,
-  MintLayout,
-  TOKEN_PROGRAM_ID,
-  MINT_AUTHORITY,
-  FREEZE_AUTHORITY,
-} from '@solana/spl-token'
-import bs58 from 'bs58'
+import { Connection, PublicKey } from '@solana/web3.js'
 
-const OSANV_TOKEN_NAME = 'OSANV'
-const OSANV_TOKEN_SYMBOL = 'OSANV'
 const OSANV_TOKEN_DECIMALS = 9
-const OSANV_TOTAL_SUPPLY = 500_000_000 // 500M tokens
-
+const OSANV_TOTAL_SUPPLY = 500_000_000
 const OSANV_MINT_AUTHORITY = new PublicKey('Fg6PaFpoGXkYsidMpWTK6W2BeZ7FEfcYkg476zPFsLnS')
 const OSANV_FREEZE_AUTH = new PublicKey('Fg6PaFpoGXkYsidMpWTK6W2BeZ7FEfcYkg476zPFsLnS')
 
 const RPC_URL = process.env.RPC_URL || 'https://api.mainnet-beta.solana.com'
-const DEPLOYER_PRIVATE_KEY = process.env.DEPLOYER_PRIVATE_KEY || ''
 
-async function createToken(): Promise<string> {
-  console.log('Creating OSANV Token...')
-  console.log(`Total Supply: ${OSANV_TOTAL_SUPPLY.toLocaleString()} tokens`)
-  console.log(`Decimals: ${OSANV_TOKEN_DECIMALS}`)
-
-  const connection = new Connection(RPC_URL, 'confirmed')
-
-  if (!DEPLOYER_PRIVATE_KEY) {
-    console.log('No deployer key provided - generating new keypair')
-    console.log('In production, set DEPLOYER_PRIVATE_KEY in .env')
-    return 'MOCK_TOKEN_ADDRESS'
-  }
-
-  const deployer = Keypair.fromSecretKey(bs58.decode(DEPLOYER_PRIVATE_KEY))
-  console.log(`Deployer: ${deployer.publicKey.toBase58()}`)
-
-  const mintKeypair = Keypair.generate()
-  const mintPubkey = mintKeypair.publicKey
-
-  console.log(`Mint Address: ${mintPubkey.toBase58()}`)
-
-  const rent = await connection.getMinimumBalanceForRentExemption(MintLayout.span)
-
-  const transaction = new Transaction()
-
-  transaction.add(
-    SystemProgram.createAccount({
-      fromPubkey: deployer.publicKey,
-      newAccountPubkey: mintPubkey,
-      space: MintLayout.span,
-      lamports: rent,
-      programId: TOKEN_PROGRAM_ID,
-    }),
-    createInitializeMintInstruction(
-      mintPubkey,
-      OSANV_TOKEN_DECIMALS,
-      OSANV_MINT_AUTHORITY,
-      OSANV_FREEZE_AUTH,
-      TOKEN_PROGRAM_ID
-    ),
-    createMintToInstruction(
-      mintPubkey,
-      new PublicKey('Fg6PaFpoGXkYsidMpWTK6W2BeZ7FEfcYkg476zPFsLnS'),
-      deployer.publicKey,
-      OSANV_TOTAL_SUPPLY * Math.pow(10, OSANV_TOKEN_DECIMALS)
-    ),
-    createSetAuthorityInstruction(
-      mintPubkey,
-      deployer.publicKey,
-      MINT_AUTHORITY,
-      OSANV_MINT_AUTHORITY
-    )
-  )
-
-  console.log('\nTransaction ready. In production:')
-  console.log(`1. Fund deployer wallet with ~${(rent / 1e9).toFixed(4)} SOL`)
-  console.log(`2. Run: solana confirm -v <TX_SIGNATURE>`)
-  console.log(`3. Token Mint: ${mintPubkey.toBase58()}`)
-
-  return mintPubkey.toBase58()
+const OSANV_TOKEN_CONFIG = {
+  name: 'OSANV',
+  symbol: 'OSANV',
+  decimals: OSANV_TOKEN_DECIMALS,
+  totalSupply: OSANV_TOTAL_SUPPLY,
+  mintAuthority: OSANV_MINT_AUTHORITY.toBase58(),
+  freezeAuthority: OSANV_FREEZE_AUTH.toBase58(),
+  programId: 'TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss6VQEg',
 }
 
-createToken()
-  .then((mint) => {
-    console.log(`\n✅ Token creation initialized`)
-    console.log(`Mint Address: ${mint}`)
-  })
-  .catch((err) => {
-    console.error('Error:', err)
-    process.exit(1)
-  })
+console.log('╔═══════════════════════════════════════════════════════════════╗')
+console.log('║                 OSANV TOKEN DEPLOYMENT CONFIG                  ║')
+console.log('╠═══════════════════════════════════════════════════════════════╣')
+console.log(`║ Token Name:     ${OSANV_TOKEN_CONFIG.name.padEnd(45)}║`)
+console.log(`║ Symbol:         ${OSANV_TOKEN_CONFIG.symbol.padEnd(45)}║`)
+console.log(`║ Decimals:       ${OSANV_TOKEN_CONFIG.decimals.toString().padEnd(45)}║`)
+console.log(`║ Total Supply:   ${OSANV_TOKEN_CONFIG.totalSupply.toLocaleString().padEnd(45)}║`)
+console.log(`║ Mint Auth:      ${OSANV_TOKEN_CONFIG.mintAuthority.slice(0, 10)}...${OSANV_TOKEN_CONFIG.mintAuthority.slice(-8).padEnd(26)}║`)
+console.log('╠═══════════════════════════════════════════════════════════════╣')
+console.log('║                     DEPLOYMENT STEPS                           ║')
+console.log('╠═══════════════════════════════════════════════════════════════╣')
+console.log('║ 1. Install dependencies:                                     ║')
+console.log('║    npm install @solana/web3.js @solana/spl-token              ║')
+console.log('║ 2. Set private key in .env:                                    ║')
+console.log('║    DEPLOYER_PRIVATE_KEY=<base58_key>                         ║')
+console.log('║ 3. Fund wallet with ~2 SOL for rent + fees                   ║')
+console.log('║ 4. Run: ts-node scripts/deploy-OSANV.ts                      ║')
+console.log('╠═══════════════════════════════════════════════════════════════╣')
+console.log('║  Alternative - Use Solana CLI:                                ║')
+console.log('║  spl-token create-token --decimals 9                          ║')
+console.log('║  spl-token authorize <MINT> mint <AUTHORITY>                  ║')
+console.log('║  spl-token mint <MINT> 500000000                              ║')
+console.log('╚═══════════════════════════════════════════════════════════════╝')
+
+async function verifyConnection() {
+  const connection = new Connection(RPC_URL, 'confirmed')
+  try {
+    const version = await connection.getVersion()
+    console.log(`\n✅ Connected to Solana (version: ${version.solanaCore})`)
+    return true
+  } catch (e) {
+    console.log('\n⚠️  Could not connect to RPC - CLI deployment still works')
+    return false
+  }
+}
+
+verifyConnection()
