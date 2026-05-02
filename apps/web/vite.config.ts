@@ -3,12 +3,18 @@ import react from '@vitejs/plugin-react'
 
 export default defineConfig({
   plugins: [react()],
-  build: {
-    target: 'es2020'
+  resolve: {
+    preserveSymlinks: true
   },
   optimizeDeps: {
     esbuildOptions: {
       target: 'es2020'
+    }
+  },
+  build: {
+    target: 'es2020',
+    commonjsOptions: {
+      transformMixedEsModules: true
     }
   }
 })
