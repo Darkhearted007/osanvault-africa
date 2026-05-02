@@ -1,13 +1,8 @@
-import type { FC, ReactNode } from 'react'
 import { useWallet } from '@solana/wallet-adapter-react'
 import { WalletMultiButton } from '@solana/wallet-adapter-react-ui'
 import { Link } from './Link'
 
-interface NavProps {
-  children?: ReactNode
-}
-
-export const Nav: FC<NavProps> = () => {
+export function Nav() {
   const { connected } = useWallet()
 
   return (
@@ -26,11 +21,7 @@ export const Nav: FC<NavProps> = () => {
       </div>
 
       <div className="nav-actions">
-        {connected ? (
-          <WalletMultiButton />
-        ) : (
-          <WalletMultiButton />
-        )}
+        <WalletMultiButton />
       </div>
     </nav>
   )
