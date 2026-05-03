@@ -34,6 +34,7 @@ import lpManagerRouter from "./routes/lpManager"
 import dcaRouter from "./routes/dca"
 import dividendDripRouter from "./routes/dividendDrip"
 import portfolioRebalancerRouter from "./routes/portfolioRebalancer"
+import supportRouter from "./routes/support"
 
 const app = express()
 const PORT = parseInt(process.env.PORT || "3001", 10)
@@ -64,6 +65,7 @@ app.use("/api/lp", requireAdmin(), lpManagerRouter)
 app.use("/api/dca", requireAuthenticated(), dcaRouter)
 app.use("/api/dividends", requireAdmin(), dividendDripRouter)
 app.use("/api/portfolio", requireAuthenticated(), portfolioRebalancerRouter)
+app.use("/api/support", supportRouter)
 
 // Webhook routes need stricter limits
 app.use(express.json({

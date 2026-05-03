@@ -16,4 +16,6 @@ export const API_ROUTES = {
   portfolio: "/api/portfolio",
   lp: "/api/lp",
   queue: "/api/queue",
+  support: "/api/support",
+  supportContact: "/api/support/contact-info",
 } as const

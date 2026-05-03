@@ -540,6 +540,23 @@ footer {
   font-size: 0.8rem;
 }
 
+.footer-contact {
+  display: flex;
+  gap: 20px;
+  margin: 12px 0;
+  font-size: 0.85rem;
+  color: var(--text-muted);
+}
+
+.footer-contact a {
+  color: var(--brand-primary);
+  text-decoration: none;
+}
+
+.footer-contact a:hover {
+  text-decoration: underline;
+}
+
 /* Logo mark */
 .logo-mark {
   display: block;
