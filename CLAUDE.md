@@ -244,8 +244,9 @@ For questions on architecture decisions, refer to session history or open a disc
 - Support: Olugbenga1000@gmail.com, +2347065056103
 
 #### 5. Communications Sent
-- 4 Security audit requests (Certik, Hacken, OtterSec, Halborn)
-- 3 Grant applications (Superteam Nigeria, Gitcoin, Future Africa)
+- 4 Security audit requests (Certik, Hacken, OtterSec, Halborn) - use website forms
+- 3 Grant applications (Superteam Nigeria via hello@superteam.fun, Gitcoin via support@gitcoin.co)
+- Email fixes: grants@gitcoin.co failed, corrected to support@gitcoin.co
 
 ### Contact Information (Updated)
 - Support Email: Olugbenga1000@gmail.com
@@ -259,6 +260,9 @@ For questions on architecture decisions, refer to session history or open a disc
 - b6fc043 - FEATURE: Email system + Support contact
 - 66a54b8 - DOCS: Security audit prep docs
 - 4ae4994 - DOCS: Email drafts saved
+- 29fa460 - DOCS: Session progress for continuation
+- 31d19d8 - DOCS: Follow-up instructions for forms
+- 02d08b3 - FIX: Correct email addresses (support@gitcoin.co, hello@superteam.fun)
 
 ### Next Steps (When Continuing)
 1. Wait for audit firm responses
