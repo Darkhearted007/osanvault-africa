@@ -25,15 +25,13 @@ The previous emails failed because audit firms and grant programs use **website 
 
 ### For Grant Applications
 
-1. **Superteam Nigeria** - https://superteam.fun/earn/regions/nigeria/
-   - Go to "Grants" tab
-   - Submit via their portal
+1. **Superteam Nigeria** - hello@superteam.fun ✅ (just sent)
+   - Also: https://superteam.fun/earn/regions/nigeria/
 
-2. **Gitcoin** - https://gitcoin.co/grants/
-   - Create a grant profile on their platform
+2. **Gitcoin** - support@gitcoin.co ✅ (just sent)
+   - Also: https://grants.gitcoin.co/
 
-3. **Future Africa** - Check their website for application portal
-   - Look for "Apply" or "Contact" page
+3. **Future Africa** - Check their website
 
 ---
 
