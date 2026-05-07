@@ -299,9 +299,37 @@ For questions on architecture decisions, refer to session history or open a disc
 6. Legal registrations (SCUML, DAOP)
 7. KBW 2026 preparation (September Seoul)
 
+### Session Progress - May 7, 2026 (Smart Contract Audit)
+
+#### Smart Contract Bug Analysis Completed
+- Analyzed all 7 Anchor/Rust smart contracts
+- Identified 16 bugs across contracts:
+
+| Contract | Issues Fixed |
+|----------|--------------|
+| osanvault_core | Functions outside module (unreachable), extra brace, account space, redundant constraint |
+| reits | Yield distribution bug (transferred full amount not total_yield), missing share minting, unwrap() panics |
+| osanvault-lend | Missing collateral vault account |
+| minerals | Unused royalty_recipient parameter |
+| landbank | Division by zero (3 issues), acquired_acres calculation, claim_land math |
+| oracle | No price staleness check |
+| carbon | Wrong verifier account type (TokenAccount not Signer) |
+
+#### Verification
+- All 7 contracts pass `rustfmt --check` syntax validation
+- Rust 1.95.0 installed (Windows + WSL)
+- Anchor CLI v1.0.2 and v0.30.1 available
+- Full build pending: Solana CLI download network timeout
+
+#### Files Modified
+- Anchor.toml - Added all 7 programs + toolchain version
+- programs/oracle/Cargo.toml - New file created
+- All 7 contract lib.rs files - Bug fixes applied
+
 ### GitHub Commits (May 7, 2026)
 | Commit | Description |
 |--------|-------------|
+| 22cd90c | FIX: Smart contract bug fixes - 16 issues across 7 contracts |
 | e55586a | DOCS: Update CLAUDE.md session progress + email scripts |
 | f2c027c | FIX: Correct email addresses (support@gitcoin.co, hello@superteam.fun) |
 | 4b43949 | SECURITY: Fix 2 moderate vulnerabilities (vite, ip-address) |
