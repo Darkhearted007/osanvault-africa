@@ -254,16 +254,6 @@ For questions on architecture decisions, refer to session history or open a disc
 - Website: osanvaultafrica.com
 
 ### GitHub Commits This Session
-- 5bcd097 - ADD: Token deployment scripts
-- 4f5df27 - FEATURE: 6 new Anchor contracts + Oracle
-- 95b0709 - FEATURE: RBAC, OSANV token mint
-- b6fc043 - FEATURE: Email system + Support contact
-- 66a54b8 - DOCS: Security audit prep docs
-- 4ae4994 - DOCS: Email drafts saved
-- 29fa460 - DOCS: Session progress for continuation
-- 31d19d8 - DOCS: Follow-up instructions - use website forms not email
-- 02d08b3 - FIX: Correct email addresses (support@gitcoin.co, hello@superteam.fun)
-- a7c3d91 - DOCS: Reply to Certik + Gitcoin email responses
 
 ### Session Progress - May 7, 2026
 
@@ -295,6 +285,11 @@ For questions on architecture decisions, refer to session history or open a disc
 | Future Africa | Just applied | Await response |
 | Hacken/OtterSec/Halborn | Pending | Await responses |
 
+#### Security Vulnerabilities Fixed
+- **Vite path traversal** (GHSA-4w7w-66w2-5vf9): Updated 5.4.21 → 6.4.2
+- **ip-address XSS** (GHSA-v2v4-37r5-5v8g): Updated express-rate-limit 8.4.1 → 8.5.0
+- **Result**: `pnpm audit` shows 0 vulnerabilities
+
 ### Next Steps (When Continuing)
 1. Await CertiK quote response
 2. Await Superteam Nigeria response
@@ -303,6 +298,12 @@ For questions on architecture decisions, refer to session history or open a disc
 5. Deploy OSANV token (needs ~2 SOL)
 6. Legal registrations (SCUML, DAOP)
 7. KBW 2026 preparation (September Seoul)
+
+### GitHub Commits (May 7, 2026)
+| Commit | Description |
+|--------|-------------|
+| f2c027c | FIX: Correct email addresses (support@gitcoin.co, hello@superteam.fun) |
+| 4b43949 | SECURITY: Fix 2 moderate vulnerabilities (vite, ip-address) |
 
 #### Key Files Reference
 - Token deployment: scripts/setup-solana.sh, scripts/setup-solana.bat
