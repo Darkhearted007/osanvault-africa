@@ -302,8 +302,10 @@ For questions on architecture decisions, refer to session history or open a disc
 ### GitHub Commits (May 7, 2026)
 | Commit | Description |
 |--------|-------------|
+| e55586a | DOCS: Update CLAUDE.md session progress + email scripts |
 | f2c027c | FIX: Correct email addresses (support@gitcoin.co, hello@superteam.fun) |
 | 4b43949 | SECURITY: Fix 2 moderate vulnerabilities (vite, ip-address) |
+| bce9178 | DOCS: Update CLAUDE.md with security fixes + grant status |
 
 #### Key Files Reference
 - Token deployment: scripts/setup-solana.sh, scripts/setup-solana.bat
