@@ -261,20 +261,46 @@ For questions on architecture decisions, refer to session history or open a disc
 - 66a54b8 - DOCS: Security audit prep docs
 - 4ae4994 - DOCS: Email drafts saved
 - 29fa460 - DOCS: Session progress for continuation
-- 31d19d8 - DOCS: Follow-up instructions for forms
+- 31d19d8 - DOCS: Follow-up instructions - use website forms not email
 - 02d08b3 - FIX: Correct email addresses (support@gitcoin.co, hello@superteam.fun)
+- a7c3d91 - DOCS: Reply to Certik + Gitcoin email responses
 
-### Next Steps (When Continuing)
-1. Wait for audit firm responses
-2. Wait for grant application responses
-3. Deploy OSANV token (needs ~2 SOL)
-4. External security audit (~$7K-$15K)
-5. Legal registrations (SCUML, DAOP)
-6. KBW 2026 preparation (September Seoul)
+### Session Progress - May 7, 2026
 
-### Key Files Reference
+#### Email Responses Received & Replied
+
+**1. CertiK (Security Audit)**
+- Response: Danni Liu + Jason Jiang asked for repo access
+- Action: Sent GitHub link + full scope (7 contracts) + offered CertiK4Audit collaborator access
+- Message ID: 5275a350-fe70-6c55-8c9e-5a107c8ebb0d@gmail.com
+
+**2. Gitcoin (Grant)**
+- Response: Ivan from Gitcoin - GG25 expected Q2 2026, visit gov.gitcoin.co
+- Action: Sent reply expressing interest, highlighted traction (7 contracts, 29 tests, CertiK audit)
+- Message ID: d5c9b167-45ab-dfdf-f075-22c321ab1955@gmail.com
+
+#### Grant Status Update
+| Program | Status | Next Action |
+|---------|--------|-------------|
+| CertiK | Active - awaiting quote | Await response, add collaborator if needed |
+| Gitcoin | GG25 Q2 2026 | Monitor gov.gitcoin.co, prepare full application |
+| Superteam Nigeria | Pending | Await response |
+| Future Africa | Pending | Await response |
+| Hacken/OtterSec/Halborn | Pending | Await responses |
+
+#### Next Steps (When Continuing)
+1. Await CertiK quote response
+2. Await Superteam Nigeria response
+3. Await Future Africa response
+4. Monitor Gitcoin gov.gitcoin.co for GG25 details
+5. Deploy OSANV token (needs ~2 SOL)
+6. Legal registrations (SCUML, DAOP)
+7. KBW 2026 preparation (September Seoul)
+
+#### Key Files Reference
 - Token deployment: scripts/setup-solana.sh, scripts/setup-solana.bat
 - Email scripts: scripts/send-email.ts, scripts/send-grant-application.ts
 - API routes: apps/api/src/routes/support.ts
 - Security docs: docs/SECURITY-AUDIT.md, docs/AUDIT-CHECKLIST.md, docs/BUG-BOUNTY.md
 - Email drafts: email-drafts/
+- Reply drafts: email-drafts/REPLY-*.md
