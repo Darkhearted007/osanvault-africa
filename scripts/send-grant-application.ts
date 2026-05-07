@@ -15,9 +15,9 @@ interface GrantTarget {
 }
 
 const grantTargets: GrantTarget[] = [
-  { name: 'Superteam Nigeria', email: 'apply@superteam.fun', subject: 'Grant Application - ÒsánVault Africa' },
+  { name: 'Superteam Nigeria', email: 'hello@superteam.fun', subject: 'Grant Application - ÒsánVault Africa' },
   { name: 'Gitcoin', email: 'grants@gitcoin.co', subject: 'Retroactive Grant - ÒsánVault Africa' },
-  { name: 'Future Africa', email: 'hello@future.africa', subject: 'Pre-Seed Application - ÒsánVault' }
+  { name: 'Future Africa', email: 'funding@future.africa', subject: 'Pre-Seed Application - ÒsánVault' }
 ];
 
 const grantApplication = (targetName: string) => `

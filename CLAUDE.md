@@ -279,16 +279,23 @@ For questions on architecture decisions, refer to session history or open a disc
 - Action: Sent reply expressing interest, highlighted traction (7 contracts, 29 tests, CertiK audit)
 - Message ID: d5c9b167-45ab-dfdf-f075-22c321ab1955@gmail.com
 
+### Session Progress - May 7, 2026 (Continued)
+
+#### Grant Applications Sent (Fixed Emails)
+- **Superteam Nigeria**: hello@superteam.fun (fixed from apply@superteam.fun)
+- **Future Africa**: funding@future.africa (fixed from hello@future.africa)
+- **Gitcoin**: support@gitcoin.co (confirmed correct)
+
 #### Grant Status Update
 | Program | Status | Next Action |
 |---------|--------|-------------|
 | CertiK | Active - awaiting quote | Await response, add collaborator if needed |
 | Gitcoin | GG25 Q2 2026 | Monitor gov.gitcoin.co, prepare full application |
-| Superteam Nigeria | Pending | Await response |
-| Future Africa | Pending | Await response |
+| Superteam Nigeria | Just applied | Await response |
+| Future Africa | Just applied | Await response |
 | Hacken/OtterSec/Halborn | Pending | Await responses |
 
-#### Next Steps (When Continuing)
+### Next Steps (When Continuing)
 1. Await CertiK quote response
 2. Await Superteam Nigeria response
 3. Await Future Africa response
