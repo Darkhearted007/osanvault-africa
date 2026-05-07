@@ -7,6 +7,7 @@ export default defineConfig({
     preserveSymlinks: true
   },
   optimizeDeps: {
+    include: ['react-router', 'react-router-dom'],
     esbuildOptions: {
       target: 'es2020'
     }
@@ -15,6 +16,9 @@ export default defineConfig({
     target: 'es2020',
     commonjsOptions: {
       transformMixedEsModules: true
+    },
+    rollupOptions: {
+      external: []
     }
   }
 })
