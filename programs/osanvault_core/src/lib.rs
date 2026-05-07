@@ -176,17 +176,6 @@ pub mod osanvault_core {
         Ok(())
     }
 
-    /// Get OSANV token price from Pyth oracle
-    /// Returns the current price in USD (scaled by 1e8)
-    pub fn get_osanv_price(_ctx: Context<GetOraclePrice>) -> Result<u64> {
-        // In production, this would fetch from Pyth oracle
-        // For now, returning mock price
-        // TODO: Integrate Pyth Network price feed
-        let mock_price: u64 = 1_00_000_000; // $1.00 USD (scaled)
-        Ok(mock_price)
-    }
-}
-
     /// Transfer platform ownership to a new admin
     /// SECURITY: Only super admin can transfer ownership
     pub fn transfer_ownership(ctx: Context<TransferOwnership>, new_admin: Pubkey) -> Result<()> {
@@ -243,6 +232,7 @@ pub mod osanvault_core {
             OsanvaultError::ApyTooHigh
         );
 
+        let property = &mut ctx.accounts.property;
         property.id = property_id;
         property.total_value_usd = total_value_usd;
         property.total_tokens = total_tokens;
@@ -322,7 +312,7 @@ pub struct InitializePlatform<'info> {
     #[account(
         init,
         payer = admin,
-        space = 8 + 32 + 8 + 1 + 32 + 32 + 32 + 32 + 32 + 2 + 8, 
+        space = 8 + 32 + 8 + 1 + 32 + 32 + 32 + 32 + 32 + 32 + 2 + 8,
         seeds = [b"platform"],
         bump
     )]
@@ -445,11 +435,7 @@ pub struct Invest<'info> {
     #[account(mut)]
     pub property: Account<'info, PropertyState>,
     
-    #[account(
-        mut,
-        address = ctx.accounts.platform.key(),
-        constraint = ctx.accounts.platform.as_ref().key() == ctx.accounts.platform.key()
-    )]
+    #[account(mut)]
     pub platform: Account<'info, PlatformState>,
     
     #[account(

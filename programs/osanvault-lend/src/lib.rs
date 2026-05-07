@@ -261,6 +261,16 @@ pub struct InitPool<'info> {
     )]
     pub pool: Account<'info, LendingPool>,
     
+    #[account(
+        init,
+        payer = owner,
+        seeds = [b"collateral-vault", pool.key().as_ref()],
+        bump,
+        token::mint = collateral_mint,
+        token::authority = pool
+    )]
+    pub collateral_vault: Account<'info, TokenAccount>,
+    
     #[account(mut)]
     pub owner: Signer<'info>,
     pub collateral_mint: Account<'info, Mint>,

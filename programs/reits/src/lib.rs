@@ -42,8 +42,13 @@ pub mod reits {
         
         reit.shares_issued = new_shares;
         
-        let share_token = &mut ctx.accounts.share_token;
-        share_token.mint = ctx.accounts.reit_mint.key();
+        let cpi_accounts = anchor_spl::token::MintTo {
+            mint: ctx.accounts.reit_mint.to_account_info(),
+            to: ctx.accounts.share_token.to_account_info(),
+            authority: ctx.accounts.mint_authority.to_account_info(),
+        };
+        let cpi = CpiContext::new(ctx.accounts.token_program.to_account_info(), cpi_accounts);
+        anchor_spl::token::mint_to(cpi, num_shares)?;
         
         msg!("Issued {} shares to {}", num_shares, recipient);
         Ok(())
@@ -61,7 +66,10 @@ pub mod reits {
             .checked_div(reit.nav_per_share as u128)
             as u64;
         
-        require!(reit.shares_issued.checked_add(shares_to_issue).unwrap() <= reit.total_shares, ReitError::SharesExhausted);
+        let new_shares_issued = reit.shares_issued
+            .checked_add(shares_to_issue)
+            .ok_or(ReitError::OverflowError)?;
+        require!(new_shares_issued <= reit.total_shares, ReitError::SharesExhausted);
         
         let cpi_accounts = Transfer {
             from: ctx.accounts.investor_token.to_account_info(),
@@ -71,14 +79,14 @@ pub mod reits {
         let cpi = CpiContext::new(ctx.accounts.token_program.to_account_info(), cpi_accounts);
         token::transfer(cpi, amount)?;
         
-        reit.shares_issued = reit.shares_issued.checked_add(shares_to_issue).unwrap();
+        reit.shares_issued = new_shares_issued;
         
         msg!("Invested {} for {} shares", amount, shares_to_issue);
         Ok(())
     }
 
     pub fn distribute_yield(ctx: Context<DistributeYield>, amount: u64) -> Result<()> {
-        let reit = &mut ctx.accounts.reit;
+        let reit = &ctx.accounts.reit;
         
         require!(reit.manager == ctx.accounts.manager.key(), ReitError::Unauthorized);
         
@@ -87,15 +95,17 @@ pub mod reits {
             .ok_or(ReitError::OverflowError)?
             / 10000;
         
+        require!(total_yield > 0, ReitError::InvalidAmount);
+        
         let cpi_accounts = Transfer {
             from: ctx.accounts.treasury_token.to_account_info(),
             to: ctx.accounts.recipient_token.to_account_info(),
             authority: ctx.accounts.treasury.to_account_info(),
         };
         let cpi = CpiContext::new(ctx.accounts.token_program.to_account_info(), cpi_accounts);
-        token::transfer(cpi, amount)?;
+        token::transfer(cpi, total_yield)?;
         
-        msg!("Distributed {} yield ({}bps)", amount, reit.yield_bps);
+        msg!("Distributed {} yield ({}bps)", total_yield, reit.yield_bps);
         Ok(())
     }
 
@@ -104,7 +114,9 @@ pub mod reits {
         
         require!(reit.manager == ctx.accounts.manager.key(), ReitError::Unauthorized);
         
-        reit.total_properties = reit.total_properties.checked_add(1).unwrap();
+        reit.total_properties = reit.total_properties
+            .checked_add(1)
+            .ok_or(ReitError::OverflowError)?;
         
         let property = &mut ctx.accounts.property;
         property.value = property_value;
@@ -171,7 +183,11 @@ pub struct IssueShares<'info> {
     #[account(mut)]
     pub share_token: Account<'info, TokenAccount>,
     
+    #[account(mut)]
     pub reit_mint: Account<'info, Mint>,
+    
+    pub mint_authority: Signer<'info>,
+    pub token_program: Program<'info, Token>,
     pub system_program: Program<'info, System>,
 }
 

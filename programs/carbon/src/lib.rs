@@ -154,7 +154,7 @@ pub struct RegisterProject<'info> {
     
     #[account(mut)]
     pub owner: Signer<'info>,
-    pub verifier: Account<'info, TokenAccount>,
+    pub verifier: Signer<'info>,
     pub system_program: Program<'info, System>,
     pub token_program: Program<'info, Token>,
     pub rent: Sysvar<'info, Rent>,

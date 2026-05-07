@@ -52,14 +52,11 @@ pub mod landbank {
         
         require!(pool.status == 1, LandError::PoolNotActive);
         require!(amount >= pool.min_contribution, LandError::BelowMinimum);
+        require!(pool.target_price_per_acre > 0, LandError::InvalidPrice);
         
         // Calculate ownership percentage
         let total_value = pool.total_acres * pool.target_price_per_acre;
-        let ownership = if total_value > 0 {
-            (amount as u128 * 10000 / total_value as u128) as u64
-        } else {
-            0
-        };
+        let ownership = (amount as u128 * 10000 / total_value as u128) as u64;
         
         let user_position = &mut ctx.accounts.user_position;
         user_position.contribution = user_position.contribution
@@ -79,10 +76,17 @@ pub mod landbank {
         
         // Increment contributor count if new
         if user_position.contribution == amount {
-            pool.total_contributors = pool.total_contributors.checked_add(1).unwrap();
+            pool.total_contributors = pool.total_contributors
+                .checked_add(1)
+                .ok_or(LandError::OverflowError)?;
         }
         
-        pool.acquired_acres = pool.acquired_acres.checked_add(1).unwrap(); // Simplified
+        let acres_acquired = amount
+            .checked_div(pool.target_price_per_acre)
+            .ok_or(LandError::OverflowError)?;
+        pool.acquired_acres = pool.acquired_acres
+            .checked_add(acres_acquired)
+            .ok_or(LandError::OverflowError)?;
         
         msg!("Contribution of {} - ownership: {} bps", amount, ownership);
         Ok(())
@@ -92,10 +96,11 @@ pub mod landbank {
         let pool = &mut ctx.accounts.pool;
         
         require!(pool.status == 1, LandError::PoolNotActive);
+        require!(pool.total_acres > 0, LandError::InvalidAcres);
         
         let user_position = &mut ctx.accounts.user_position;
         
-        let required_ownership = acres * pool.target_price_per_acre * 10000 / (pool.total_acres * pool.target_price_per_acre);
+        let required_ownership = acres * 10000 / pool.total_acres;
         
         require!(user_position.ownership_bps >= required_ownership, LandError::InsufficientOwnership);
         

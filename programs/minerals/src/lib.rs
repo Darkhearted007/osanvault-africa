@@ -61,7 +61,6 @@ pub mod minerals {
     pub fn transfer_mineral(
         ctx: Context<TransferMineral>,
         amount: u64,
-        royalty_recipient: Pubkey,
     ) -> Result<()> {
         let site = &ctx.accounts.site;
         

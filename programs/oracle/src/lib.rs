@@ -1,8 +1,9 @@
 use anchor_lang::prelude::*;
 
-declare_id!("PyTHoRacle11111111111111111111111111111111");
+declare_id!("PyTHoR2c11111111111111111111111111111111");
 
 pub const PYTH_PRICE_FEED_SIZE: usize = 3312;
+pub const MAX_PRICE_AGE_SECONDS: i64 = 60;
 
 #[program]
 pub mod oracle {
@@ -11,12 +12,14 @@ pub mod oracle {
     pub fn get_price(ctx: Context<GetPrice>) -> Result<u64> {
         let price_data = &ctx.accounts.price_feed;
         let price = pyth_decode_price(price_data)?;
+        check_price_freshness(price_data)?;
         Ok(price)
     }
 
     pub fn get_price_with_confidence(ctx: Context<GetPriceWithConfidence>) -> Result<PriceWithConfidence> {
         let price_data = &ctx.accounts.price_feed;
         let (price, conf) = pyth_decode_price_with_confidence(price_data)?;
+        check_price_freshness(price_data)?;
         Ok(PriceWithConfidence { price, confidence: conf })
     }
 }
@@ -107,6 +110,25 @@ fn pyth_decode_price_with_confidence(feed: &PriceFeed) -> Result<(u64, u64)> {
     };
     
     Ok((price_u64, conf))
+}
+
+fn check_price_freshness(feed: &PriceFeed) -> Result<()> {
+    let data = &feed.data;
+    let publish_time_offset = 64;
+    let publish_time_bytes = &data[publish_time_offset..publish_time_offset + 8];
+    let publish_time = i64::from_le_bytes(
+        publish_time_bytes.try_into().map_err(|_| OracleError::InvalidData)?
+    );
+    
+    let clock = Clock::get()?;
+    let current_time = clock.unix_timestamp;
+    
+    require!(
+        current_time - publish_time <= MAX_PRICE_AGE_SECONDS,
+        OracleError::FeedUnavailable
+    );
+    
+    Ok(())
 }
 
 // Switchboard Oracle fallback
