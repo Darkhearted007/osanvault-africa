@@ -16,9 +16,7 @@
     "@solana/wallet-adapter-react-ui": "^0.9.39",
     "@solana/web3.js": "^1.98.4",
     "react": "^19.2.5",
-    "react-dom": "^19.2.5",
-    "react-router": "6.30.3",
-    "react-router-dom": "6.30.3"
+    "react-dom": "^19.2.5"
   },
   "devDependencies": {
     "@vitejs/plugin-react": "^4.3.1",
