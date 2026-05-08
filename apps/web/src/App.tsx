@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react"
-import { useWallet } from "@solana/wallet-adapter-react"
+// wallet adapter removed temporarily
 import { WalletButton } from "./WalletButton"
 import "./index.css"
 
@@ -140,7 +140,7 @@ function StatCard({ label, value, sub, accent }: { label: string; value: string;
 }
 
 function PropertyCard({ p, onSelect }: { p: Property; onSelect: (p: Property) => void }) {
-  const { connected } = useWallet()
+  const connected = false
   const funded = fundedPct(p.tokens_sold, p.total_tokens)
   const statusColors: Record<string, string> = {
     Active: "#2e7d32", "Coming Soon": "#f59e0b", Funded: "#0284c7",
@@ -315,7 +315,7 @@ function GovernanceTab() {
 
 // ── Root ───────────────────────────────────────────────────────────────────
 export default function App() {
-  const { connected, publicKey } = useWallet()
+  const connected = false; const publicKey = null
   const [tab, setTab] = useState<Tab>("dashboard")
   const [properties, setProperties] = useState<Property[]>(MOCK_PROPERTIES)
   const [selectedProperty, setSelectedProperty] = useState<Property | null>(null)
