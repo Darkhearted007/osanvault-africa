@@ -1,6 +1,6 @@
 use anchor_lang::prelude::*;
 
-declare_id!("PyTHoR2c11111111111111111111111111111111");
+declare_id!("9x81xZ2Kqjc5zbVAsX7Kqwv4HSo1HSkWkC3LUorZ8n55");
 
 pub const PYTH_PRICE_FEED_SIZE: usize = 3312;
 pub const MAX_PRICE_AGE_SECONDS: i64 = 60;

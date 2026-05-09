@@ -1,7 +1,7 @@
 use anchor_lang::prelude::*;
 use anchor_spl::token::{self, Mint, Token, TokenAccount, Transfer};
 
-declare_id!("Minr7X8qNpFxS1wXaKjKqLvXqHpFZ9YmN8QhBvK5ZxP");
+declare_id!("6oNLPSirAwbmTohpfUtUk2UHSLfsVnvHguP9ZdwcGRzF");
 
 #[program]
 pub mod minerals {

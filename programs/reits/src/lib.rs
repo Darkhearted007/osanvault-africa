@@ -1,7 +1,7 @@
 use anchor_lang::prelude::*;
 use anchor_spl::token::{self, Mint, Token, TokenAccount, Transfer};
 
-declare_id!("REITs5X8qNpFxS1wXaKjKqLvXqHpFZ9YmN8QhBvK5ZxP");
+declare_id!("EUJWumAPhQVeTK3CAuBKh9SFf1AvqrmvTty37RKJxmf1");
 
 #[program]
 pub mod reits {

@@ -1,0 +1,15 @@
+FROM solanalabs/solana:v1.18.26
+
+ENV DEBIAN_FRONTEND=noninteractive
+
+RUN apt-get update && apt-get install -y \
+    curl \
+    unzip \
+    && rm -rf /var/lib/apt/lists/*
+
+RUN curl -fsSL https://github.com/solana-foundation/anchor/releases/download/v1.0.2/anchor-1.0.2-x86_64-unknown-linux-gnu -o /usr/local/bin/anchor && \
+    chmod +x /usr/local/bin/anchor
+
+WORKDIR /workspace
+
+CMD []

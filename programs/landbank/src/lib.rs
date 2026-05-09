@@ -1,7 +1,7 @@
 use anchor_lang::prelude::*;
 use anchor_spl::token::{self, Mint, Token, TokenAccount, Transfer};
 
-declare_id!("Land7X8qNpFxS1wXaKjKqLvXqHpFZ9YmN8QhBvK5ZxP");
+declare_id!("FRsKDe4vdmRczcXSvub2oAgCgs4uo4LttxvXrwfg1NkT");
 
 #[program]
 pub mod landbank {

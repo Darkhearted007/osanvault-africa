@@ -296,13 +296,16 @@ For questions on architecture decisions, refer to session history or open a disc
 - Started Docker Desktop
 - Generated KBW 2026 pitch deck (osanvault-kbw2026.pptx)
 - Added Docker Anchor development guide (docs/DOCKER-ANCHOR.md)
-- Pushed to GitHub: commit 1474715
+- Created comprehensive README.md
+- Added KBW 2026 outreach email templates
+- Pushed to GitHub: commits 6855995
 
 #### GitHub Commits
 | Commit | Description |
 |--------|-------------|
 | 2109662 | DOCS: Update CLAUDE.md - Anchor CLI installation session progress |
 | 1474715 | FEAT: Add KBW 2026 pitch deck + Docker Anchor guide |
+| 6855995 | FEAT: Complete README + KBW 2026 outreach templates |
 
 #### Pending
 1. Await CertiK quote response
@@ -312,6 +315,67 @@ For questions on architecture decisions, refer to session history or open a disc
 5. Deploy OSANV token (needs ~2 SOL)
 6. Legal registrations (SCUML, DAOP)
 7. KBW 2026 (September Seoul) - pitch deck ready
+
+### Session Progress - May 9, 2026 (Docker Anchor Build - In Progress)
+
+#### Goal
+Build and test all 7 Solana smart contracts using Anchor framework via Docker
+
+#### Constraints & Preferences
+- Windows environment (PowerShell)
+- Must use Docker for build environment
+- All 7 programs: osanvault_core, osanvault_lend, reits, minerals, carbon, landbank, oracle
+
+#### Progress
+- Docker Desktop installed and running
+- Solana v1.18.26 image pulled (solanalabs/solana:v1.18.26)
+- Synced all 7 program IDs between source code and Anchor.toml
+- Created proper keypair.json files for all 7 programs (Array format)
+- Built osanvault/anchor:1.0.2 custom Docker image with Anchor CLI binary
+- Updated all Cargo.toml files to anchor-lang = "1.0.2"
+- Updated Anchor.toml with all 7 programs and correct version
+- Docker container successfully started with volume mount
+- GLIBC compatibility issue confirmed across all Anchor binary versions
+
+#### Blocked
+- **GLIBC version mismatch**: Anchor binary requires GLIBC 2.32+ but Debian 11 (base image) has GLIBC 2.31
+  - Tried: Anchor CLI v0.30.1, v1.0.2, v1.1.0 — all fail with same GLIBC error
+  - Tried: Custom Dockerfile with newer Debian — build infrastructure issues
+- **cargo-bpf/cargo-build-sbf**: Not available in solanalabs/solana:v1.18.26 image
+  - Image only contains validator, faucet, genesis binaries
+- **Anchor GHCR images**: ghcr.io/coral-xyz/anchor:* — access denied (403 Forbidden)
+- **WSL cargo install**: MSYS2 path conflicts with Rust toolchain
+- **Windows Rust**: Missing MSVC linker (link.exe not in VS2022 BuildTools without C++ workload)
+- **Solana CLI download**: Network timeout from release.anza.xyz
+- Docker Desktop daemon keeps crashing/stopping after several runs
+
+#### Key Observations
+- Anchor CLI binaries (precompiled) are statically linked against newer GLIBC than available in Debian 11
+- solanalabs/solana:v1.18.26 image is a validator image, NOT a build image
+- cargo-build-sbf and cargo-bpf are not installed in the validator image
+- Need a different approach: either Alpine-based image, or install Rust+SBF tools from source
+
+#### Program IDs (from declare_id!)
+- osanvault_core: 5bNkJDyJaE3rZ93ahWaA8MPTxQvCG6dC9jkTanLV2qRF
+- osanvault_lend: 3ZX5svRbpgvNVQXpwj7cQG2MZs97KVnV3azCkSiwU3CR
+- reits: EUJWumAPhQVeTK3CAuBKh9SFf1AvqrmvTty37RKJxmf1
+- minerals: 6oNLPSirAwbmTohpfUtUk2UHSLfsVnvHguP9ZdwcGRzF
+- carbon: H2hzHypyQxJpDiGWgpYSDN56JdyLzpPkrHcAD2cxnZUb
+- landbank: FRsKDe4vdmRczcXSvub2oAgCgs4uo4LttxvXrwfg1NkT
+- oracle: 9x81xZ2Kqjc5zbVAsX7Kqwv4HSo1HSkWkC3LUorZ8n55
+
+#### Files Created
+- Anchor.toml — All 7 programs + version = "1.0.2"
+- Dockerfile.anchor — Custom image with Anchor CLI (but GLIBC incompatible)
+- docker-compose.anchor.yml — Compose file for dev setup
+- programs/*/keypair.json — Generated keypairs (Array format)
+- programs/*/Cargo.toml — All updated to anchor-lang = "1.0.2"
+
+#### Next Steps (To Resolve)
+1. Try Alpine-based Anchor image (Alpine uses musl, no GLIBC dependency)
+2. Or install Rust + cargo-build-sbf from source in container
+3. Or use CI/CD approach (GitHub Actions with Ubuntu 24.04)
+4. Or build contracts individually using cargo build without Anchor abstraction
 
 ### Session Progress - May 7, 2026 (Smart Contract Audit)
 

@@ -1,7 +1,7 @@
 use anchor_lang::prelude::*;
 use anchor_spl::token::{self, Mint, Token, TokenAccount, Transfer};
 
-declare_id!("Lend7Y8qNpFxS1wXaKjKqLvXqHpFZ9YmN8QhBvK5ZxP");
+declare_id!("3ZX5svRbpgvNVQXpwj7cQG2MZs97KVnV3azCkSiwU3CR");
 
 #[program]
 pub mod osanvault_lend {
