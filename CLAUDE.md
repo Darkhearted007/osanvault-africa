@@ -326,10 +326,41 @@ For questions on architecture decisions, refer to session history or open a disc
 - programs/oracle/Cargo.toml - New file created
 - All 7 contract lib.rs files - Bug fixes applied
 
+### Session Progress - May 9, 2026 (Anchor CLI Installation)
+
+#### Installation Attempt Summary
+- Node.js v24.15.0 installed ✅
+- Rust 1.95.0 installed (stable-x86_64-pc-windows-gnu) ✅
+- npm packages: @coral-xyz/anchor@0.30.1 installed ✅
+- Docker 29.4.0 installed (daemon not running yet) ✅
+- MSYS2 + MinGW toolchain installed (dlltool available) ✅
+- Visual Studio 2022 BuildTools installed (without C++ workload)
+
+#### Challenges
+- Anchor CLI Rust binary build fails on zstd-sys crate
+- MSVC toolchain missing (link.exe not found)
+- Solana CLI not yet installed
+- Docker Desktop daemon not started
+
+#### Solution: Use Docker for Anchor development
+- Docker Desktop installed, needs restart to activate
+- Recommended: Use Anchor Docker container for development
+- Commands to run in project:
+  ```bash
+  docker run -it --rm -v ${PWD}:/workspace ghcr.io/coral-xyz/anchor:latest
+  ```
+
+#### Next Steps
+1. Restart Docker Desktop and start daemon
+2. Use Docker-based Anchor development
+3. Deploy OSANV token (needs ~2 SOL)
+4. Legal registrations (SCUML, DAOP)
+5. KBW 2026 preparation (September Seoul)
+
 ### GitHub Commits (May 7, 2026)
 | Commit | Description |
 |--------|-------------|
-| 22cd90c | FIX: Smart contract bug fixes - 16 issues across 7 contracts |
+| c9db4aa | DOCS: Update CLAUDE.md with smart contract fixes |
 | e55586a | DOCS: Update CLAUDE.md session progress + email scripts |
 | f2c027c | FIX: Correct email addresses (support@gitcoin.co, hello@superteam.fun) |
 | 4b43949 | SECURITY: Fix 2 moderate vulnerabilities (vite, ip-address) |
