@@ -290,14 +290,28 @@ For questions on architecture decisions, refer to session history or open a disc
 - **ip-address XSS** (GHSA-v2v4-37r5-5v8g): Updated express-rate-limit 8.4.1 → 8.5.0
 - **Result**: `pnpm audit` shows 0 vulnerabilities
 
-### Next Steps (When Continuing)
+### Session Progress - May 9, 2026 (KBW 2026 Prep + Docker Setup)
+
+#### Completed
+- Started Docker Desktop
+- Generated KBW 2026 pitch deck (osanvault-kbw2026.pptx)
+- Added Docker Anchor development guide (docs/DOCKER-ANCHOR.md)
+- Pushed to GitHub: commit 1474715
+
+#### GitHub Commits
+| Commit | Description |
+|--------|-------------|
+| 2109662 | DOCS: Update CLAUDE.md - Anchor CLI installation session progress |
+| 1474715 | FEAT: Add KBW 2026 pitch deck + Docker Anchor guide |
+
+#### Pending
 1. Await CertiK quote response
 2. Await Superteam Nigeria response
 3. Await Future Africa response
 4. Monitor Gitcoin gov.gitcoin.co for GG25 details
 5. Deploy OSANV token (needs ~2 SOL)
 6. Legal registrations (SCUML, DAOP)
-7. KBW 2026 preparation (September Seoul)
+7. KBW 2026 (September Seoul) - pitch deck ready
 
 ### Session Progress - May 7, 2026 (Smart Contract Audit)
 
