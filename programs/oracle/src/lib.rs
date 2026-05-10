@@ -18,33 +18,36 @@ pub mod oracle {
         Ok(price)
     }
 
-    pub fn get_price_with_confidence(ctx: Context<GetPriceWithConfidence>) -> Result<PriceWithConfidence> {
+    pub fn get_price_with_confidence(
+        ctx: Context<GetPriceWithConfidence>,
+    ) -> Result<PriceWithConfidence> {
         let price_data = &ctx.accounts.price_feed;
         let (price, conf) = pyth_decode_price_with_confidence(price_data)?;
         check_price_freshness(price_data)?;
-        
+
         let confidence_bps = calculate_confidence_bps(price, conf);
         require!(
             confidence_bps <= CONFIDENCE_THRESHOLD_BPS,
             OracleError::LowConfidence
         );
-        
-        Ok(PriceWithConfidence { price, confidence: conf })
+
+        Ok(PriceWithConfidence {
+            price,
+            confidence: conf,
+        })
     }
 
-    pub fn get_price_fallback(
-        ctx: Context<GetPriceFallback>,
-    ) -> Result<OraclePriceResult> {
+    pub fn get_price_fallback(ctx: Context<GetPriceFallback>) -> Result<OraclePriceResult> {
         let pyth_feed = &ctx.accounts.pyth_price_feed;
         let switchboard_feed = &ctx.accounts.switchboard_feed;
-        
+
         let pyth_price = try_get_pyth_price(pyth_feed);
         let sb_price = try_get_switchboard_price(switchboard_feed);
-        
+
         let (price, source) = select_best_price(pyth_price, sb_price)?;
-        
+
         msg!("Oracle price: {} from {}", price, source);
-        
+
         Ok(OraclePriceResult {
             price,
             source,
@@ -120,20 +123,20 @@ fn try_get_switchboard_price(feed: &AccountInfo) -> Option<u64> {
         if data.len() >= 64 {
             let timestamp = i64::from_le_bytes(data[40..48].try_into().ok()?);
             let current_time = Clock::get().ok()?.unix_timestamp;
-            
+
             if current_time - timestamp > SWITCHBOARD_MAX_AGE_SECONDS {
                 return None;
             }
-            
+
             let value = i128::from_le_bytes(data[0..16].try_into().ok()?);
             let decimal = u32::from_le_bytes(data[16..20].try_into().ok()?);
-            
+
             let price_u64 = if decimal >= 18 {
                 (value as u64).saturating_div(10u64.pow((decimal - 18) as u32))
             } else {
                 (value as u64).saturating_mul(10u64.pow((18 - decimal) as u32))
             };
-            
+
             return Some(price_u64);
         }
     }
@@ -148,7 +151,7 @@ fn select_best_price(pyth: Option<u64>, switchboard: Option<u64>) -> Result<(u64
             let diff = if p > s { p - s } else { s - p };
             let avg = (p + s) / 2;
             let tolerance = avg / 100;
-            
+
             if tolerance == 0 || diff <= tolerance {
                 Ok((p, "PYTH".to_string()))
             } else {
@@ -169,55 +172,65 @@ fn calculate_confidence_bps(price: u64, confidence: u64) -> u64 {
 
 fn pyth_decode_price(feed: &PriceFeed) -> Result<u64> {
     let data = &feed.data;
-    
+
     let price_offset = 128;
     let price_data = &data[price_offset..price_offset + 40];
-    
+
     let price = i64::from_le_bytes(
-        price_data[0..8].try_into().map_err(|_| OracleError::InvalidData)?
+        price_data[0..8]
+            .try_into()
+            .map_err(|_| OracleError::InvalidData)?,
     );
-    
+
     let exponent = i32::from_le_bytes(
-        price_data[8..12].try_into().map_err(|_| OracleError::InvalidData)?
+        price_data[8..12]
+            .try_into()
+            .map_err(|_| OracleError::InvalidData)?,
     );
-    
+
     require!(price > 0, OracleError::InvalidPrice);
-    
+
     let price_u64 = if exponent >= 0 {
         (price as u64).saturating_mul(10u64.pow(exponent as u32))
     } else {
         (price as u64).saturating_div(10u64.pow((-exponent) as u32))
     };
-    
+
     Ok(price_u64)
 }
 
 fn pyth_decode_price_with_confidence(feed: &PriceFeed) -> Result<(u64, u64)> {
     let data = &feed.data;
-    
+
     let price_offset = 128;
     let price_data = &data[price_offset..price_offset + 64];
-    
+
     let price = i64::from_le_bytes(
-        price_data[0..8].try_into().map_err(|_| OracleError::InvalidData)?
+        price_data[0..8]
+            .try_into()
+            .map_err(|_| OracleError::InvalidData)?,
     );
-    
+
     let conf = u64::from_le_bytes(
-        price_data[24..32].try_into().map_err(|_| OracleError::InvalidData)?
+        price_data[24..32]
+            .try_into()
+            .map_err(|_| OracleError::InvalidData)?,
     );
-    
+
     let exponent = i32::from_le_bytes(
-        price_data[8..12].try_into().map_err(|_| OracleError::InvalidData)?
+        price_data[8..12]
+            .try_into()
+            .map_err(|_| OracleError::InvalidData)?,
     );
-    
+
     require!(price > 0, OracleError::InvalidPrice);
-    
+
     let price_u64 = if exponent >= 0 {
         (price as u64).saturating_mul(10u64.pow(exponent as u32))
     } else {
         (price as u64).saturating_div(10u64.pow((-exponent) as u32))
     };
-    
+
     Ok((price_u64, conf))
 }
 
@@ -226,17 +239,19 @@ fn check_price_freshness(feed: &PriceFeed) -> Result<()> {
     let publish_time_offset = 64;
     let publish_time_bytes = &data[publish_time_offset..publish_time_offset + 8];
     let publish_time = i64::from_le_bytes(
-        publish_time_bytes.try_into().map_err(|_| OracleError::InvalidData)?
+        publish_time_bytes
+            .try_into()
+            .map_err(|_| OracleError::InvalidData)?,
     );
-    
+
     let clock = Clock::get()?;
     let current_time = clock.unix_timestamp;
-    
+
     require!(
         current_time - publish_time <= MAX_PRICE_AGE_SECONDS,
         OracleError::FeedUnavailable
     );
-    
+
     Ok(())
 }
 

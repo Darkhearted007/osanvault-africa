@@ -9,12 +9,12 @@ pub mod osanvault_lend {
 
     pub fn initialize_lending_pool(ctx: Context<InitPool>, fee_bps: u16) -> Result<()> {
         let pool = &mut ctx.accounts.pool;
-        
+
         require!(
             pool.owner == Pubkey::default(),
             LendError::AlreadyInitialized
         );
-        
+
         pool.owner = ctx.accounts.owner.key();
         pool.collateral_token = ctx.accounts.collateral_mint.key();
         pool.debt_token = ctx.accounts.debt_mint.key();
@@ -22,22 +22,23 @@ pub mod osanvault_lend {
         pool.liquidation_threshold_bps = 2500; // 25%
         pool.max_ltv_bps = 7500; // 75% max LTV
         pool.paused = false;
-        
+
         msg!("ÒsánVault Lend Pool Initialized!");
         Ok(())
     }
 
     pub fn deposit_collateral(ctx: Context<Deposit>, amount: u64) -> Result<()> {
         let pool = &mut ctx.accounts.pool;
-        
+
         require!(!pool.paused, LendError::PoolPaused);
         require!(amount > 0, LendError::InvalidAmount);
-        
+
         let user_position = &mut ctx.accounts.user_position;
-        user_position.collateral_amount = user_position.collateral_amount
+        user_position.collateral_amount = user_position
+            .collateral_amount
             .checked_add(amount)
             .ok_or(LendError::OverflowError)?;
-        
+
         let cpi_accounts = Transfer {
             from: ctx.accounts.user_token.to_account_info(),
             to: ctx.accounts.vault.to_account_info(),
@@ -45,46 +46,48 @@ pub mod osanvault_lend {
         };
         let cpi = CpiContext::new(ctx.accounts.token_program.to_account_info(), cpi_accounts);
         token::transfer(cpi, amount)?;
-        
+
         msg!("Deposited {} as collateral", amount);
         Ok(())
     }
 
     pub fn borrow(ctx: Context<Borrow>, amount: u64) -> Result<()> {
         let pool = &mut ctx.accounts.pool;
-        
+
         require!(!pool.paused, LendError::PoolPaused);
         require!(amount > 0, LendError::InvalidAmount);
-        
+
         // Get current price from oracle
         let price = ctx.accounts.price_feed.get_value()?;
         let collateral_amount = ctx.accounts.user_position.collateral_amount;
-        
+
         let collateral_value = (collateral_amount as u128)
             .checked_mul(price as u128)
             .ok_or(LendError::OverflowError)?
             / (10_u128.pow(8)); // Price is 8 decimal
-        
+
         let max_loan = (collateral_value as u64)
             .checked_mul(pool.max_ltv_bps as u64)
             .ok_or(LendError::OverflowError)?
             / 10000;
-        
+
         require!(amount <= max_loan, LendError::InsufficientCollateral);
-        
+
         let fee = (amount as u64)
             .checked_mul(pool.fee_bps as u64)
             .ok_or(LendError::OverflowError)?
             / 10000;
-        
+
         let user_position = &mut ctx.accounts.user_position;
-        user_position.borrowed_amount = user_position.borrowed_amount
+        user_position.borrowed_amount = user_position
+            .borrowed_amount
             .checked_add(amount)
             .ok_or(LendError::OverflowError)?;
-        user_position.borrow_fee = user_position.borrow_fee
+        user_position.borrow_fee = user_position
+            .borrow_fee
             .checked_add(fee)
             .ok_or(LendError::OverflowError)?;
-        
+
         let cpi_accounts = Transfer {
             from: ctx.accounts.vault.to_account_info(),
             to: ctx.accounts.user_token.to_account_info(),
@@ -92,27 +95,28 @@ pub mod osanvault_lend {
         };
         let cpi = CpiContext::new(ctx.accounts.token_program.to_account_info(), cpi_accounts);
         token::transfer(cpi, amount)?;
-        
+
         msg!("Borrowed {} (fee: {})", amount, fee);
         Ok(())
     }
 
     pub fn repay(ctx: Context<Repay>, amount: u64) -> Result<()> {
         let pool = &mut ctx.accounts.pool;
-        
+
         require!(amount > 0, LendError::InvalidAmount);
-        
+
         let user_position = &mut ctx.accounts.user_position;
-        
+
         require!(
             amount <= user_position.borrowed_amount,
             LendError::InvalidAmount
         );
-        
-        user_position.borrowed_amount = user_position.borrowed_amount
+
+        user_position.borrowed_amount = user_position
+            .borrowed_amount
             .checked_sub(amount)
             .ok_or(LendError::UnderflowError)?;
-        
+
         let cpi_accounts = Transfer {
             from: ctx.accounts.user_token.to_account_info(),
             to: ctx.accounts.vault.to_account_info(),
@@ -120,7 +124,7 @@ pub mod osanvault_lend {
         };
         let cpi = CpiContext::new(ctx.accounts.token_program.to_account_info(), cpi_accounts);
         token::transfer(cpi, amount)?;
-        
+
         msg!("Repaid {}", amount);
         Ok(())
     }
@@ -129,20 +133,20 @@ pub mod osanvault_lend {
     pub fn liquidate(ctx: Context<Liquidate>) -> Result<()> {
         let pool = &ctx.accounts.pool;
         let position = &mut ctx.accounts.user_position;
-        
+
         // Get oracle price
         let price = ctx.accounts.price_feed.get_value()?;
-        
+
         let collateral_value = (position.collateral_amount as u128)
             .checked_mul(price as u128)
             .ok_or(LendError::OverflowError)?
             / (10_u128.pow(8));
-        
+
         let debt_value = (position.borrowed_amount as u128)
             .checked_mul(price as u128)
             .ok_or(LendError::OverflowError)?
             / (10_u128.pow(8));
-        
+
         // Calculate health ratio
         let health_bps = if debt_value > 0 {
             ((collateral_value as u64) * 10000)
@@ -151,39 +155,41 @@ pub mod osanvault_lend {
         } else {
             10000
         };
-        
+
         // Check if liquidation required (below threshold)
         require!(
             health_bps < pool.liquidation_threshold_bps as u64,
             LendError::PositionHealthy
         );
-        
+
         // Calculate liquidation amount (50% of debt)
         let liquidate_amount = (position.borrowed_amount as u64)
             .checked_mul(5000)
             .ok_or(LendError::OverflowError)?
             / 10000;
-        
+
         // Transfer collateral to liquidator
         let collateral_to_liquidator = (liquidate_amount as u64)
             .checked_mul(11000) // 10% bonus
             .ok_or(LendError::OverflowError)?
             .checked_div(10000)
             .unwrap_or(liquidate_amount);
-        
+
         require!(
             collateral_to_liquidator <= position.collateral_amount,
             LendError::InsufficientCollateral
         );
-        
-        position.collateral_amount = position.collateral_amount
+
+        position.collateral_amount = position
+            .collateral_amount
             .checked_sub(collateral_to_liquidator)
             .ok_or(LendError::UnderflowError)?;
-        
-        position.borrowed_amount = position.borrowed_amount
+
+        position.borrowed_amount = position
+            .borrowed_amount
             .checked_sub(liquidate_amount)
             .ok_or(LendError::UnderflowError)?;
-        
+
         // Transfer collateral to liquidator
         let cpi_accounts = Transfer {
             from: ctx.accounts.collateral_vault.to_account_info(),
@@ -192,21 +198,24 @@ pub mod osanvault_lend {
         };
         let cpi = CpiContext::new(ctx.accounts.token_program.to_account_info(), cpi_accounts);
         token::transfer(cpi, collateral_to_liquidator)?;
-        
-        msg!("Liquidated! Liquidator received {}", collateral_to_liquidator);
+
+        msg!(
+            "Liquidated! Liquidator received {}",
+            collateral_to_liquidator
+        );
         Ok(())
     }
 
     pub fn set_liquidation_threshold(ctx: Context<UpdatePool>, threshold_bps: u16) -> Result<()> {
         let pool = &mut ctx.accounts.pool;
-        
+
         require!(
             pool.owner == ctx.accounts.owner.key(),
             LendError::Unauthorized
         );
-        
+
         require!(threshold_bps <= 5000, LendError::InvalidParameter);
-        
+
         pool.liquidation_threshold_bps = threshold_bps;
         msg!("Liquidation threshold updated to {} bps", threshold_bps);
         Ok(())
@@ -214,12 +223,12 @@ pub mod osanvault_lend {
 
     pub fn pause_pool(ctx: Context<UpdatePool>) -> Result<()> {
         let pool = &mut ctx.accounts.pool;
-        
+
         require!(
             pool.owner == ctx.accounts.owner.key(),
             LendError::Unauthorized
         );
-        
+
         pool.paused = true;
         msg!("Pool paused");
         Ok(())
@@ -227,12 +236,12 @@ pub mod osanvault_lend {
 
     pub fn unpause_pool(ctx: Context<UpdatePool>) -> Result<()> {
         let pool = &mut ctx.accounts.pool;
-        
+
         require!(
             pool.owner == ctx.accounts.owner.key(),
             LendError::Unauthorized
         );
-        
+
         pool.paused = false;
         msg!("Pool unpaused");
         Ok(())
@@ -243,10 +252,10 @@ pub mod osanvault_lend {
 pub fn get_pyth_price(price_feed: &Account<PythPrice>) -> Result<u64> {
     let price = price_feed.agg.price;
     let conf = price_feed.agg.conf;
-    
+
     require!(price > 0, LendError::OracleError);
     require!(conf < price / 10, LendError::OracleError); // Max 10% confidence
-    
+
     Ok(price as u64)
 }
 
@@ -260,7 +269,7 @@ pub struct InitPool<'info> {
         bump
     )]
     pub pool: Account<'info, LendingPool>,
-    
+
     #[account(
         init,
         payer = owner,
@@ -270,7 +279,7 @@ pub struct InitPool<'info> {
         token::authority = pool
     )]
     pub collateral_vault: Account<'info, TokenAccount>,
-    
+
     #[account(mut)]
     pub owner: Signer<'info>,
     pub collateral_mint: Account<'info, Mint>,
@@ -282,7 +291,7 @@ pub struct InitPool<'info> {
 pub struct Deposit<'info> {
     #[account(mut)]
     pub pool: Account<'info, LendingPool>,
-    
+
     #[account(
         init_if_needed,
         payer = user,
@@ -291,7 +300,7 @@ pub struct Deposit<'info> {
         bump
     )]
     pub user_position: Account<'info, UserPosition>,
-    
+
     #[account(mut)]
     pub user: Signer<'info>,
     #[account(mut)]
@@ -306,10 +315,10 @@ pub struct Deposit<'info> {
 pub struct Borrow<'info> {
     #[account(mut)]
     pub pool: Account<'info, LendingPool>,
-    
+
     #[account(mut)]
     pub user_position: Account<'info, UserPosition>,
-    
+
     #[account(mut)]
     pub user: Signer<'info>,
     #[account(mut)]
@@ -324,10 +333,10 @@ pub struct Borrow<'info> {
 pub struct Repay<'info> {
     #[account(mut)]
     pub pool: Account<'info, LendingPool>,
-    
+
     #[account(mut)]
     pub user_position: Account<'info, UserPosition>,
-    
+
     #[account(mut)]
     pub user: Signer<'info>,
     #[account(mut)]
@@ -341,10 +350,10 @@ pub struct Repay<'info> {
 pub struct Liquidate<'info> {
     #[account(mut)]
     pub pool: Account<'info, LendingPool>,
-    
+
     #[account(mut)]
     pub user_position: Account<'info, UserPosition>,
-    
+
     #[account(mut)]
     pub liquidator: Signer<'info>,
     #[account(mut)]
@@ -359,7 +368,7 @@ pub struct Liquidate<'info> {
 pub struct UpdatePool<'info> {
     #[account(mut)]
     pub pool: Account<'info, LendingPool>,
-    
+
     #[account(mut)]
     pub owner: Signer<'info>,
 }
