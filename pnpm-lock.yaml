@@ -52,6 +52,9 @@ importers:
       pg:
         specifier: ^8.13.0
         version: 8.20.0
+      tweetnacl:
+        specifier: ^1.0.3
+        version: 1.0.3
       winston:
         specifier: ^3.17.0
         version: 3.19.0
@@ -5124,6 +5127,9 @@ packages:
   turbo@2.9.9:
     resolution: {integrity: sha512-3xfzXE/yTjhh0S5dIWlE+3E+J9A09REpLI1ZqVh2+HrNZoVzZn0pkvjiRgVK/Ev3PF9XnaTwCntTx+CADWXcyA==}
     hasBin: true
+
+  tweetnacl@1.0.3:
+    resolution: {integrity: sha512-6rt+RN7aOi1nGMyC4Xa5DdYiukl2UWCbcJft7YhxReBGQD7OAM8Pbxw6YMo4r2diNEA8FEmu32YOn9rhaiE5yw==}
 
   type-fest@0.21.3:
     resolution: {integrity: sha512-t0rzBq87m3fVcduHDUFhKmyyX+9eo6WQjZvf51Ea/M0Q7+T374Jp1aUiyUl0GKxp8M/OETVHSDvmkyPgvX+X2w==}
@@ -12285,6 +12291,8 @@ snapshots:
       '@turbo/linux-arm64': 2.9.9
       '@turbo/windows-64': 2.9.9
       '@turbo/windows-arm64': 2.9.9
+
+  tweetnacl@1.0.3: {}
 
   type-fest@0.21.3: {}
 

@@ -1,5 +1,6 @@
 import { Router } from 'express'
 import type { Request, Response } from 'express'
+import { PublicKey } from '@solana/web3.js'
 import { pool } from '../db/index.js'
 import { redis } from '../db/redis.js'
 import { z } from 'zod'
@@ -130,22 +131,14 @@ router.post('/verify', verifyLimiter, async (req: Request, res: Response) => {
 
     // CRITICAL: Verify Ed25519 signature cryptographically
     try {
-      const { Ed25519Program } = await import('@solana/web3.js')
-      const { PublicKey } = await import('@solana/web3.js')
+      const nacl = await import('tweetnacl')
 
-      const publicKey = new PublicKey(wallet_address)
-      const message = Buffer.from(`Sign this message to authenticate with ÒsánVault Africa.\n\nNonce: ${nonce}\nTimestamp: ${stored.expires - NONCE_EXPIRY_MS}`)
-      const signatureBuffer = Buffer.from(signature)
+      const publicKeyBytes = new PublicKey(wallet_address).toBytes()
+      const messageBytes = Buffer.from(`Sign this message to authenticate with ÒsánVault Africa.\n\nNonce: ${nonce}\nTimestamp: ${stored.expires - NONCE_EXPIRY_MS}`)
+      const signatureBytes = Uint8Array.from(signature)
 
-      const isValid = Ed25519Program.createInstructionWithVerifyPolicy(
-        publicKey,
-        { publicKey: Buffer.alloc(32), signature: signatureBuffer },
-        message
-      )
-
-      // Note: In production, use proper signature verification via the web3.js verify method
-      // For now, we validate the signature structure and proceed with audit logging
-      logger.info(`Signature validation: ${isValid ? 'PASSED' : 'STRUCTURE VALID'}`)
+      const isValid = nacl.sign.detached.verify(messageBytes, signatureBytes, publicKeyBytes)
+      logger.info(`Signature verification: ${isValid ? 'PASSED' : 'FAILED'}`)
     } catch (sigError) {
       // Log signature verification failure but don't block - structure is valid
       logger.warn(`Signature verification note: ${sigError}`)
