@@ -51,7 +51,7 @@ Framework: React + Vite + TypeScript
 Styling: Dark African fintech aesthetic
 Wallet Integration: Phantom, Backpack (Solana-native)
 Monorepo: pnpm + Turborepo
-Smart Contracts (9 total)
+Smart Contracts (7 total)
 Solana-native: Rust + Anchor framework (primary)
 EVM-compatible layer: Solidity + Vyper (hybrid split)
 Use Anchor/Rust by default unless EVM is explicitly required
@@ -172,18 +172,20 @@ osanvault-africa/
 │   ├── web/                   # React + Vite + TypeScript frontend
 │   └── api/                   # Node.js / TypeScript backend
 ├── programs/                  # Anchor/Rust smart contracts (Solana)
-│   ├── tokenized-real-estate/
-│   ├── osanvault-lend/
-│   ├── reits/
-│   ├── minerals/
-│   ├── carbon/
-│   └── landbank/
+│   ├── osanvault_core/        # Platform, property, investment, OSANV mint, RBAC
+│   ├── osanvault_lend/        # DeFi lending with liquidation engine
+│   ├── reits/                 # Real estate investment trusts
+│   ├── minerals/              # Tokenized minerals
+│   ├── carbon/                # Carbon credit tokenization
+│   ├── landbank/              # Land acquisition pooling
+│   └── oracle/                # Pyth + Switchboard price feeds
 ├── contracts/                 # Solidity + Vyper (EVM layer)
 ├── bots/
-│   ├── lp-manager/
-│   ├── dca-bot/
-│   ├── dividend-drip/
-│   └── portfolio-rebalancer/
+│   ├── lp-manager/           # Automated liquidity pool management
+│   ├── dca-bot/              # Dollar-cost averaging execution
+│   ├── dividend-drip/        # Automatic dividend reinvestment
+│   ├── portfolio-rebalancer/ # On-chain portfolio rebalancing
+│   └── property-scraper/     # Property data collection
 ├── infra/
 │   ├── docker-compose.yml
 │   └── k8s/

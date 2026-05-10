@@ -1,8 +1,18 @@
-import { API_ROUTES } from "@osanvault/shared"
-
 const BASE_URL = import.meta.env.VITE_API_URL || "http://localhost:3001"
 const PUTER_WORKER = import.meta.env.VITE_PUTER_WORKER_URL || null
 const USE_PUTER = import.meta.env.VITE_USE_PUTER === "true"
+
+const API_ROUTES = {
+  properties: "/api/properties",
+  dashboard: "/api/dashboard",
+  auth: {
+    nonce: "/api/auth/nonce",
+    verify: "/api/auth/verify",
+  },
+  oracle: "/api/oracle",
+} as const
+
+type API_ROUTES = typeof API_ROUTES
 
 function getBaseUrl(): string {
   if (USE_PUTER && PUTER_WORKER) return PUTER_WORKER

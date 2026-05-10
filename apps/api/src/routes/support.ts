@@ -4,17 +4,17 @@ import nodemailer from 'nodemailer'
 const router = Router()
 
 const SUPPORT_CONFIG = {
-  email: 'Olugbenga1000@gmail.com',
-  phone: '+2347065056103',
-  telegram: '@OsanvaultAfrica',
-  website: 'https://osanvaultafrica.com'
+  email: process.env.SUPPORT_EMAIL || 'Olugbenga1000@gmail.com',
+  phone: process.env.SUPPORT_PHONE || '+2347065056103',
+  telegram: process.env.SUPPORT_TELEGRAM || '@OsanvaultAfrica',
+  website: process.env.SUPPORT_WEBSITE || 'https://osanvaultafrica.com'
 }
 
 const transporter = nodemailer.createTransport({
   service: 'gmail',
   auth: {
-    user: 'Olugbenga1000@gmail.com',
-    pass: 'daefebttmynvkztr'
+    user: process.env.EMAIL_USER,
+    pass: process.env.EMAIL_APP_PASSWORD
   }
 })
 

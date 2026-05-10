@@ -35,12 +35,16 @@ pub mod landbank {
         require!(acres > 0, LandError::InvalidAcres);
         require!(price_per_acre > 0, LandError::InvalidPrice);
         
-        pool.total_acres = pool.total_acres.checked_add(acres).unwrap();
+        pool.total_acres = pool.total_acres
+            .checked_add(acres)
+            .ok_or(LandError::OverflowError)?;
         
         let land = &mut ctx.accounts.land;
         land.acres = acres;
         land.price_per_acre = price_per_acre;
-        land.total_value = acres.checked_mul(price_per_acre).unwrap();
+        land.total_value = acres
+            .checked_mul(price_per_acre)
+            .ok_or(LandError::OverflowError)?;
         land.status = 1; // Acquired
         
         msg!("Added {} acres at {} per acre", acres, price_per_acre);
@@ -100,9 +104,13 @@ pub mod landbank {
         
         let user_position = &mut ctx.accounts.user_position;
         
-        let required_ownership = acres * 10000 / pool.total_acres;
+        let required_ownership_bps = acres
+            .checked_mul(10_000)
+            .ok_or(LandError::OverflowError)?
+            .checked_div(pool.total_acres)
+            .ok_or(LandError::InvalidAcres)?;
         
-        require!(user_position.ownership_bps >= required_ownership, LandError::InsufficientOwnership);
+        require!(user_position.ownership_bps >= required_ownership_bps, LandError::InsufficientOwnership);
         
         user_position.claimed_acres = user_position.claimed_acres
             .checked_add(acres)
@@ -118,14 +126,18 @@ pub mod landbank {
         require!(pool.owner == ctx.accounts.owner.key(), LandError::Unauthorized);
         require!(acres <= pool.acquired_acres, LandError::InsufficientLand);
         
-        pool.acquired_acres = pool.acquired_acres.checked_sub(acres).unwrap();
+        pool.acquired_acres = pool.acquired_acres
+            .checked_sub(acres)
+            .ok_or(LandError::UnderflowError)?;
         
         let sale = &mut ctx.accounts.sale;
         sale.pool = pool.key();
         sale.seller = ctx.accounts.seller.key();
         sale.buyer = buyer;
         sale.acres = acres;
-        sale.price = acres * pool.target_price_per_acre;
+        sale.price = acres
+            .checked_mul(pool.target_price_per_acre)
+            .ok_or(LandError::OverflowError)?;
         sale.status = 1; // Pending
         
         msg!("Listed {} acres for sale at {}", acres, sale.price);
@@ -331,4 +343,6 @@ pub enum LandError {
     AppreciationTooHigh,
     #[msg("Overflow error")]
     OverflowError,
+    #[msg("Underflow error")]
+    UnderflowError,
 }

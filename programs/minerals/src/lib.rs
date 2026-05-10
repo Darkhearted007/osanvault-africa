@@ -27,6 +27,7 @@ pub mod minerals {
         site.location = location;
         site.status = 1; // Active
         site.royalty_bps = 500; // 5%
+        site.royalty_recipient = ctx.accounts.owner.key();
         
         msg!("Mineral site {} registered - type: {}", name, mineral_type);
         Ok(())
@@ -216,7 +217,7 @@ pub struct MineralSite {
     pub location: String,
     pub status: u8,
     pub royalty_bps: u16,
-    pub reserved: [u8; 32],
+    pub royalty_recipient: Pubkey,
 }
 
 #[error_code]

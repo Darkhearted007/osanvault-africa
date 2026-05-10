@@ -144,7 +144,7 @@ pub struct RegisterProject<'info> {
     #[account(
         init,
         payer = owner,
-        mint::authority = verifier,
+        mint::authority = owner,
         mint::decimals = 0,
         space = 82,
         seeds = [b"carbon-mint", name.as_bytes()],
@@ -154,7 +154,7 @@ pub struct RegisterProject<'info> {
     
     #[account(mut)]
     pub owner: Signer<'info>,
-    pub verifier: Signer<'info>,
+    pub verifier: UncheckedAccount<'info>,
     pub system_program: Program<'info, System>,
     pub token_program: Program<'info, Token>,
     pub rent: Sysvar<'info, Rent>,
@@ -165,7 +165,7 @@ pub struct IssueCredits<'info> {
     #[account(mut)]
     pub project: Account<'info, CarbonProject>,
     
-    pub verifier: Signer<'info>,
+    pub verifier: UncheckedAccount<'info>,
     #[account(mut)]
     pub carbon_mint: Account<'info, Mint>,
     #[account(mut)]

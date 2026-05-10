@@ -89,6 +89,7 @@ pub mod reits {
         let reit = &ctx.accounts.reit;
         
         require!(reit.manager == ctx.accounts.manager.key(), ReitError::Unauthorized);
+        require!(amount > 0, ReitError::InvalidAmount);
         
         let total_yield = amount
             .checked_mul(reit.yield_bps as u64)
@@ -96,6 +97,7 @@ pub mod reits {
             / 10000;
         
         require!(total_yield > 0, ReitError::InvalidAmount);
+        require!(total_yield <= ctx.accounts.treasury_token.amount, ReitError::InvalidAmount);
         
         let cpi_accounts = Transfer {
             from: ctx.accounts.treasury_token.to_account_info(),
@@ -105,7 +107,7 @@ pub mod reits {
         let cpi = CpiContext::new(ctx.accounts.token_program.to_account_info(), cpi_accounts);
         token::transfer(cpi, total_yield)?;
         
-        msg!("Distributed {} yield ({}bps)", total_yield, reit.yield_bps);
+        msg!("Distributed {} yield ({}bps of {})", total_yield, reit.yield_bps, amount);
         Ok(())
     }
 

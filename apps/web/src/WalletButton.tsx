@@ -72,7 +72,7 @@ export function WalletButton() {
       className="wallet-connect-btn"
       onClick={async () => {
         try {
-          await select('Phantom')
+          await select('Phantom' as unknown as Parameters<typeof select>[0])
         } catch {
           // Fallback - Phantom will auto-trigger modal via adapter
           const phantom = document.querySelector('[data-adapter="phantom"]') as HTMLElement

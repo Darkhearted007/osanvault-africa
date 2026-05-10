@@ -1,6 +1,6 @@
+import { useEffect } from 'react'
 import { Outlet } from 'react-router-dom'
 import { Nav } from './Nav'
-import { useEffect } from 'react'
 
 const SUPPORT_EMAIL = 'Olugbenga1000@gmail.com'
 const SUPPORT_PHONE = '+2347065056103'

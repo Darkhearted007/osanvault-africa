@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react"
+import React, { useState, useEffect } from "react"
 import { useWallet } from "./WalletProvider"
 import { WalletButton } from "./WalletButton"
 import "./index.css"
@@ -420,7 +420,10 @@ export default function App() {
               <button className="btn-secondary" style={{flex:1}}>Buy OSANV</button>
             </div>
             <p className="section-title">Investment Opportunities</p>
-            {properties.map(p => <PropertyCard key={p.id} p={p} onSelect={setSelectedProperty} />)}
+            {properties.map((p, idx) => {
+              const comp = <PropertyCard p={p} onSelect={setSelectedProperty} />
+              return <React.Fragment key={idx}>{comp}</React.Fragment>
+            })}
             <button className="btn-outline" style={{width:"100%"}} onClick={() => setTab("explore")}>Explore All Opportunities →</button>
             <p className="section-title">Recent Activity</p>
             <LedgerRows entries={MOCK_LEDGER} />
@@ -431,7 +434,10 @@ export default function App() {
           <div className="tab-content">
             <p className="section-title">All SPV Opportunities</p>
             <p className="section-sub">Pan-African real estate & asset tokenization</p>
-            {properties.map(p => <PropertyCard key={p.id} p={p} onSelect={setSelectedProperty} />)}
+            {properties.map((p, idx) => {
+              const comp = <PropertyCard p={p} onSelect={setSelectedProperty} />
+              return <React.Fragment key={idx}>{comp}</React.Fragment>
+            })}
             <div className="coming-soon-banner">🌍 Ghana · Kenya · South Africa — Coming 2026</div>
           </div>
         )}

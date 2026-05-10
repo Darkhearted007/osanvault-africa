@@ -16,7 +16,7 @@ Enable fractional real estate investment from $10 equivalent, with on-chain divi
 ## 📁 Project Structure
 
 ```
-hsanvault-africa/
+osanvault-africa/
 ├── apps/
 │   ├── web/              # React + Vite + TypeScript frontend
 │   └── api/              # Node.js / TypeScript backend

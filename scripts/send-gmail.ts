@@ -1,11 +1,19 @@
 import { OAuth2Client } from 'google-auth-library';
 import { google } from 'googleapis';
 import { createInterface } from 'readline';
+import * as dotenv from 'dotenv';
+dotenv.config();
 
-const CLIENT_ID = '1033665469946-p00j1v9lidnje0abvv5naec9r6jjgpvn.apps.googleusercontent.com';
-const CLIENT_SECRET = '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';
-const REDIRECT_URI = 'http://localhost:3000/oauth2callback';
-const TOKEN_DIR = './tokens';
+const CLIENT_ID = process.env.GOOGLE_CLIENT_ID;
+const CLIENT_SECRET = process.env.GOOGLE_CLIENT_SECRET;
+const REDIRECT_URI = process.env.GOOGLE_REDIRECT_URI || 'http://localhost:3000/oauth2callback';
+const TOKEN_DIR = process.env.TOKEN_DIR || './tokens';
+
+if (!CLIENT_ID || !CLIENT_SECRET) {
+  console.error('ERROR: GOOGLE_CLIENT_ID and GOOGLE_CLIENT_SECRET environment variables are required.');
+  console.error('Set them in your .env file or environment.');
+  process.exit(1);
+}
 
 const oAuth2Client = new OAuth2Client(CLIENT_ID, CLIENT_SECRET, REDIRECT_URI);
 
@@ -23,9 +31,11 @@ async function getTokenFromCode(code: string) {
 }
 
 async function sendEmail(to: string, subject: string, body: string) {
-  oAuth2Client.setCredentials({
-    refresh_token: '1//0g' // This needs to be a real token
-  });
+  const refreshToken = process.env.GOOGLE_REFRESH_TOKEN;
+  if (!refreshToken) {
+    throw new Error('GOOGLE_REFRESH_TOKEN environment variable is required.');
+  }
+  oAuth2Client.setCredentials({ refresh_token: refreshToken });
   
   const gmail = google.gmail({ version: 'v1', auth: oAuth2Client });
   
