@@ -1,6 +1,7 @@
-import { Router, Request, Response } from "express"
-import { getPrice, validateOraclePrice, getCacheStats, clearPriceCache } from "../services/oracle"
-import { requireAdmin } from "../middleware/rbac"
+import { Router } from "express"
+import type { Request, Response } from "express"
+import { getPrice, validateOraclePrice, getCacheStats, clearPriceCache } from "../services/oracle.js"
+import { requireAdmin } from "../middleware/rbac.js"
 import { z } from "zod"
 
 const router = Router()
@@ -26,7 +27,7 @@ router.get("/:asset", async (req: Request, res: Response) => {
         fetched_at: new Date(result.fetchTime).toISOString(),
       },
     })
-  } catch (err) {
+  } catch (err: unknown) {
     if (err instanceof z.ZodError) {
       return res.status(400).json({ error: "Invalid asset" })
     }
@@ -45,7 +46,7 @@ router.get("/:asset/validate", async (req: Request, res: Response) => {
       data: {
         asset,
         oracle_valid: isValid,
-        max_staleness,
+        max_staleness: maxStaleness,
       },
     })
   } catch {

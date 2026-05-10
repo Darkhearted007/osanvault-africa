@@ -97,7 +97,7 @@ Best regards,
       success: true,
       message: 'Message sent successfully. We will get back to you soon!'
     })
-  } catch (error) {
+  } catch (error: unknown) {
     console.error('Contact form error:', error)
     res.status(500).json({
       success: false,
@@ -138,7 +138,7 @@ Reported at: ${new Date().toISOString()}
       success: true,
       message: 'Issue reported. Our team will investigate.'
     })
-  } catch (error) {
+  } catch (error: unknown) {
     res.status(500).json({ success: false, error: 'Failed to report issue' })
   }
 })

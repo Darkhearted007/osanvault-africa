@@ -1,12 +1,13 @@
-import { Router, Request, Response } from "express"
+import { Router } from "express"
+import type { Request, Response } from "express"
 import {
   getSafeBalances,
   proposeTransaction,
   getTransactionHistory,
   requiresMultisig,
-} from "../services/gnosisSafe"
-import { getTreasurySnapshot } from "../services/treasury"
-import { requireAdmin } from "../middleware/rbac"
+} from "../services/gnosisSafe.js"
+import { getTreasurySnapshot } from "../services/treasury.js"
+import { requireAdmin } from "../middleware/rbac.js"
 import { z } from "zod"
 
 const router = Router()
@@ -40,7 +41,7 @@ router.post("/propose", requireAdmin(), async (req: Request, res: Response) => {
 
     const result = await proposeTransaction(body)
     res.json({ data: result })
-  } catch (err) {
+  } catch (err: unknown) {
     if (err instanceof z.ZodError) {
       return res.status(400).json({ error: "Invalid transaction data" })
     }

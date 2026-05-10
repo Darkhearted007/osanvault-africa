@@ -1,6 +1,6 @@
-import { Request, Response, NextFunction } from 'express'
-import { logger, securityAlert, suspiciousActivity } from '../logger'
-import { pool } from '../db'
+import type { Request, Response, NextFunction } from 'express'
+import { logger, securityAlert, suspiciousActivity } from '../logger.js'
+import { pool } from '../db/index.js'
 
 const SENSITIVE_ENDPOINTS = new Set(['/api/auth/verify', '/api/auth/nonce', '/api/investments', '/api/payout'])
 const MAX_BODY_LOG_SIZE = 200

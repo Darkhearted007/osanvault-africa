@@ -1,7 +1,7 @@
 import { Router } from 'express'
-import { pool } from '../db'
-import { redis } from '../db/redis'
-import { listCircuits } from '../middleware/circuitBreaker'
+import { pool } from '../db/index.js'
+import { redis } from '../db/redis.js'
+import { listCircuits } from '../middleware/circuitBreaker.js'
 
 const router = Router()
 

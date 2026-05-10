@@ -1,9 +1,9 @@
 import { Worker } from "bullmq"
-import { redis } from "../db/redis"
-import { calculateYield } from "../core/financial/yieldEngine"
-import { liquidityFactor } from "../core/financial/liquidityEngine"
-import { getStressFactor } from "../core/financial/treasuryEngine"
-import { addLedger } from "../services/ledger"
+import { redis } from "../db/redis.js"
+import { calculateYield } from "../core/financial/yieldEngine.js"
+import { liquidityFactor } from "../core/financial/liquidityEngine.js"
+import { getStressFactor } from "../core/financial/treasuryEngine.js"
+import { addLedger } from "../services/ledger.js"
 
 console.log("🟡 Payout worker file loaded")
 

@@ -1,8 +1,8 @@
 import { Router } from "express"
 import { z } from "zod"
-import { requireAdmin } from "../middleware/rbac"
-import { logger } from "../logger"
-import { pool } from "../db"
+import { requireAdmin } from "../middleware/rbac.js"
+import { logger } from "../logger.js"
+import { pool } from "../db/index.js"
 
 const router = Router()
 
@@ -25,7 +25,7 @@ router.post("/rebalance", requireAdmin(), async (req, res) => {
     )
 
     res.json({ success: true, pool: params.pool_address })
-  } catch (err) {
+  } catch (err: unknown) {
     if (err instanceof z.ZodError) {
       return res.status(400).json({ error: "Invalid parameters", details: err.errors })
     }

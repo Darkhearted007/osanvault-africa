@@ -1,6 +1,7 @@
-import { Router, Request, Response } from 'express'
-import { pool } from '../db'
-import { redis } from '../db/redis'
+import { Router } from 'express'
+import type { Request, Response } from 'express'
+import { pool } from '../db/index.js'
+import { redis } from '../db/redis.js'
 
 const router = Router()
 

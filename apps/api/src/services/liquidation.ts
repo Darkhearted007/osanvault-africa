@@ -1,7 +1,7 @@
-import { pool } from "../db"
-import { getPrice } from "./oracle"
-import { logger, securityAlert } from "../logger"
-import { withTransaction } from "../db"
+import { pool } from "../db/index.js"
+import { getPrice } from "./oracle.js"
+import { logger, securityAlert } from "../logger.js"
+import { withTransaction } from "../db/index.js"
 
 export interface LiquidationCandidate {
   position_id: string
@@ -165,7 +165,7 @@ export async function runLiquidationCheck(): Promise<{
           debt_covered: result.debt_covered,
         })
       }
-    } catch (err) {
+    } catch (err: unknown) {
       errors++
       logger.error(`Liquidation failed for ${candidate.position_id}: ${err}`)
     }

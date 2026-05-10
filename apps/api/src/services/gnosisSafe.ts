@@ -1,5 +1,5 @@
-import { logger, securityAlert, auditEvent } from "../logger"
-import { pool } from "../db"
+import { logger, securityAlert, auditEvent } from "../logger.js"
+import { pool } from "../db/index.js"
 
 export interface GnosisSafeConfig {
   safeAddress: string
@@ -61,7 +61,7 @@ export async function getSafeBalances(): Promise<SafeBalance> {
     }))
     const total = breakdown.reduce((sum, t) => sum + t.balance, 0)
     return { total, breakdown }
-  } catch (err) {
+  } catch (err: unknown) {
     logger.error(`Failed to fetch Safe balances: ${err}`)
     return { total: 0, breakdown: [] }
   }
@@ -181,6 +181,6 @@ export async function getTransactionHistory(limit = 20): Promise<Array<Record<st
   }
 }
 
-export async function requiresMultisig(amount: number): boolean {
+export async function requiresMultisig(amount: number): Promise<boolean> {
   return amount >= parseInt(process.env.SAFE_MULTISIG_THRESHOLD || "10000", 10)
 }

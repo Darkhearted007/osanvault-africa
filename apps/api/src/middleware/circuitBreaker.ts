@@ -67,7 +67,7 @@ export function circuitBreaker(
       }
 
       return result
-    } catch (err) {
+    } catch (err: unknown) {
       circuit.lastFailure = now
       circuit.failures++
 

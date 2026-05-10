@@ -1,6 +1,6 @@
-import { Request, Response, NextFunction } from "express"
+import type { Request, Response, NextFunction } from "express"
 import { z } from "zod"
-import { logger } from "../logger"
+import { logger } from "../logger.js"
 
 export function inputValidator(req: Request, res: Response, next: NextFunction) {
   const contentType = req.headers["content-type"] || ""
@@ -53,7 +53,7 @@ export function validateSchema(schema: z.ZodSchema) {
     try {
       req.body = schema.parse(req.body)
       next()
-    } catch (err) {
+    } catch (err: unknown) {
       if (err instanceof z.ZodError) {
         res.status(400).json({
           error: "Validation failed",

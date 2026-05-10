@@ -1,11 +1,12 @@
 import { Router } from "express";
-import { payoutQueue } from "../services/queue";
+import { payoutQueue } from "../services/queue.js";
 
 const router = Router();
 
 router.post("/yield", async (req, res) => {
   const job = await payoutQueue.add("calculate", {
-    amount: 1000,
+    userId: "test_user",
+    balance: 1000,
     apy: 12,
   });
 

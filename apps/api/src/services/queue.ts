@@ -1,5 +1,5 @@
 import { Queue } from "bullmq";
-import { redis } from "../db/redis";
+import { redis } from "../db/redis.js";
 
 export type PayoutJobData = {
   userId: string;

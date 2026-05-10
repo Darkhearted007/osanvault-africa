@@ -10,31 +10,31 @@ import express from "express"
 import cors from "cors"
 import helmet from "helmet"
 
-import { bootstrapCore } from "./core/bootstrap"
-import { startWorkers } from "./workers"
+import { bootstrapCore } from "./core/bootstrap.js"
+import { startWorkers } from "./workers/index.js"
 
-import { requestLogger } from "./middleware/requestLogger"
-import { errorHandler } from "./middleware/errorHandler"
-import { apiLimiter, authLimiter, propertyLimiter, investmentLimiter, verifyLimiter } from "./middleware/rateLimit"
-import { inputValidator } from "./middleware/inputValidator"
-import { requireAdmin, requireAuthenticated } from "./middleware/rbac"
-import { logger } from "./logger"
+import { requestLogger } from "./middleware/requestLogger.js"
+import { errorHandler } from "./middleware/errorHandler.js"
+import { apiLimiter, authLimiter, propertyLimiter, investmentLimiter, verifyLimiter } from "./middleware/rateLimit.js"
+import { inputValidator } from "./middleware/inputValidator.js"
+import { requireAdmin, requireAuthenticated } from "./middleware/rbac.js"
+import { logger } from "./logger.js"
 
-import healthRouter from "./routes/health"
-import propertiesRouter from "./routes/properties"
-import tokensRouter from "./routes/tokens"
-import lendRouter from "./routes/lend"
-import milestonesRouter from "./routes/milestones"
-import dashboardRouter from "./routes/dashboard"
-import authRouter from "./routes/auth"
-import queueRouter from "./routes/queues"
-import oracleRouter from "./routes/oracle"
-import treasuryRouter from "./routes/treasury"
-import lpManagerRouter from "./routes/lpManager"
-import dcaRouter from "./routes/dca"
-import dividendDripRouter from "./routes/dividendDrip"
-import portfolioRebalancerRouter from "./routes/portfolioRebalancer"
-import supportRouter from "./routes/support"
+import healthRouter from "./routes/health.js"
+import propertiesRouter from "./routes/properties.js"
+import tokensRouter from "./routes/tokens.js"
+import lendRouter from "./routes/lend.js"
+import milestonesRouter from "./routes/milestones.js"
+import dashboardRouter from "./routes/dashboard.js"
+import authRouter from "./routes/auth.js"
+import queueRouter from "./routes/queues.js"
+import oracleRouter from "./routes/oracle.js"
+import treasuryRouter from "./routes/treasury.js"
+import lpManagerRouter from "./routes/lpManager.js"
+import dcaRouter from "./routes/dca.js"
+import dividendDripRouter from "./routes/dividendDrip.js"
+import portfolioRebalancerRouter from "./routes/portfolioRebalancer.js"
+import supportRouter from "./routes/support.js"
 
 const app = express()
 const PORT = parseInt(process.env.PORT || "3001", 10)
@@ -86,7 +86,7 @@ async function bootstrap() {
         `Environment: ${process.env.NODE_ENV || "development"}`
       );
     });
-  } catch (err) {
+  } catch (err: unknown) {
     console.error("❌ BOOT ERROR:", err);
   }
 }

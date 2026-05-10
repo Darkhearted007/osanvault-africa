@@ -1,8 +1,8 @@
 import { Router } from "express"
 import { z } from "zod"
-import { requireAuthenticated } from "../middleware/rbac"
-import { logger } from "../logger"
-import { pool } from "../db"
+import { requireAuthenticated } from "../middleware/rbac.js"
+import { logger } from "../logger.js"
+import { pool } from "../db/index.js"
 
 const router = Router()
 
@@ -34,7 +34,7 @@ router.post("/plan", requireAuthenticated(), async (req, res) => {
     )
 
     res.status(201).json({ data: rows[0] })
-  } catch (err) {
+  } catch (err: unknown) {
     if (err instanceof z.ZodError) {
       return res.status(400).json({ error: "Validation failed", details: err.errors })
     }

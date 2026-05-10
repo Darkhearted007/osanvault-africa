@@ -1,6 +1,6 @@
-import { Request, Response, NextFunction } from 'express'
-import { pool } from '../db'
-import { logger } from '../logger'
+import type { Request, Response, NextFunction } from 'express'
+import { pool } from '../db/index.js'
+import { logger } from '../logger.js'
 
 // Role definitions
 export enum Role {
@@ -80,7 +80,7 @@ export function requireRole(...allowedRoles: Role[]) {
       req.headers['x-user-role'] = user.role
 
       next()
-    } catch (err) {
+    } catch (err: unknown) {
       logger.error(`RBAC middleware error: ${err}`)
       res.status(500).json({ error: 'Authorization check failed' })
     }
@@ -107,7 +107,7 @@ export function requirePropertyManager() {
 export function requireAuthenticated() {
   return async (req: Request, res: Response, next: NextFunction) => {
     try {
-      const walletAddress = req.headers['x-wallet-address'] as string || 
+      const walletAddress = req.headers['x-wallet-address'] as string ||
                            req.body.wallet_address as string
 
       if (!walletAddress) {
@@ -127,7 +127,7 @@ export function requireAuthenticated() {
       req.headers['x-user-role'] = rows[0].role
 
       next()
-    } catch (err) {
+    } catch (err: unknown) {
       logger.error(`Authentication middleware error: ${err}`)
       res.status(500).json({ error: 'Authentication check failed' })
     }

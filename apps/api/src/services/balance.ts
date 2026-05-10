@@ -1,4 +1,4 @@
-import { getLedger, LedgerEntry } from "./ledger.js";
+import type { LedgerEntry } from "./ledger.js";
 
 export function calculateBalance(entries: LedgerEntry[]) {
   return entries.reduce((sum: number, entry: LedgerEntry) => {

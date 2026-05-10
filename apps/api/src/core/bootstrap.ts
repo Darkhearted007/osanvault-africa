@@ -1,6 +1,6 @@
-import { connectDB } from "../db"
-import { redis } from "../db/redis"
-import { logger } from "../logger"
+import { connectDB } from "../db/index.js"
+import { redis } from "../db/redis.js"
+import { logger } from "../logger.js"
 
 export async function bootstrapCore() {
   try {
@@ -10,7 +10,7 @@ export async function bootstrapCore() {
     await redis.ping()
 
     logger.info("Core services initialized")
-  } catch (err) {
+  } catch (err: unknown) {
     console.error("❌ CORE BOOTSTRAP ERROR:", err)
     logger.error(err)
 

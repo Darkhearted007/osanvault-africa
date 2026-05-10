@@ -1,5 +1,5 @@
-import { runLiquidationCheck, getLiquidationStats } from "../services/liquidation"
-import { logger } from "../logger"
+import { runLiquidationCheck, getLiquidationStats } from "../services/liquidation.js"
+import { logger } from "../logger.js"
 
 const LIQUIDATION_INTERVAL_MS = 60_000
 
@@ -14,7 +14,7 @@ export function startLiquidationWorker(): void {
       if (result.liquidated > 0) {
         logger.info(`Liquidation worker: ${result.liquidated} positions liquidated`)
       }
-    } catch (err) {
+    } catch (err: unknown) {
       logger.error(`Liquidation worker error: ${err}`)
     }
   }, LIQUIDATION_INTERVAL_MS)

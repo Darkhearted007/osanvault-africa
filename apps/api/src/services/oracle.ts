@@ -1,5 +1,5 @@
-import { logger, securityAlert } from "../logger"
-import { pythBreaker } from "../middleware/circuitBreaker"
+import { logger, securityAlert } from "../logger.js"
+import { pythBreaker } from "../middleware/circuitBreaker.js"
 
 const PYTH_RPC = process.env.PYTH_RPC_URL || "https://pythrpc.helius.xyz"
 const SWITCHBOARD_RPC = process.env.SWITCHBOARD_RPC_URL || "https://witchboard-v2.helius.xyz"

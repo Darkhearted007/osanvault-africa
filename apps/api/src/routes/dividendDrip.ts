@@ -1,7 +1,7 @@
 import { Router } from "express"
-import { requireAdmin } from "../middleware/rbac"
-import { logger } from "../logger"
-import { pool } from "../db"
+import { requireAdmin } from "../middleware/rbac.js"
+import { logger } from "../logger.js"
+import { pool } from "../db/index.js"
 
 const router = Router()
 
@@ -67,7 +67,7 @@ router.post("/distribute", requireAdmin(), async (req, res) => {
       investor_count: dividendRecords.length,
       total_amount: amount,
     })
-  } catch (err) {
+  } catch (err: unknown) {
     await client.query("ROLLBACK")
     logger.error(`Dividend distribution failed: ${err}`)
     res.status(500).json({ error: "Dividend distribution failed" })

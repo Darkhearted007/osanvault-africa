@@ -1,8 +1,9 @@
-import { Router, Request, Response } from 'express'
-import { pool } from '../db'
+import { Router } from 'express'
+import type { Request, Response } from 'express'
+import { pool } from '../db/index.js'
 import { z } from 'zod'
-import { requireAdmin, requirePropertyManager } from '../middleware/rbac'
-import { logger } from '../logger'
+import { requireAdmin, requirePropertyManager } from '../middleware/rbac.js'
+import { logger } from '../logger.js'
 
 const router = Router({ mergeParams: true })
 
@@ -86,7 +87,7 @@ router.patch('/:milestoneId', requirePropertyManager(), async (req: Request, res
     }
 
     res.json({ data: rows[0] })
-  } catch (err) {
+  } catch (err: unknown) {
     await client.query('ROLLBACK')
     if (err instanceof z.ZodError) {
       return res.status(400).json({ error: 'Validation failed', details: err.errors })

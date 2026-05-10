@@ -1,9 +1,10 @@
-import { Router, Request, Response } from 'express'
-import { pool } from '../db'
+import { Router } from 'express'
+import type { Request, Response } from 'express'
+import { pool } from '../db/index.js'
 import { z } from 'zod'
-import { requireAdmin, requirePropertyManager } from '../middleware/rbac'
-import { verifyQueueAuth } from '../middleware/verifyQueueAuth'
-import { logger } from '../logger'
+import { requireAdmin, requirePropertyManager } from '../middleware/rbac.js'
+import { verifyQueueAuth } from '../middleware/verifyQueueAuth.js'
+import { logger } from '../logger.js'
 
 const router = Router()
 
@@ -63,7 +64,7 @@ router.get('/', async (req: Request, res: Response) => {
         pages: Math.ceil(parseInt(count.rows[0].count) / limit)
       }
     })
-  } catch (err) {
+  } catch (err: unknown) {
     logger.error(`Property fetch error: ${err}`)
     res.status(500).json({ error: 'Failed to fetch properties' })
   }
@@ -84,7 +85,7 @@ router.get('/:id', async (req: Request, res: Response) => {
     )
     if (!rows.length) return res.status(404).json({ error: 'Property not found' })
     res.json({ data: rows[0] })
-  } catch (err) {
+  } catch (err: unknown) {
     logger.error(`Property fetch error: ${err}`)
     res.status(500).json({ error: 'Failed to fetch property' })
   }
@@ -115,7 +116,7 @@ router.post('/', requirePropertyManager(), async (req: Request, res: Response) =
     }
     
     res.status(201).json({ data: rows[0] })
-  } catch (err) {
+  } catch (err: unknown) {
     if (err instanceof z.ZodError) {
       return res.status(400).json({ error: 'Validation failed', details: err.errors })
     }
@@ -153,7 +154,7 @@ router.patch('/:id/status', requireAdmin(), async (req: Request, res: Response) 
     }
     
     res.json({ data: rows[0] })
-  } catch (err) {
+  } catch (err: unknown) {
     logger.error(`Property status update error: ${err}`)
     res.status(500).json({ error: 'Failed to update property status' })
   }
@@ -209,13 +210,13 @@ router.post('/ingest', verifyQueueAuth, requireAdmin(), async (req: Request, res
         ingested_count: results.length,
         data: results 
       })
-    } catch (err) {
+    } catch (err: unknown) {
       await client.query('ROLLBACK')
       throw err
     } finally {
       client.release()
     }
-  } catch (err) {
+  } catch (err: unknown) {
     if (err instanceof z.ZodError) {
       return res.status(400).json({ error: 'Validation failed', details: err.errors })
     }

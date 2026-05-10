@@ -1,5 +1,5 @@
-import { Request, Response, NextFunction } from 'express'
-import { logger, securityAlert } from '../logger'
+import type { Request, Response, NextFunction } from 'express'
+import { logger, securityAlert } from '../logger.js'
 
 export function errorHandler(
   err: Error & { statusCode?: number },

@@ -1,6 +1,6 @@
 import rateLimit from "express-rate-limit"
-import { Request, Response, NextFunction } from "express"
-import { logger } from "../logger"
+import type { Request, Response, NextFunction } from "express"
+import { logger } from "../logger.js"
 
 // Standard API rate limiter
 export const apiLimiter = rateLimit({

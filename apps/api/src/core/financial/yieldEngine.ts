@@ -1,4 +1,4 @@
-import { YieldInput } from "./types"
+import type { YieldInput } from "./types.js"
 
 export function calculateYield(input: YieldInput) {
   const timeDecay = 1 / (1 + input.daysActive)

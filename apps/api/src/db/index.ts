@@ -1,5 +1,6 @@
-import { Pool, PoolClient } from 'pg'
-import { logger } from '../logger'
+import { Pool } from 'pg'
+import type { PoolClient } from 'pg'
+import { logger } from '../logger.js'
 
 const DATABASE_URL = process.env.DATABASE_URL
 if (!DATABASE_URL) {
@@ -33,7 +34,7 @@ export async function connectDB(): Promise<void> {
     if (result.rows[0] === 1) {
       logger.info('PostgreSQL connected successfully')
     }
-  } catch (err) {
+  } catch (err: unknown) {
     logger.error(`PostgreSQL connection failed: ${err}`)
     throw err
   }
@@ -48,7 +49,7 @@ export async function withTransaction<T>(
     const result = await callback(client)
     await client.query('COMMIT')
     return result
-  } catch (err) {
+  } catch (err: unknown) {
     await client.query('ROLLBACK')
     throw err
   } finally {

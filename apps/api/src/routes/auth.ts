@@ -1,8 +1,9 @@
-import { Router, Request, Response } from 'express'
-import { pool } from '../db'
+import { Router } from 'express'
+import type { Request, Response } from 'express'
+import { pool } from '../db/index.js'
 import { z } from 'zod'
-import { logger } from '../logger'
-import { verifyLimiter } from '../middleware/rateLimit'
+import { logger } from '../logger.js'
+import { verifyLimiter } from '../middleware/rateLimit.js'
 import crypto from 'crypto'
 
 const router = Router()
@@ -51,7 +52,7 @@ router.post('/nonce', async (req: Request, res: Response) => {
       message,
       expires: expires,
     })
-  } catch (err) {
+  } catch (err: unknown) {
     if (err instanceof z.ZodError) {
       return res.status(400).json({ error: 'Invalid wallet address' })
     }
@@ -136,7 +137,7 @@ router.post('/verify', verifyLimiter, async (req: Request, res: Response) => {
         created_at: user.created_at,
       }
     })
-  } catch (err) {
+  } catch (err: unknown) {
     if (err instanceof z.ZodError) {
       return res.status(400).json({ error: 'Invalid request data' })
     }
@@ -190,7 +191,7 @@ router.post('/wallet', async (req: Request, res: Response) => {
       },
       warning: '请使用 /api/auth/verify 进行安全认证'
     })
-  } catch (err) {
+  } catch (err: unknown) {
     if (err instanceof z.ZodError) {
       return res.status(400).json({ error: 'Invalid wallet address' })
     }

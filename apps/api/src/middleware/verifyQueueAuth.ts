@@ -1,5 +1,5 @@
 import crypto from "crypto"
-import { Request, Response, NextFunction } from "express"
+import type { Request, Response, NextFunction } from "express"
 
 export function verifyQueueAuth(req: Request, res: Response, next: NextFunction) {
   const secret = process.env.QUEUE_SECRET
