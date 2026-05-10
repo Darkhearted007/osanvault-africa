@@ -13,6 +13,12 @@ on:
       - 'programs/**'
       - 'Anchor.toml'
       - '.github/workflows/anchor-build.yml'
+  workflow_dispatch:
+    inputs:
+      cluster:
+        description: 'Cluster to deploy (devnet/mainnet)'
+        required: false
+        default: 'devnet'
 
 env:
   CARGO_HOME: ${{ github.workspace }}/.cargo
@@ -80,6 +86,8 @@ jobs:
           echo "=== Building with Anchor ==="
           echo "Current directory: $(pwd)"
           echo "Anchor.toml exists: $(test -f Anchor.toml && echo yes || echo no)"
+          echo "Programs directory:"
+          ls -la programs/
           echo ""
           anchor build 2>&1
         shell: bash
