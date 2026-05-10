@@ -74,7 +74,6 @@ button { cursor: pointer; font-family: inherit; }
 .brand-africa { color: var(--gold-400); }
 .topbar-right { display: flex; align-items: center; gap: 8px; }
 .topbar-title { font-size: 16px; font-weight: 700; color: #fff; flex: 1; text-align: center; }
-.wallet-chip { font-size: 11px; font-weight: 600; color: #d4f4d6; background: rgba(255,255,255,0.12); border-radius: 20px; padding: 4px 10px; }
 .back-btn { background: none; border: none; color: var(--gold-400); font-size: 14px; font-weight: 600; padding: 8px 0; min-width: 48px; }
 
 /* ── Main ──────────────────────────────────────────────────────────────── */
@@ -243,6 +242,58 @@ button { cursor: pointer; font-family: inherit; }
 /* ── Wallet Adapter ────────────────────────────────────────────────────── */
 .wallet-adapter-button { background: rgba(255,255,255,0.15) !important; border-radius: 8px !important; height: 36px !important; font-size: 12px !important; font-weight: 700 !important; padding: 0 12px !important; color: #fff !important; border: 1px solid rgba(255,255,255,0.25) !important; }
 .wallet-adapter-button:hover { background: rgba(255,255,255,0.25) !important; }
+
+/* ── Wallet Connect Button ──────────────────────────────────────────────── */
+.wallet-connect-btn {
+  background: linear-gradient(135deg, var(--primary-600), var(--primary-800));
+  color: #fff; border: none; border-radius: var(--radius-md);
+  height: 36px; font-size: 12px; font-weight: 700;
+  padding: 0 14px; box-shadow: 0 2px 8px rgba(42,96,50,0.3);
+  transition: transform 0.15s;
+}
+.wallet-connect-btn:hover { transform: scale(1.02); }
+.wallet-connect-btn:disabled { opacity: 0.6; cursor: not-allowed; transform: none; }
+
+.wallet-menu-wrapper { position: relative; }
+
+.wallet-chip {
+  display: flex; align-items: center; gap: 6px;
+  font-size: 11px; font-weight: 600; color: #d4f4d6;
+  background: rgba(255,255,255,0.12); border-radius: 20px; padding: 4px 10px;
+  border: none; cursor: pointer;
+}
+.wallet-chip:hover { background: rgba(255,255,255,0.2); }
+
+.wallet-dot {
+  width: 7px; height: 7px; border-radius: 50%; background: #4ade80;
+  box-shadow: 0 0 6px #4ade80;
+}
+
+.wallet-dropdown {
+  position: absolute; top: calc(100% + 8px); right: 0;
+  background: var(--surface); border: 1px solid var(--border);
+  border-radius: var(--radius-md); padding: 8px; min-width: 200px;
+  box-shadow: var(--shadow-lg); z-index: 200;
+}
+.wallet-address-display {
+  font-size: 11px; font-family: monospace; color: var(--text-muted);
+  padding: 6px 8px; background: var(--surface-alt); border-radius: 6px;
+  word-break: break-all; margin-bottom: 6px;
+}
+.wallet-dropdown-item {
+  display: block; width: 100%; padding: 8px 10px; border: none;
+  background: none; text-align: left; font-size: 12px; font-weight: 600;
+  color: var(--text-primary); border-radius: 6px; cursor: pointer;
+}
+.wallet-dropdown-item:hover { background: var(--surface-alt); }
+.wallet-dropdown-item.danger { color: var(--danger); }
+
+.wallet-spinner {
+  display: inline-block; width: 14px; height: 14px;
+  border: 2px solid rgba(255,255,255,0.3); border-top-color: #fff;
+  border-radius: 50%; animation: spin 0.8s linear infinite; margin-right: 6px;
+}
+@keyframes spin { to { transform: rotate(360deg); } }
 
 /* ── Desktop ───────────────────────────────────────────────────────────── */
 @media (min-width: 768px) {

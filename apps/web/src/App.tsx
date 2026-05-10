@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react"
-// wallet adapter removed temporarily
+import { useWallet } from "./WalletProvider"
 import { WalletButton } from "./WalletButton"
 import "./index.css"
 
@@ -315,7 +315,7 @@ function GovernanceTab() {
 
 // ── Root ───────────────────────────────────────────────────────────────────
 export default function App() {
-  const connected = false; const publicKey = null
+  const { publicKey, connected } = useWallet()
   const [tab, setTab] = useState<Tab>("dashboard")
   const [properties, setProperties] = useState<Property[]>(MOCK_PROPERTIES)
   const [selectedProperty, setSelectedProperty] = useState<Property | null>(null)

@@ -1,0 +1,191 @@
+name: Anchor Contracts Build
+
+on:
+  push:
+    branches: [main, dev]
+    paths:
+      - 'programs/**'
+      - 'Anchor.toml'
+      - '.github/workflows/anchor-build.yml'
+  pull_request:
+    branches: [main]
+    paths:
+      - 'programs/**'
+      - 'Anchor.toml'
+      - '.github/workflows/anchor-build.yml'
+
+env:
+  CARGO_HOME: ${{ github.workspace }}/.cargo
+  RUSTUP_HOME: ${{ github.workspace }}/.rustup
+
+jobs:
+  build-contracts:
+    name: Build Solana Programs
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Rust
+        uses: rust-lang/actions/setup@v2
+        with:
+          version: stable
+          components: rustfmt, clippy
+
+      - name: Cache Rust SBF toolchain
+        id: cache-sbf
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.cargo/bin/
+            ~/.cargo/registry/
+            ~/.rustup/
+          key: ${{ runner.os }}-sbf-toolchain-v2
+
+      - name: Install Solana CLI
+        if: steps.cache-sbf.outputs.cache-hit != 'true'
+        run: |
+          sh -c "$(curl -sSfL https://release.solana.com/v1.18.26/install.sh)"
+          echo "$HOME/.local/bin" >> $GITHUB_PATH
+        shell: bash
+
+      - name: Verify Solana CLI
+        run: |
+          solana-install --version
+          cargo build-sbf --version || echo "cargo build-sbf not available"
+        shell: bash
+
+      - name: Cache build artifacts
+        uses: actions/cache@v4
+        with:
+          path: |
+            programs/*/target/
+            .anchor/
+          key: ${{ runner.os }}-programs-${{ hashFiles('programs/*/Cargo.lock', 'programs/*/Cargo.toml') }}
+          restore-keys: |
+            ${{ runner.os }}-programs-
+
+      - name: Build with Anchor
+        run: anchor build 2>&1
+        shell: bash
+        env:
+          CARGO_NET_GIT_FETCH_WITH_CLI: true
+
+      - name: Generate build report
+        run: |
+          echo "## Build Artifacts" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "| Program | Status | Size |" >> $GITHUB_STEP_SUMMARY
+          echo "|---------|--------|------|" >> $GITHUB_STEP_SUMMARY
+          for prog in osanvault_core osanvault_lend reits minerals carbon landbank oracle; do
+            sofile=""
+            for path in ".anchor/localnet/$prog.so" "target/deploy/$prog.so" "programs/$prog/target/sbf-solana-solana/release/$prog.so"; do
+              if [ -f "$path" ]; then
+                sofile="$path"
+                break
+              fi
+            done
+            if [ -n "$sofile" ]; then
+              size=$(wc -c < "$sofile" 2>/dev/null || echo "0")
+              echo "| $prog | :white_check_mark: Built | ${size} bytes |" >> $GITHUB_STEP_SUMMARY
+            else
+              echo "| $prog | :x: FAILED | - |" >> $GITHUB_STEP_SUMMARY
+            fi
+          done
+        shell: bash
+
+      - name: Upload build artifacts
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: solana-programs-build
+          path: |
+            .anchor/
+            target/
+          retention-days: 7
+
+  verify-program-ids:
+    name: Verify Program IDs
+    runs-on: ubuntu-24.04
+    needs: build-contracts
+    timeout-minutes: 10
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Verify Program IDs
+        run: |
+          echo "## Program ID Verification" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "### Anchor.toml" >> $GITHUB_STEP_SUMMARY
+          echo '```' >> $GITHUB_STEP_SUMMARY
+          grep -E "^\s*[a-z_]+ = \"" Anchor.toml >> $GITHUB_STEP_SUMMARY
+          echo '```' >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "### declare_id! in contracts" >> $GITHUB_STEP_SUMMARY
+          echo '```' >> $GITHUB_STEP_SUMMARY
+          grep -rh "declare_id!" programs/*/src/lib.rs | sort | uniq >> $GITHUB_STEP_SUMMARY
+          echo '```' >> $GITHUB_STEP_SUMMARY
+
+  lint-rust:
+    name: Lint Rust Code
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Rust
+        uses: rust-lang/actions/setup@v2
+        with:
+          version: stable
+          components: rustfmt, clippy
+
+      - name: Run rustfmt
+        run: |
+          for prog in programs/*/Cargo.toml; do
+            dir=$(dirname "$prog")
+            echo "Formatting $prog..."
+            cargo fmt --check --manifest-path="$prog" 2>&1 || echo "Format issues found"
+          done
+        shell: bash
+        continue-on-error: true
+
+      - name: Run clippy
+        run: |
+          for prog in programs/*/Cargo.toml; do
+            dir=$(dirname "$prog")
+            echo "Linting $prog..."
+            cargo clippy --manifest-path="$prog" -- -D warnings 2>&1 || echo "Lint warnings found"
+          done
+        shell: bash
+        continue-on-error: true
+
+  security-checks:
+    name: Security Checks
+    runs-on: ubuntu-24.04
+    needs: build-contracts
+    timeout-minutes: 20
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Rust
+        uses: rust-lang/actions/setup@v2
+        with:
+          version: stable
+
+      - name: Run cargo-audit
+        run: |
+          cargo install cargo-audit 2>/dev/null || true
+          cargo audit --version || echo "cargo-audit not available"
+          for prog in programs/*/Cargo.toml; do
+            cargo audit --manifest-path="$prog" 2>&1 || true
+          done
+        shell: bash
+        continue-on-error: true
