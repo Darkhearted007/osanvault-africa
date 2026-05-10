@@ -47,6 +47,9 @@ jobs:
   api-test:
     name: API Health
     runs-on: ubuntu-22.04
+    # TEMPORARILY DISABLED - Requires GitHub secrets (POSTGRES_PASSWORD, REDIS_PASSWORD, JWT_SECRET, QUEUE_SECRET)
+    # Enable after configuring secrets in repo Settings > Secrets
+    if: false
 
     services:
       postgres:
@@ -118,11 +121,11 @@ jobs:
   security-scan:
     name: Security Scan
     runs-on: ubuntu-22.04
-    
+
     permissions:
       contents: read
       security-events: write
-    
+
     steps:
       - uses: actions/checkout@v4
 
@@ -141,7 +144,7 @@ jobs:
     name: Container Scan
     runs-on: ubuntu-22.04
     if: false  # Enable when Dockerfiles are added
-    
+
     steps:
       - uses: actions/checkout@v4
 

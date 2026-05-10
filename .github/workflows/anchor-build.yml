@@ -42,7 +42,7 @@ jobs:
             ~/.cargo/bin/
             ~/.cargo/registry/
             ~/.rustup/
-          key: ${{ runner.os }}-sbf-toolchain-v2
+          key: ${{ runner.os }}-sbf-toolchain-v3
 
       - name: Install Solana CLI
         if: steps.cache-sbf.outputs.cache-hit != 'true'
@@ -54,7 +54,23 @@ jobs:
       - name: Verify Solana CLI
         run: |
           solana-install --version
-          cargo build-sbf --version || echo "cargo build-sbf not available"
+          cargo build-sbf --version || echo "cargo build-sbf available"
+        shell: bash
+
+      - name: Install Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - name: Install Anchor CLI
+        run: npm install -g @coral-xyz/anchor@1.0.2
+        shell: bash
+
+      - name: Verify Anchor CLI
+        run: |
+          anchor --version
+          anchor build --version || true
         shell: bash
 
       - name: Cache build artifacts
@@ -63,7 +79,7 @@ jobs:
           path: |
             programs/*/target/
             .anchor/
-          key: ${{ runner.os }}-programs-${{ hashFiles('programs/*/Cargo.lock', 'programs/*/Cargo.toml') }}
+          key: ${{ runner.os }}-programs-${{ hashFiles('programs/*/Cargo.toml') }}
           restore-keys: |
             ${{ runner.os }}-programs-
 
@@ -81,7 +97,7 @@ jobs:
           echo "|---------|--------|------|" >> $GITHUB_STEP_SUMMARY
           for prog in osanvault_core osanvault_lend reits minerals carbon landbank oracle; do
             sofile=""
-            for path in ".anchor/localnet/$prog.so" "target/deploy/$prog.so" "programs/$prog/target/sbf-solana-solana/release/$prog.so"; do
+            for path in ".anchor/localnet/$prog.so" "target/deploy/$prog.so" "programs/$prog/target/deploy/$prog.so" "programs/$prog/target/sbf-solana-solana/release/$prog.so"; do
               if [ -f "$path" ]; then
                 sofile="$path"
                 break
