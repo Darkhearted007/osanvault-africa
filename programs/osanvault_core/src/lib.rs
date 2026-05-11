@@ -281,14 +281,12 @@ pub mod osanvault_core {
         receipt.amount = receipt.amount.checked_add(amount).ok_or(OsanvaultError::OverflowError)?;
 
         // Transfer funds from investor to vault (external call)
-
         let cpi_accounts = Transfer {
             from: ctx.accounts.investor_token_account.to_account_info(),
             to: ctx.accounts.vault_token_account.to_account_info(),
             authority: ctx.accounts.investor.to_account_info(),
         };
-        let cpi_program = ctx.accounts.token_program.to_account_info();
-        let cpi_ctx = CpiContext::new(cpi_program, cpi_accounts);
+        let cpi_ctx = CpiContext::new(ctx.accounts.token_program.to_account_info().key(), cpi_accounts);
         token::transfer(cpi_ctx, amount)?;
 
         msg!("Investment of {} successfully processed.", amount);
@@ -353,7 +351,6 @@ pub struct InitializeTokenMint<'info> {
         mint::authority = admin,
         mint::freeze_authority = admin,
         mint::decimals = 9,
-        space = 82,
         seeds = [b"osanv-mint"],
         bump
     )]

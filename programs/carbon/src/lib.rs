@@ -52,7 +52,7 @@ pub mod carbon {
             to: ctx.accounts.recipient_token.to_account_info(),
             authority: ctx.accounts.verifier.to_account_info(),
         };
-        let cpi = CpiContext::new(ctx.accounts.token_program.to_account_info(), cpi_accounts);
+        let cpi = CpiContext::new(ctx.accounts.token_program.to_account_info().key(), cpi_accounts);
         anchor_spl::token::mint_to(cpi, amount)?;
 
         msg!("Issued {} carbon credits", amount);
@@ -70,7 +70,7 @@ pub mod carbon {
             from: ctx.accounts.holder_token.to_account_info(),
             authority: ctx.accounts.holder.to_account_info(),
         };
-        let cpi = CpiContext::new(ctx.accounts.token_program.to_account_info(), cpi_accounts);
+        let cpi = CpiContext::new(ctx.accounts.token_program.to_account_info().key(), cpi_accounts);
         anchor_spl::token::burn(cpi, amount)?;
 
         project.credits_retired = project.credits_retired
@@ -89,7 +89,7 @@ pub mod carbon {
             to: ctx.accounts.to_token.to_account_info(),
             authority: ctx.accounts.from.to_account_info(),
         };
-        let cpi = CpiContext::new(ctx.accounts.token_program.to_account_info(), cpi_accounts);
+        let cpi = CpiContext::new(ctx.accounts.token_program.to_account_info().key(), cpi_accounts);
         token::transfer(cpi, amount)?;
 
         msg!("Transferred {} carbon credits", amount);

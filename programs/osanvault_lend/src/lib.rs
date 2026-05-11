@@ -46,7 +46,7 @@ pub mod osanvault_lend {
             to: ctx.accounts.vault.to_account_info(),
             authority: ctx.accounts.user.to_account_info(),
         };
-        let cpi = CpiContext::new(ctx.accounts.token_program.to_account_info(), cpi_accounts);
+        let cpi = CpiContext::new(ctx.accounts.token_program.to_account_info().key(), cpi_accounts);
         token::transfer(cpi, amount)?;
 
         msg!("Deposited {} as collateral for {}", amount, ctx.accounts.user.key());
@@ -99,7 +99,7 @@ pub mod osanvault_lend {
             authority: ctx.accounts.pool.to_account_info(),
         };
         let cpi = CpiContext::new_with_signer(
-            ctx.accounts.token_program.to_account_info(),
+            ctx.accounts.token_program.to_account_info().key(),
             cpi_accounts,
             signer,
         );
@@ -131,7 +131,7 @@ pub mod osanvault_lend {
             to: ctx.accounts.vault.to_account_info(),
             authority: ctx.accounts.user.to_account_info(),
         };
-        let cpi = CpiContext::new(ctx.accounts.token_program.to_account_info(), cpi_accounts);
+        let cpi = CpiContext::new(ctx.accounts.token_program.to_account_info().key(), cpi_accounts);
         token::transfer(cpi, amount)?;
 
         msg!("Repaid {}", amount);
@@ -209,7 +209,7 @@ pub mod osanvault_lend {
             authority: ctx.accounts.pool.to_account_info(),
         };
         let cpi = CpiContext::new_with_signer(
-            ctx.accounts.token_program.to_account_info(),
+            ctx.accounts.token_program.to_account_info().key(),
             cpi_accounts,
             signer,
         );
