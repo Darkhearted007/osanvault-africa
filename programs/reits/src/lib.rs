@@ -57,7 +57,7 @@ pub mod reits {
             to: ctx.accounts.share_token.to_account_info(),
             authority: ctx.accounts.mint_authority.to_account_info(),
         };
-        let cpi = CpiContext::new(ctx.accounts.token_program.to_account_info(), cpi_accounts);
+        let cpi = CpiContext::new(ctx.accounts.token_program.to_account_info().key(), cpi_accounts);
         anchor_spl::token::mint_to(cpi, num_shares)?;
 
         msg!("Issued {} shares to {}", num_shares, recipient);
@@ -89,7 +89,7 @@ pub mod reits {
             to: ctx.accounts.treasury_token.to_account_info(),
             authority: ctx.accounts.investor.to_account_info(),
         };
-        let cpi = CpiContext::new(ctx.accounts.token_program.to_account_info(), cpi_accounts);
+        let cpi = CpiContext::new(ctx.accounts.token_program.to_account_info().key(), cpi_accounts);
         token::transfer(cpi, amount)?;
 
         reit.shares_issued = new_shares_issued;
@@ -123,7 +123,7 @@ pub mod reits {
             to: ctx.accounts.recipient_token.to_account_info(),
             authority: ctx.accounts.treasury.to_account_info(),
         };
-        let cpi = CpiContext::new(ctx.accounts.token_program.to_account_info(), cpi_accounts);
+        let cpi = CpiContext::new(ctx.accounts.token_program.to_account_info().key(), cpi_accounts);
         token::transfer(cpi, total_yield)?;
 
         msg!(
@@ -197,7 +197,6 @@ pub struct CreateReit<'info> {
         payer = manager,
         mint::authority = manager,
         mint::decimals = 9,
-        space = 82,
         seeds = [b"reit-mint", name.as_bytes()],
         bump
     )]

@@ -88,7 +88,7 @@ pub mod landbank {
             to: ctx.accounts.treasury_token.to_account_info(),
             authority: ctx.accounts.contributor.to_account_info(),
         };
-        let cpi = CpiContext::new(ctx.accounts.token_program.to_account_info(), cpi_accounts);
+        let cpi = CpiContext::new(ctx.accounts.token_program.to_account_info().key(), cpi_accounts);
         token::transfer(cpi, amount)?;
 
         // Increment contributor count if new

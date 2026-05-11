@@ -59,7 +59,7 @@ pub mod minerals {
             to: ctx.accounts.recipient_token.to_account_info(),
             authority: ctx.accounts.minter.to_account_info(),
         };
-        let cpi = CpiContext::new(ctx.accounts.token_program.to_account_info(), cpi_accounts);
+        let cpi = CpiContext::new(ctx.accounts.token_program.to_account_info().key(), cpi_accounts);
         anchor_spl::token::mint_to(cpi, amount)?;
 
         msg!("Minted {} mineral tokens", amount);
@@ -83,7 +83,7 @@ pub mod minerals {
             to: ctx.accounts.to_token.to_account_info(),
             authority: ctx.accounts.from.to_account_info(),
         };
-        let cpi = CpiContext::new(ctx.accounts.token_program.to_account_info(), cpi_accounts);
+        let cpi = CpiContext::new(ctx.accounts.token_program.to_account_info().key(), cpi_accounts);
         token::transfer(cpi, transfer_amount)?;
 
         if royalty > 0 {
@@ -93,7 +93,7 @@ pub mod minerals {
                 authority: ctx.accounts.from.to_account_info(),
             };
             let royalty_ctx =
-                CpiContext::new(ctx.accounts.token_program.to_account_info(), royalty_cpi);
+                CpiContext::new(ctx.accounts.token_program.to_account_info().key(), royalty_cpi);
             token::transfer(royalty_ctx, royalty)?;
         }
 
@@ -163,7 +163,6 @@ pub struct RegisterSite<'info> {
         payer = owner,
         mint::authority = owner,
         mint::decimals = 0,
-        space = 82,
         seeds = [b"mineral-mint", name.as_bytes()],
         bump
     )]
