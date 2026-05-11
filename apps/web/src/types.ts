@@ -1,55 +1,74 @@
-export interface Property {
+export type Property = {
   id: string
   title: string
   location: string
   country: string
-  total_value: number
-  token_price: number
+  total_value: string | number
+  token_price: string | number
   total_tokens: number
   tokens_sold: number
-  annual_yield: number
-  ipfs_hash?: string
-  image_url?: string
-  status: 'pending' | 'active' | 'fully_funded' | 'closed'
-  created_at?: string
+  annual_yield: string | number
+  status?: "Active" | "Coming Soon" | "Funded" | "active" | string
 }
 
-export interface Investment {
+export type LedgerEntry = {
   id: string
-  property_id: string
-  user_id: string
-  tokens_purchased: number
-  amount_paid: number
-  status: 'pending' | 'confirmed' | 'failed'
-  created_at: string
-}
-
-export interface Dividend {
-  id: string
-  property_id: string
+  type: "CREDIT" | "DEBIT"
+  token: string
   amount: number
-  distributed_at: string
+  reason: string
+  createdAt: string
 }
 
-export interface User {
+export type Tab = "dashboard" | "explore" | "staking" | "governance"
+
+export type StakingTier = {
+  key: string
+  name: string
+  minOSANV: number
+  apy: number
+  fee: string
+  gradient: string
+  benefits: string[]
+}
+
+export type Portfolio = {
+  totalNGN: number
+  totalUSD: number
+  dailyChangePct: number
+  osanvBalance: number
+  osanvUSD: number
+  stakedOSANV: number
+  stakingTier: string
+  activeInvestments: number
+}
+
+export type DashboardStats = {
+  totalValue?: number
+  totalInvestors?: number
+  totalProperties?: number
+  osanvPrice?: number
+  dailyChange?: number
+  activeProperties?: number
+  totalTvl?: number
+  totalDividendsPaid?: number
+  completedMilestones?: number
+}
+
+export type Investment = {
   id: string
-  wallet_address: string
-  role: 'investor' | 'admin' | 'property_manager'
-  kyc_status: 'pending' | 'verified' | 'rejected'
-  created_at: string
+  propertyId: string
+  investor: string
+  amount: number
+  tokens: number
+  date: string
+  status: string
 }
 
-export interface DashboardStats {
-  totalProperties: number
-  activeProperties: number
-  totalInvestors: number
-  totalTvl: number
-  totalDividendsPaid: number
-  completedMilestones: number
-}
-
-export interface ApiResponse<T> {
-  data: T
-  success?: boolean
-  error?: string
+export type Dividend = {
+  id: string
+  investor: string
+  amount: number
+  yield: number
+  date: string
 }

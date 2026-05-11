@@ -1,103 +1,47 @@
-import type { FC } from 'react'
-import { useNavigate } from 'react-router-dom'
-import { useWallet } from '@solana/wallet-adapter-react'
-import type { Property } from '../types'
+import React from "react"
+import { Property } from "../types"
+import { PROPERTY_ICONS } from "../constants"
+import { fmt, fundedPct } from "../utils"
 
-interface PropertyCardProps {
-  property: Property
-}
-
-export const PropertyCard: FC<PropertyCardProps> = ({ property }) => {
-  const navigate = useNavigate()
-  const { connected } = useWallet()
-  const pct = property.total_tokens > 0
-    ? Math.round((property.tokens_sold / property.total_tokens) * 100)
-    : 0
-
-  const statusColor = {
-    active: 'var(--accent)',
-    pending: 'var(--muted)',
-    fully_funded: '#6366F1',
-    closed: 'var(--muted)',
-  }[property.status] || 'var(--accent)'
+export function PropertyCard({ p, onSelect, connected }: { p: Property; onSelect: (p: Property) => void; connected: boolean }) {
+  const funded = fundedPct(p.tokens_sold, p.total_tokens)
+  const statusColors: Record<string, string> = {
+    Active: "#2e7d32", "Coming Soon": "#f59e0b", Funded: "#0284c7",
+  }
+  const status = p.status || "Active"
 
   return (
-    <article
-      className="property-card"
-      onClick={() => navigate(`/assets/${property.id}`)}
-      role="button"
-      tabIndex={0}
-      onKeyDown={(e) => e.key === 'Enter' && navigate(`/assets/${property.id}`)}
-    >
-      <div className="property-card__image-wrapper">
-        <span className="property-card__badge">{property.country}</span>
-        <span className="property-card__status" style={{ background: statusColor }}>
-          {property.status.replace('_', ' ')}
+    <div className="property-card" onClick={() => onSelect(p)}>
+      <div className="property-header">
+        <div className="property-icon">{PROPERTY_ICONS[p.title] || "🏢"}</div>
+        <div className="property-info">
+          <h3 className="property-title">{p.title}</h3>
+          <p className="property-location">📍 {p.location} · {p.country}</p>
+        </div>
+        <span className="property-status-badge" style={{ color: statusColors[status], background: statusColors[status] + "18" }}>
+          {status}
         </span>
-        <img
-          src={property.image_url || `https://placehold.co/600x400/16161a/F59E0B?text=${encodeURIComponent(property.title)}`}
-          alt={property.title}
-          className="property-card__image"
-          onError={(e) => {
-            (e.currentTarget as HTMLImageElement).src = `https://placehold.co/600x400/16161a/F59E0B?text=${encodeURIComponent(property.title)}`
-          }}
-        />
       </div>
-
-      <div className="property-card__body">
-        <h3 className="property-card__title">{property.title}</h3>
-        <p className="property-card__location">
-          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-            <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z" />
-            <circle cx="12" cy="10" r="3" />
-          </svg>
-          {property.location}
-        </p>
-
-        <div className="property-card__metrics">
-          <div className="property-card__metric">
-            <span className="property-card__metric-label">Asset Value</span>
-            <span className="property-card__metric-value">
-              ${Number(property.total_value).toLocaleString()}
-            </span>
-          </div>
-          <div className="property-card__metric">
-            <span className="property-card__metric-label">Est. Yield</span>
-            <span className="property-card__metric-value gradient-text">
-              {property.annual_yield}% APY
-            </span>
-          </div>
+      <div className="property-progress-wrap">
+        <div className="property-progress-bar">
+          <div className="property-progress-fill" style={{ width: `${funded}%` }} />
         </div>
-
-        <div className="property-card__progress">
-          <div className="property-card__progress-header">
-            <span>Funding Progress</span>
-            <span className="highlight">{pct}%</span>
-          </div>
-          <div className="progress-bar">
-            <div className="progress-bar__fill" style={{ width: `${pct}%` }} />
-          </div>
-          <div className="property-card__progress-footer">
-            <span>{Number(property.tokens_sold).toLocaleString()} tokens sold</span>
-            <span>${Number(property.token_price).toFixed(2)} per token</span>
-          </div>
+        <div className="property-progress-labels">
+          <span>₦{fmt(Math.round(p.tokens_sold * Number(p.token_price)))}</span>
+          <span className="funded-pct">{funded}%</span>
+          <span>₦{fmt(Number(p.total_value))}</span>
         </div>
-
+      </div>
+      <div className="property-footer">
+        <span className="property-yield">🏆 {p.annual_yield}% APY</span>
         <button
-          className="btn btn--primary btn--full"
-          disabled={!connected}
-          onClick={(e) => {
-            e.stopPropagation()
-            navigate(`/assets/${property.id}`)
-          }}
+          className="btn-invest"
+          disabled={!connected || status === "Coming Soon"}
+          onClick={e => e.stopPropagation()}
         >
-          {!connected
-            ? 'Connect Wallet to Invest'
-            : property.status === 'active'
-            ? 'Invest Now'
-            : 'View Details'}
+          {status === "Coming Soon" ? "Coming Soon" : connected ? "Invest Now" : "Connect Wallet"}
         </button>
       </div>
-    </article>
+    </div>
   )
 }

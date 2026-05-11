@@ -79,6 +79,9 @@ app.use(errorHandler)
 async function bootstrap() {
   try {
     await bootstrapCore();
+    
+    // Start background workers
+    await startWorkers();
 
     app.listen(Number(PORT), "0.0.0.0", () => {
       logger.info(`ÒsánVault API running on http://localhost:${PORT}`);

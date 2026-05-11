@@ -1,23 +1,11 @@
-import type { FC } from 'react'
+import React from "react"
 
-interface StatCardProps {
-  label: string
-  value: string
-  sub?: string
-  trend?: { value: number; positive: boolean }
-}
-
-export const StatCard: FC<StatCardProps> = ({ label, value, sub, trend }) => {
+export function StatCard({ label, value, sub, accent }: { label: string; value: string; sub?: string; accent?: string }) {
   return (
     <div className="stat-card">
-      <span className="stat-card__label">{label}</span>
-      <span className="stat-card__value">{value}</span>
-      {sub && <span className="stat-card__sub">{sub}</span>}
-      {trend && (
-        <span className={`stat-card__trend ${trend.positive ? 'up' : 'down'}`}>
-          {trend.positive ? '+' : '-'}{Math.abs(trend.value)}%
-        </span>
-      )}
+      <p className="stat-label">{label}</p>
+      <p className="stat-value" style={accent ? { color: accent } : {}}>{value}</p>
+      {sub && <p className="stat-sub">{sub}</p>}
     </div>
   )
 }

@@ -1,64 +1,56 @@
-import { useEffect } from 'react'
-import { Outlet } from 'react-router-dom'
-import { Nav } from './Nav'
-
-const SUPPORT_EMAIL = 'Olugbenga1000@gmail.com'
-const SUPPORT_PHONE = '+2347065056103'
-const WEBSITE = 'https://osanvaultafrica.com'
-
-export const SUPPORT_CONTACT = {
-  email: SUPPORT_EMAIL,
-  phone: SUPPORT_PHONE,
-  website: WEBSITE,
-  twitter: '@Osanvault',
-  telegram: '@OsanvaultAfrica'
-}
+import React from "react"
+import { WalletButton } from "../WalletButton"
+import { Tab } from "../types"
 
 interface LayoutProps {
-  title?: string
-  hideNav?: boolean
+  children: React.ReactNode
+  connected: boolean
+  shortAddr: string | null
+  tab: Tab
+  setTab: (t: Tab) => void
+  setSelectedProperty: (p: any) => void
 }
 
-export function Layout({ title, hideNav }: LayoutProps) {
-  useEffect(() => {
-    if (title) {
-      document.title = `${title} — ÒsánVault Africa`
-    }
-  }, [title])
+export function Layout({ children, connected, shortAddr, tab, setTab, setSelectedProperty }: LayoutProps) {
+  const tabs: { key: Tab; icon: string; label: string }[] = [
+    { key: "dashboard", icon: "🏠", label: "Home" },
+    { key: "explore", icon: "🧭", label: "Explore" },
+    { key: "staking", icon: "⚡", label: "Staking" },
+    { key: "governance", icon: "🗳", label: "Governance" },
+  ]
 
   return (
-    <div className="app-shell">
-      {!hideNav && <Nav />}
+    <div className="app">
+      <header className="topbar">
+        <div className="topbar-brand">
+          <span className="brand-icon">🏛</span>
+          <span className="brand-name">ÒsánVault <span className="brand-africa">Africa</span></span>
+        </div>
+        <div className="topbar-right">
+          {connected && shortAddr && <span className="wallet-chip">{shortAddr}</span>}
+          <WalletButton />
+        </div>
+      </header>
 
-      <main className="main-content">
-        <Outlet />
+      <main className="main">
+        {children}
       </main>
 
-      <footer className="footer">
-        <div className="footer-inner">
-          <div className="footer-brand">
-            <span className="logo-mark" />
-            <span>ÒsánVault Africa</span>
-          </div>
-
-          <div className="footer-links">
-            <a href={WEBSITE} target="_blank" rel="noreferrer">Website</a>
-            <a href="https://github.com/Darkhearted007/osanvault-africa" target="_blank" rel="noreferrer">GitHub</a>
-            <a href={`mailto:${SUPPORT_EMAIL}`}>Contact Support</a>
-            <a href="/privacy">Privacy</a>
-            <a href="/terms">Terms</a>
-          </div>
-
-          <div className="footer-contact">
-            <span>📧 {SUPPORT_EMAIL}</span>
-            <span>📞 {SUPPORT_PHONE}</span>
-          </div>
-
-          <div className="footer-copy">
-            © 2026 ÒsánVault Africa — Built on Solana
-          </div>
-        </div>
-      </footer>
+      <nav className="bottom-nav">
+        {tabs.map(t => (
+          <button
+            key={t.key}
+            className={`nav-item ${tab === t.key ? "active" : ""}`}
+            onClick={() => {
+              setSelectedProperty(null)
+              setTab(t.key)
+            }}
+          >
+            <span className="nav-icon">{t.icon}</span>
+            <span className="nav-label">{t.label}</span>
+          </button>
+        ))}
+      </nav>
     </div>
   )
 }
