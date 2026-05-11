@@ -1,5 +1,6 @@
 use anchor_lang::prelude::*;
 use anchor_spl::token::{self, Mint, Token, TokenAccount, Transfer};
+use std::str::FromStr;
 
 declare_id!("3ZX5svRbpgvNVQXpwj7cQG2MZs97KVnV3azCkSiwU3CR");
 
@@ -34,6 +35,7 @@ pub mod osanvault_lend {
         require!(amount > 0, LendError::InvalidAmount);
 
         let user_position = &mut ctx.accounts.user_position;
+        user_position.user = ctx.accounts.user.key();
         user_position.collateral_amount = user_position
             .collateral_amount
             .checked_add(amount)
@@ -47,7 +49,7 @@ pub mod osanvault_lend {
         let cpi = CpiContext::new(ctx.accounts.token_program.to_account_info(), cpi_accounts);
         token::transfer(cpi, amount)?;
 
-        msg!("Deposited {} as collateral", amount);
+        msg!("Deposited {} as collateral for {}", amount, ctx.accounts.user.key());
         Ok(())
     }
 
@@ -88,12 +90,19 @@ pub mod osanvault_lend {
             .checked_add(fee)
             .ok_or(LendError::OverflowError)?;
 
+        let seeds = &[b"lend-pool".as_ref(), &[ctx.bumps.pool]];
+        let signer = &[&seeds[..]];
+
         let cpi_accounts = Transfer {
             from: ctx.accounts.vault.to_account_info(),
             to: ctx.accounts.user_token.to_account_info(),
             authority: ctx.accounts.pool.to_account_info(),
         };
-        let cpi = CpiContext::new(ctx.accounts.token_program.to_account_info(), cpi_accounts);
+        let cpi = CpiContext::new_with_signer(
+            ctx.accounts.token_program.to_account_info(),
+            cpi_accounts,
+            signer,
+        );
         token::transfer(cpi, amount)?;
 
         msg!("Borrowed {} (fee: {})", amount, fee);
@@ -191,12 +200,19 @@ pub mod osanvault_lend {
             .ok_or(LendError::UnderflowError)?;
 
         // Transfer collateral to liquidator
+        let seeds = &[b"lend-pool".as_ref(), &[ctx.bumps.pool]];
+        let signer = &[&seeds[..]];
+
         let cpi_accounts = Transfer {
             from: ctx.accounts.collateral_vault.to_account_info(),
             to: ctx.accounts.liquidator_token.to_account_info(),
             authority: ctx.accounts.pool.to_account_info(),
         };
-        let cpi = CpiContext::new(ctx.accounts.token_program.to_account_info(), cpi_accounts);
+        let cpi = CpiContext::new_with_signer(
+            ctx.accounts.token_program.to_account_info(),
+            cpi_accounts,
+            signer,
+        );
         token::transfer(cpi, collateral_to_liquidator)?;
 
         msg!(
@@ -323,8 +339,16 @@ pub struct Borrow<'info> {
     pub user: Signer<'info>,
     #[account(mut)]
     pub user_token: Account<'info, TokenAccount>,
-    #[account(mut)]
+
+    #[account(
+        mut,
+        constraint = vault.key() == pool.debt_token @ LendError::InvalidVault
+    )]
     pub vault: Account<'info, TokenAccount>,
+
+    #[account(
+        constraint = price_feed.to_account_info().owner == &Pubkey::from_str("FsJ9A4H3KCcqUPS3axAz9uXN945Z4yXzZ44h6S234G8S").unwrap() @ LendError::OracleError
+    )]
     pub price_feed: Account<'info, PythPrice>,
     pub token_program: Program<'info, Token>,
 }
@@ -439,4 +463,6 @@ pub enum LendError {
     PositionHealthy,
     #[msg("Oracle error")]
     OracleError,
+    #[msg("Invalid vault")]
+    InvalidVault,
 }

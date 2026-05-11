@@ -29,11 +29,7 @@ pub mod carbon {
         project.status = 1; // Active
         project.verifier = ctx.accounts.verifier.key();
 
-        msg!(
-            "Carbon project {} registered - {} credits",
-            name,
-            total_carbon_credits
-        );
+        msg!("Carbon project {} registered - {} credits", name, total_carbon_credits);
         Ok(())
     }
 
@@ -41,20 +37,13 @@ pub mod carbon {
         let project = &mut ctx.accounts.project;
 
         require!(project.status == 1, CarbonError::ProjectNotActive);
-        require!(
-            project.verifier == ctx.accounts.verifier.key(),
-            CarbonError::Unauthorized
-        );
+        require!(project.verifier == ctx.accounts.verifier.key(), CarbonError::Unauthorized);
 
-        let new_issued = project
-            .credits_issued
+        let new_issued = project.credits_issued
             .checked_add(amount)
             .ok_or(CarbonError::OverflowError)?;
 
-        require!(
-            new_issued <= project.total_credits,
-            CarbonError::ExceedsTotal
-        );
+        require!(new_issued <= project.total_credits, CarbonError::ExceedsTotal);
 
         project.credits_issued = new_issued;
 
@@ -84,8 +73,7 @@ pub mod carbon {
         let cpi = CpiContext::new(ctx.accounts.token_program.to_account_info(), cpi_accounts);
         anchor_spl::token::burn(cpi, amount)?;
 
-        project.credits_retired = project
-            .credits_retired
+        project.credits_retired = project.credits_retired
             .checked_add(amount)
             .ok_or(CarbonError::OverflowError)?;
 
@@ -111,10 +99,7 @@ pub mod carbon {
     pub fn verify_project(ctx: Context<VerifyProject>, new_verifier: Pubkey) -> Result<()> {
         let project = &mut ctx.accounts.project;
 
-        require!(
-            project.owner == ctx.accounts.owner.key(),
-            CarbonError::Unauthorized
-        );
+        require!(project.owner == ctx.accounts.owner.key(), CarbonError::Unauthorized);
 
         project.verifier = new_verifier;
         msg!("Verifier updated to {}", new_verifier);
@@ -124,10 +109,7 @@ pub mod carbon {
     pub fn pause_project(ctx: Context<UpdateProject>) -> Result<()> {
         let project = &mut ctx.accounts.project;
 
-        require!(
-            project.owner == ctx.accounts.owner.key(),
-            CarbonError::Unauthorized
-        );
+        require!(project.owner == ctx.accounts.owner.key(), CarbonError::Unauthorized);
 
         project.status = 0; // Paused
         msg!("Project paused");
@@ -137,15 +119,9 @@ pub mod carbon {
     pub fn update_credits(ctx: Context<UpdateProject>, new_total: u64) -> Result<()> {
         let project = &mut ctx.accounts.project;
 
-        require!(
-            project.owner == ctx.accounts.owner.key(),
-            CarbonError::Unauthorized
-        );
+        require!(project.owner == ctx.accounts.owner.key(), CarbonError::Unauthorized);
 
-        require!(
-            new_total >= project.credits_issued,
-            CarbonError::InvalidAmount
-        );
+        require!(new_total >= project.credits_issued, CarbonError::InvalidAmount);
 
         project.total_credits = new_total;
         msg!("Total credits updated to {}", new_total);
@@ -168,7 +144,7 @@ pub struct RegisterProject<'info> {
     #[account(
         init,
         payer = owner,
-        mint::authority = owner,
+        mint::authority = verifier,
         mint::decimals = 0,
         space = 82,
         seeds = [b"carbon-mint", name.as_bytes()],
@@ -178,7 +154,7 @@ pub struct RegisterProject<'info> {
 
     #[account(mut)]
     pub owner: Signer<'info>,
-    pub verifier: UncheckedAccount<'info>,
+    pub verifier: Signer<'info>,
     pub system_program: Program<'info, System>,
     pub token_program: Program<'info, Token>,
     pub rent: Sysvar<'info, Rent>,
@@ -189,7 +165,7 @@ pub struct IssueCredits<'info> {
     #[account(mut)]
     pub project: Account<'info, CarbonProject>,
 
-    pub verifier: UncheckedAccount<'info>,
+    pub verifier: Signer<'info>,
     #[account(mut)]
     pub carbon_mint: Account<'info, Mint>,
     #[account(mut)]

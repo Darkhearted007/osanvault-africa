@@ -274,7 +274,14 @@ pub mod osanvault_core {
         // CEI Pattern: Update state BEFORE external call
         property.tokens_sold = new_tokens_sold;
 
+        // Register the investment receipt
+        let receipt = &mut ctx.accounts.receipt;
+        receipt.investor = ctx.accounts.investor.key();
+        receipt.property = property.key();
+        receipt.amount = receipt.amount.checked_add(amount).ok_or(OsanvaultError::OverflowError)?;
+
         // Transfer funds from investor to vault (external call)
+
         let cpi_accounts = Transfer {
             from: ctx.accounts.investor_token_account.to_account_info(),
             to: ctx.accounts.vault_token_account.to_account_info(),
@@ -283,12 +290,6 @@ pub mod osanvault_core {
         let cpi_program = ctx.accounts.token_program.to_account_info();
         let cpi_ctx = CpiContext::new(cpi_program, cpi_accounts);
         token::transfer(cpi_ctx, amount)?;
-
-        // Register the investment receipt
-        let receipt = &mut ctx.accounts.receipt;
-        receipt.investor = ctx.accounts.investor.key();
-        receipt.property = property.key();
-        receipt.amount = amount;
 
         msg!("Investment of {} successfully processed.", amount);
         Ok(())
@@ -441,7 +442,10 @@ pub struct Invest<'info> {
     #[account(mut)]
     pub investor_token_account: Account<'info, TokenAccount>,
 
-    #[account(mut)]
+    #[account(
+        mut,
+        constraint = vault_token_account.owner == platform.key() @ OsanvaultError::InvalidVault
+    )]
     pub vault_token_account: Account<'info, TokenAccount>,
 
     pub token_program: Program<'info, Token>,
@@ -531,4 +535,7 @@ pub enum OsanvaultError {
 
     #[msg("Oracle price feed not available.")]
     OracleUnavailable,
+
+    #[msg("Invalid vault account.")]
+    InvalidVault,
 }
