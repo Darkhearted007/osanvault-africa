@@ -116,7 +116,7 @@ export default function AssetsPage() {
               </div>
             ))
           : filtered.map(p => (
-              <PropertyCard key={p.id} property={p} />
+              <PropertyCard key={p.id} p={p} onSelect={() => {}} connected={false} />
             ))}
       </div>
 

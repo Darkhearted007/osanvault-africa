@@ -143,7 +143,7 @@ export default function HomePage() {
                 </div>
               ))
             : properties.slice(0, 3).map(p => (
-                <PropertyCard key={p.id} property={p} />
+                <PropertyCard key={p.id} p={p} onSelect={() => {}} connected={false} />
               ))}
         </div>
       </section>

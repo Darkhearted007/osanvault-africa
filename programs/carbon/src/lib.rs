@@ -146,7 +146,6 @@ pub struct RegisterProject<'info> {
         payer = owner,
         mint::authority = verifier,
         mint::decimals = 0,
-        space = 82,
         seeds = [b"carbon-mint", name.as_bytes()],
         bump
     )]
