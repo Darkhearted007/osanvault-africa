@@ -2,31 +2,15 @@ use anchor_lang::prelude::*;
 use anchor_spl::token::{self, Mint, Token, TokenAccount, Transfer};
 use std::str::FromStr;
 
-declare_id!("3ZX5svRbpgvNVQXpwj7cQG2MZs97KVnV3azCkSiwU3CR");
+mod constants {
+    pub const LENDING_POOL_SEED: &[u8] = b"lend-pool";
+    pub const COLLATERAL_VAULT_SEED: &[u8] = b"collateral-vault";
+    pub const PYTH_ORACLE: &str = "FsJ9A4H3KCcqUPS3axAz9uXN945Z4yXzZ44h6S234G8S";
+}
 
-#[program]
-pub mod osanvault_lend {
-    use super::*;
-
-    pub fn initialize_lending_pool(ctx: Context<InitPool>, fee_bps: u16) -> Result<()> {
-        let pool = &mut ctx.accounts.pool;
-
-        require!(
-            pool.owner == Pubkey::default(),
-            LendError::AlreadyInitialized
-        );
-
-        pool.owner = ctx.accounts.owner.key();
-        pool.collateral_token = ctx.accounts.collateral_mint.key();
-        pool.debt_token = ctx.accounts.debt_mint.key();
-        pool.fee_bps = fee_bps;
-        pool.liquidation_threshold_bps = 2500; // 25%
-        pool.max_ltv_bps = 7500; // 75% max LTV
-        pool.paused = false;
-
-        msg!("ÒsánVault Lend Pool Initialized!");
-        Ok(())
-    }
+fn get_pool_pda() -> (Pubkey, u8) {
+    Pubkey::find_program_address(&[b"lend-pool"], &crate::ID)
+}
 
     pub fn deposit_collateral(ctx: Context<Deposit>, amount: u64) -> Result<()> {
         let pool = &mut ctx.accounts.pool;
@@ -90,7 +74,8 @@ pub mod osanvault_lend {
             .checked_add(fee)
             .ok_or(LendError::OverflowError)?;
 
-        let seeds = &[b"lend-pool".as_ref(), &[ctx.bumps.pool]];
+        let (pool_pda, bump) = get_pool_pda();
+        let seeds = &[b"lend-pool".as_ref(), &[bump]];
         let signer = &[&seeds[..]];
 
         let cpi_accounts = Transfer {
@@ -200,7 +185,8 @@ pub mod osanvault_lend {
             .ok_or(LendError::UnderflowError)?;
 
         // Transfer collateral to liquidator
-        let seeds = &[b"lend-pool".as_ref(), &[ctx.bumps.pool]];
+        let (pool_pda, bump) = get_pool_pda();
+        let seeds = &[b"lend-pool".as_ref(), &[bump]];
         let signer = &[&seeds[..]];
 
         let cpi_accounts = Transfer {
@@ -270,7 +256,7 @@ pub fn get_pyth_price(price_feed: &Account<PythPrice>) -> Result<u64> {
     let conf = price_feed.agg.conf;
 
     require!(price > 0, LendError::OracleError);
-    require!(conf < price / 10, LendError::OracleError); // Max 10% confidence
+    require!(conf < (price / 10) as u64, LendError::OracleError); // Max 10% confidence
 
     Ok(price as u64)
 }
@@ -300,6 +286,7 @@ pub struct InitPool<'info> {
     pub owner: Signer<'info>,
     pub collateral_mint: Account<'info, Mint>,
     pub debt_mint: Account<'info, Mint>,
+    pub token_program: Program<'info, Token>,
     pub system_program: Program<'info, System>,
 }
 
@@ -426,7 +413,7 @@ pub struct PythPrice {
     pub _reserved: [u8; 100],
 }
 
-#[derive(AnchorSerialize, AnchorDeserialize)]
+#[derive(AnchorSerialize, AnchorDeserialize, Clone, Copy)]
 pub struct PythAggregate {
     pub price: i64,
     pub conf: u64,
