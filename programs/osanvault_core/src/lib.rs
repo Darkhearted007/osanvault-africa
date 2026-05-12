@@ -150,7 +150,7 @@ pub mod osanvault_core {
     /// Mint OSANV tokens for distribution
     /// SECURITY: Only token mint authority can mint
     pub fn mint_osanv(ctx: Context<MintOsanv>, amount: u64) -> Result<()> {
-        let platform = ctx.accounts.platform.as_ref();
+        let platform = &ctx.accounts.platform;
 
         require!(
             platform.token_mint_authority == ctx.accounts.mint_authority.key(),
@@ -168,7 +168,7 @@ pub mod osanvault_core {
             authority: ctx.accounts.mint_authority.to_account_info(),
         };
 
-        let cpi_program = ctx.accounts.token_program.to_account_info();
+        let cpi_program = ctx.accounts.token_program.key();
         let cpi_ctx = CpiContext::new(cpi_program, cpi_accounts);
         anchor_spl::token::mint_to(cpi_ctx, amount)?;
 
@@ -249,7 +249,7 @@ pub mod osanvault_core {
         let property = &mut ctx.accounts.property;
 
         // SECURITY: Check platform is not paused
-        let platform = ctx.accounts.platform.as_ref();
+        let platform = &ctx.accounts.platform;
         require!(!platform.paused, OsanvaultError::PlatformPaused);
 
         // SECURITY: Validate amount > 0
@@ -483,10 +483,11 @@ pub struct InvestmentReceipt {
 }
 
 #[derive(AnchorSerialize, AnchorDeserialize, Clone, PartialEq, Eq)]
+#[borsh(use_discriminant = false)]
 pub enum PropertyStatus {
-    Pending = 0,
-    Active = 1,
-    Closed = 2,
+    Pending,
+    Active,
+    Closed,
 }
 
 #[error_code]

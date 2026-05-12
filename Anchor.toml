@@ -38,3 +38,6 @@ test = "yarn run ts-mocha -p ./tsconfig.json -t 1000000 tests/**/*.ts"
 startup_wait = 60000
 shutdown_wait = 2000
 upgradeable = false
+
+[profile.release]
+overflow-checks = true
