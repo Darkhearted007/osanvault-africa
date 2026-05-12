@@ -110,7 +110,7 @@ async function main() {
     log.info(`Scraping complete! Found ${propertyPipeline.length} properties.`);
 
     if (propertyPipeline.length === 0) {
-        log.warn('No properties scraped — skipping ingestion.');
+        log.warning('No properties scraped — skipping ingestion.');
         return;
     }
 
@@ -119,7 +119,7 @@ async function main() {
     log.info(`Data saved to ${outputPath}`);
 
     if (propertyPipeline.length > 500) {
-        log.warn(`Large batch (${propertyPipeline.length}) — consider running in smaller chunks.`);
+        log.warning(`Large batch (${propertyPipeline.length}) — consider running in smaller chunks.`);
     }
 
     try {

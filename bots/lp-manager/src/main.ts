@@ -1,4 +1,5 @@
-import { Connection, Keypair } from "@solana/web3.js";
+import { Connection, Keypair, PublicKey } from "@solana/web3.js";
+import BN from "bn.js";
 import * as fs from "fs";
 import "dotenv/config";
 import { config, PoolConfig } from "./config.js";
@@ -26,14 +27,16 @@ class PoolManager {
     const targetRatio = pool.targetRatio / 100;
     const minRatioDiff = pool.minRatioDiff / 100;
 
+    const ownerPubkey = _wallet ? _wallet.publicKey : PublicKey.default;
+
     try {
       const tokenAAccounts = await this.connection.getTokenAccountsByOwner(
-        _wallet ? _wallet.publicKey : (await this.connection.getProgramAccounts([])).map(() => null as unknown as Keypair)[0],
-        { mint: pool.tokenAMint }
+        ownerPubkey,
+        { mint: new PublicKey(pool.tokenAMint) }
       );
       const tokenBAccounts = await this.connection.getTokenAccountsByOwner(
-        _wallet ? _wallet.publicKey : (await this.connection.getProgramAccounts([])).map(() => null as unknown as Keypair)[0],
-        { mint: pool.tokenBMint }
+        ownerPubkey,
+        { mint: new PublicKey(pool.tokenBMint) }
       );
 
       const balanceA = tokenAAccounts.value.length > 0
@@ -110,7 +113,6 @@ class LPManager {
         const result = await this.poolManager.checkAndRebalance(pool, this.wallet!);
         console.log(`[Manager] ${pool.name}: ${result.action} (${result.amount.toFixed(2)}%)`);
         if (result.action === "rebalance" && this.wallet) {
-          const { default: BN } = await import('bn.js');
           await this.poolManager.addLiquidity(pool, new BN(1000), new BN(1000), this.wallet);
         }
       } catch (error) { console.error(`[Manager] Error checking ${pool.name}:`, error); }
