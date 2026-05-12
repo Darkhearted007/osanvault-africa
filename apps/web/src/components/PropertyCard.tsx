@@ -3,7 +3,14 @@ import { Property } from "../types"
 import { PROPERTY_ICONS } from "../constants"
 import { fmt, fundedPct } from "../utils"
 
-export function PropertyCard({ p, onSelect, connected }: { p: Property; onSelect: (p: Property) => void; connected: boolean }) {
+interface PropertyCardProps {
+  p: Property
+  onSelect: (p: Property) => void
+  connected: boolean
+  key?: React.Key
+}
+
+export function PropertyCard({ p, onSelect, connected }: PropertyCardProps) {
   const funded = fundedPct(p.tokens_sold, p.total_tokens)
   const statusColors: Record<string, string> = {
     Active: "#2e7d32", "Coming Soon": "#f59e0b", Funded: "#0284c7",
