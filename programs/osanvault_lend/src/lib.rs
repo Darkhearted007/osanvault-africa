@@ -2,15 +2,15 @@ use anchor_lang::prelude::*;
 use anchor_spl::token::{self, Mint, Token, TokenAccount, Transfer};
 use std::str::FromStr;
 
-mod constants {
-    pub const LENDING_POOL_SEED: &[u8] = b"lend-pool";
-    pub const COLLATERAL_VAULT_SEED: &[u8] = b"collateral-vault";
-    pub const PYTH_ORACLE: &str = "FsJ9A4H3KCcqUPS3axAz9uXN945Z4yXzZ44h6S234G8S";
-}
+declare_id!("3ZX5svRbpgvNVQXpwj7cQG2MZs97KVnV3azCkSiwU3CR");
 
-fn get_pool_pda() -> (Pubkey, u8) {
-    Pubkey::find_program_address(&[b"lend-pool"], &crate::ID)
-}
+#[program]
+pub mod osanvault_lend {
+    use super::*;
+
+    fn get_pool_pda() -> (Pubkey, u8) {
+        Pubkey::find_program_address(&[b"lend-pool"], &crate::ID)
+    }
 
     pub fn deposit_collateral(ctx: Context<Deposit>, amount: u64) -> Result<()> {
         let pool = &mut ctx.accounts.pool;
