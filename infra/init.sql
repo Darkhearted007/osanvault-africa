@@ -67,6 +67,50 @@ CREATE TABLE IF NOT EXISTS audit_log (
   created_at TIMESTAMPTZ DEFAULT NOW()
 );
 
+-- KYC Submissions
+CREATE TABLE IF NOT EXISTS kyc_submissions (
+  id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+  user_id UUID REFERENCES users(id),
+  full_name VARCHAR(100) NOT NULL,
+  document_type VARCHAR(20) NOT NULL CHECK (document_type IN ('nin', 'bvn', 'passport', 'drivers_license')),
+  document_number VARCHAR(20) NOT NULL,
+  status VARCHAR(20) DEFAULT 'pending' CHECK (status IN ('pending', 'processing', 'approved', 'rejected')),
+  reviewed_by UUID REFERENCES users(id),
+  reviewed_at TIMESTAMPTZ,
+  created_at TIMESTAMPTZ DEFAULT NOW()
+);
+
+-- Governance Proposals
+CREATE TABLE IF NOT EXISTS governance_proposals (
+  id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+  title VARCHAR(200) NOT NULL,
+  description TEXT NOT NULL,
+  proposal_type VARCHAR(50) NOT NULL CHECK (proposal_type IN ('parameter_change', 'new_property', 'treasury_allocation', 'platform_upgrade')),
+  status VARCHAR(20) DEFAULT 'draft' CHECK (status IN ('draft', 'voting', 'executed', 'rejected', 'expired')),
+  proposer_id UUID REFERENCES users(id),
+  votes_for NUMERIC(18, 0) DEFAULT 0,
+  votes_against NUMERIC(18, 0) DEFAULT 0,
+  votes_abstain NUMERIC(18, 0) DEFAULT 0,
+  quorum_required NUMERIC(18, 0) DEFAULT 1000000,
+  voting_start TIMESTAMPTZ,
+  voting_end TIMESTAMPTZ,
+  executed_at TIMESTAMPTZ,
+  tx_signature VARCHAR(128),
+  created_at TIMESTAMPTZ DEFAULT NOW()
+);
+
+-- Governance Votes
+CREATE TABLE IF NOT EXISTS governance_votes (
+  id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+  proposal_id UUID REFERENCES governance_proposals(id),
+  voter_id UUID REFERENCES users(id),
+  vote VARCHAR(10) NOT NULL CHECK (vote IN ('for', 'against', 'abstain')),
+  osanv_weight NUMERIC(18, 0) NOT NULL,
+  tx_signature VARCHAR(128),
+  created_at TIMESTAMPTZ DEFAULT NOW(),
+  UNIQUE(proposal_id, voter_id)
+);
+
 -- Indexes
 CREATE INDEX IF NOT EXISTS idx_users_wallet ON users(wallet_address);
 CREATE INDEX IF NOT EXISTS idx_investments_user ON investments(user_id);

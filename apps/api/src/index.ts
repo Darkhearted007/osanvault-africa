@@ -35,6 +35,8 @@ import dcaRouter from "./routes/dca.js"
 import dividendDripRouter from "./routes/dividendDrip.js"
 import portfolioRebalancerRouter from "./routes/portfolioRebalancer.js"
 import supportRouter from "./routes/support.js"
+import kycRouter from "./routes/kyc.js"
+import governanceRouter from "./routes/governance.js"
 
 const app = express()
 const PORT = parseInt(process.env.PORT || "3001", 10)
@@ -66,6 +68,8 @@ app.use("/api/dca", requireAuthenticated(), dcaRouter)
 app.use("/api/dividends", requireAdmin(), dividendDripRouter)
 app.use("/api/portfolio", requireAuthenticated(), portfolioRebalancerRouter)
 app.use("/api/support", supportRouter)
+app.use("/api/kyc", apiLimiter, kycRouter)
+app.use("/api/governance", apiLimiter, governanceRouter)
 
 // Webhook routes need stricter limits
 app.use(express.json({

@@ -10,21 +10,70 @@ import { PropertyCard } from "./components/PropertyCard"
 import { LedgerRows } from "./components/LedgerRows"
 import { StakingTab } from "./components/StakingTab"
 import { GovernanceTab } from "./components/GovernanceTab"
+import { getDashboardSummary, getLedger, getProperties, getStoredJWT } from "./api"
 import "./index.css"
+
+interface PortfolioData {
+  osanvBalance: number
+  osanvUSD: number
+  activeInvestments: number
+  totalValue: number
+}
+
+interface LedgerEntry {
+  type: string
+  id: string
+  timestamp: string
+  description: string
+  amount: number
+  status: string
+}
 
 export default function App() {
   const { publicKey, connected } = useWallet()
   const [tab, setTab] = useState<Tab>("dashboard")
   const [properties, setProperties] = useState<Property[]>(MOCK_PROPERTIES)
   const [selectedProperty, setSelectedProperty] = useState<Property | null>(null)
-  const portfolio = MOCK_PORTFOLIO
+  const [portfolio, setPortfolio] = useState<PortfolioData>(MOCK_PORTFOLIO)
+  const [ledger, setLedger] = useState<LedgerEntry[]>(MOCK_LEDGER)
+  const [loading, setLoading] = useState(false)
 
   useEffect(() => {
-    fetch("/api/properties")
-      .then(r => r.json())
+    getProperties()
       .then(d => { if (d?.data?.length) setProperties(d.data) })
       .catch(() => {})
   }, [])
+
+  useEffect(() => {
+    if (!connected || !publicKey) return
+    const wallet = publicKey.toBase58()
+
+    const fetchData = async () => {
+      setLoading(true)
+      try {
+        const summaryData = await getDashboardSummary()
+        if (summaryData?.data) {
+          setPortfolio({
+            osanvBalance: summaryData.data.osanv_balance || 0,
+            osanvUSD: summaryData.data.osanv_usd || 0,
+            activeInvestments: summaryData.data.active_investments || 0,
+            totalValue: summaryData.data.total_invested || 0
+          })
+        }
+
+        const ledgerData = await getLedger()
+        if (ledgerData?.data?.length) {
+          setLedger(ledgerData.data)
+        }
+      } catch (err) {
+        console.error("Failed to fetch portfolio data:", err)
+      } finally {
+        setLoading(false)
+      }
+    }
+
+    fetchData()
+  }, [connected, publicKey])
 
   const shortAddr = publicKey
     ? `${publicKey.toBase58().slice(0, 4)}...${publicKey.toBase58().slice(-4)}`
@@ -99,6 +148,7 @@ export default function App() {
       {tab === "dashboard" && (
         <div className="tab-content">
           <p className="welcome">Welcome back{shortAddr ? `, ${shortAddr}` : ""}! 👋</p>
+          {loading && <p className="section-sub">Loading portfolio...</p>}
           <PortfolioCard data={portfolio} />
           <div className="stats-grid">
             <StatCard label="OSANV Balance" value={fmt(portfolio.osanvBalance)} sub={`$${fmt(portfolio.osanvUSD)} USD`} accent="var(--primary-600)" />
@@ -114,7 +164,7 @@ export default function App() {
           ))}
           <button className="btn-outline" style={{width:"100%"}} onClick={() => setTab("explore")}>Explore All Opportunities →</button>
           <p className="section-title">Recent Activity</p>
-          <LedgerRows entries={MOCK_LEDGER} />
+          <LedgerRows entries={ledger} />
         </div>
       )}
 

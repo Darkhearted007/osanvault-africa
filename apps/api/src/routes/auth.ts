@@ -1,18 +1,33 @@
 import { Router } from 'express'
 import type { Request, Response } from 'express'
 import { PublicKey } from '@solana/web3.js'
+import { z } from 'zod'
+import crypto from 'crypto'
+import jwt from 'jsonwebtoken'
 import { pool } from '../db/index.js'
 import { redis } from '../db/redis.js'
-import { z } from 'zod'
 import { logger } from '../logger.js'
 import { verifyLimiter } from '../middleware/rateLimit.js'
-import crypto from 'crypto'
 
 const router = Router()
 
 // Nonce expiration time (5 minutes)
 const NONCE_EXPIRY_MS = 5 * 60 * 1000
 const NONCE_STORE_TTL = 300 // seconds for Redis TTL
+
+const JWT_EXPIRY = '24h'
+
+function generateJWT(userId: string, walletAddress: string, role: string): string {
+  const secret = process.env.JWT_SECRET
+  if (!secret) {
+    throw new Error('JWT_SECRET not configured')
+  }
+  return jwt.sign(
+    { userId, walletAddress, role },
+    secret,
+    { expiresIn: JWT_EXPIRY }
+  )
+}
 
 async function storeNonce(wallet_address: string, nonce: string, expires: number): Promise<void> {
   const key = `auth:nonce:${wallet_address}`
@@ -168,6 +183,8 @@ router.post('/verify', verifyLimiter, async (req: Request, res: Response) => {
 
     logger.info(`Wallet verified: ${wallet_address.slice(0, 8)}...`)
 
+    const token = generateJWT(user.id, user.wallet_address, user.role)
+
     res.json({
       data: {
         id: user.id,
@@ -175,7 +192,8 @@ router.post('/verify', verifyLimiter, async (req: Request, res: Response) => {
         role: user.role,
         kyc_status: user.kyc_status,
         created_at: user.created_at,
-      }
+      },
+      token
     })
   } catch (err: unknown) {
     if (err instanceof z.ZodError) {

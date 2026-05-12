@@ -1,5 +1,5 @@
-import { pool } from "../db/index.js";
 import crypto from "crypto";
+import { pool } from "../db/index.js";
 
 export type LedgerEntry = {
   userId: string;

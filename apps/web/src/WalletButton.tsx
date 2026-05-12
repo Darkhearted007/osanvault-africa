@@ -1,9 +1,11 @@
 import { useWallet } from './WalletProvider'
 import { useState, useRef, useEffect } from 'react'
+import { requestNonce, verifyWallet, setStoredJWT, clearStoredJWT, getStoredJWT, getKycStatus } from './api'
 
 export function WalletButton() {
-  const { publicKey, disconnect, connected, connecting, select } = useWallet()
+  const { publicKey, disconnect, connected, connecting, select, signMessage } = useWallet()
   const [menuOpen, setMenuOpen] = useState(false)
+  const [authStatus, setAuthStatus] = useState<string>("")
   const menuRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
@@ -15,6 +17,58 @@ export function WalletButton() {
     document.addEventListener('mousedown', handleClickOutside)
     return () => document.removeEventListener('mousedown', handleClickOutside)
   }, [])
+
+  // Authenticate with backend after wallet connection
+  useEffect(() => {
+    if (!connected || !publicKey || getStoredJWT()) return
+
+    const authenticate = async () => {
+      try {
+        setAuthStatus("Authenticating...")
+        const walletAddr = publicKey.toBase58()
+
+        // Get nonce
+        const nonceResult = await requestNonce(walletAddr)
+        const nonceData = nonceResult.data
+        if (!nonceData?.nonce) {
+          setAuthStatus("Failed to get nonce")
+          return
+        }
+
+        // Sign message
+        if (!signMessage) {
+          setAuthStatus("Wallet doesn't support signing")
+          return
+        }
+
+        const message = nonceData.message
+        const encoded = new TextEncoder().encode(message)
+        const sig = await signMessage(encoded)
+        const sigArray = Array.from(sig)
+
+        // Verify with backend
+        const verifyResult = await verifyWallet(walletAddr, sigArray, nonceData.nonce)
+        const verifyData = verifyResult.data
+        if (verifyData?.token) {
+          setStoredJWT(verifyData.token)
+          setAuthStatus("Authenticated")
+
+          // Check KYC status
+          const kycResult = await getKycStatus(walletAddr)
+          if (kycResult?.data?.data?.kyc_status === "pending") {
+            setAuthStatus("KYC required")
+          }
+        } else {
+          setAuthStatus("Verification failed")
+        }
+      } catch (err) {
+        console.error("Auth error:", err)
+        setAuthStatus("Auth error")
+      }
+    }
+
+    authenticate()
+  }, [connected, publicKey, signMessage])
 
   const shortAddr = publicKey
     ? `${publicKey.toBase58().slice(0, 4)}...${publicKey.toBase58().slice(-4)}`
@@ -55,8 +109,10 @@ export function WalletButton() {
             <button
               className="wallet-dropdown-item danger"
               onClick={() => {
+                clearStoredJWT()
                 disconnect().catch(console.error)
                 setMenuOpen(false)
+                setAuthStatus("")
               }}
             >
               Disconnect

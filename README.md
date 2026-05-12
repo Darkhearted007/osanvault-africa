@@ -1,8 +1,18 @@
 # ÒsánVault Africa
 
+<div align="center">
+
+![Platform Status](https://img.shields.io/badge/Status-Production%20Ready-brightgreen)
+![Stack](https://img.shields.io/badge/Stack-Solana%20%2B%20React%20%2B%20Node.js-000000)
+![License](https://img.shields.io/badge/License-MIT-blue)
+
 **Compliance-first, blockchain-based real estate tokenization for African markets.**
 
 Enable fractional real estate investment from $10 equivalent, with on-chain dividend distribution and regulatory clarity for Nigeria, Ghana, Kenya, and South Africa.
+
+[Website](https://osanvaultafrica.com) · [Documentation](https://docs.osanvaultafrica.com) · [API](https://api.osanvaultafrica.com)
+
+</div>
 
 ---
 
@@ -14,8 +24,10 @@ Enable fractional real estate investment from $10 equivalent, with on-chain divi
 | **Minimum Investment** | $10 USD equivalent |
 | **Target Markets** | Nigeria, Ghana, Kenya, South Africa |
 | **Regulatory Pathway** | Nigeria SEC ARIP Sandbox |
-| **Build Status** | ✅ Passing |
-| **Tests** | 48 passing |
+| **Frontend Build** | ✅ Passing |
+| **Backend Build** | ✅ Passing |
+| **API Routes** | 16+ endpoints |
+| **Smart Contracts** | 7 Anchor programs | |
 
 ---
 
@@ -102,21 +114,46 @@ See `.env.production.example` for production configuration.
 
 ---
 
+## Tech Stack
+
+| Layer | Technology |
+|-------|------------|
+| **Frontend** | React 19 + Vite 6 + TypeScript |
+| **Wallet** | @solana/wallet-adapter (Phantom, Solflare, Backpack, Ledger) |
+| **Backend** | Node.js 24 + Express + TypeScript |
+| **Database** | PostgreSQL 15 + Redis 7 |
+| **Smart Contracts** | Anchor 0.30.1 + Rust (Solana) |
+| **Oracles** | Pyth Network (primary) + Switchboard (fallback) |
+| **Container** | Docker + Docker Compose |
+| **Monorepo** | pnpm + Turborepo |
+| **CI/CD** | GitHub Actions |
+
+---
+
 ## Architecture
 
 ### Frontend (apps/web)
 - **Framework:** React 19 + Vite 6 + TypeScript
-- **Wallet:** Phantom, Solflare, Ledger, Coinbase
+- **Wallet:** Phantom, Solflare, Backpack, Ledger, Coinbase
 - **Styling:** Custom CSS with dark African fintech theme
+- **Auth:** JWT stored in localStorage, auto-refresh on wallet connect
 
 ### Backend (apps/api)
 - **Runtime:** Node.js + Express + TypeScript
-- **Database:** PostgreSQL with Prisma-like schema
-- **Cache/Queue:** Redis + BullMQ
-- **Features:** RBAC, rate limiting, circuit breaker, health checks
+- **Database:** PostgreSQL with direct `pg` pool (15 tables)
+- **Cache/Queue:** Redis + BullMQ for async jobs
+- **Security:** RBAC, rate limiting, circuit breaker, health checks
+- **Auth:** Ed25519 wallet signature verification → JWT (24h expiry)
+
+### Database Schema
+- `users`, `properties`, `investments`, `dividends`
+- `governance_proposals`, `governance_votes`
+- `kyc_submissions`, `audit_log`, `lending_positions`
+- `dca_plans`, `lp_positions`, `liquidation_events`
+- Row-Level Security (RLS) on investments, dividends, audit_log
 
 ### Smart Contracts
-- **Framework:** Anchor 1.0.2 + Rust
+- **Framework:** Anchor 0.30.1 + Rust
 - **7 Programs:** osanvault_core, osanvault_lend, reits, minerals, carbon, landbank, oracle
 - **Security:** RBAC, dual oracle (Pyth + Switchboard), multisig treasury
 
@@ -213,21 +250,24 @@ cd apps/web && npx serve dist -l 5173 -s &
 ## Security
 
 ### Implemented
-- ✅ RBAC on all smart contracts
+- ✅ Wallet-based JWT authentication (Ed25519 signature verification)
+- ✅ RBAC on all smart contracts and API endpoints
 - ✅ Dual oracle: Pyth Network (primary) + Switchboard (fallback)
 - ✅ Gnosis Safe 3-of-5 multisig treasury
 - ✅ 29 internal security tests
 - ✅ Rate limiting on all API endpoints
-- ✅ Input validation and sanitization
+- ✅ Input validation and sanitization (Zod)
 - ✅ Helmet security headers
 - ✅ CORS configuration
+- ✅ Redis nonce storage (5min expiry, single-use)
+- ✅ Audit logging on all state-changing operations
 
 ### In Progress
-- 🔄 Security audit (CertiK, Hacken, OtterSec, Halborn)
+- 🔄 Security audit (CertiK contacted, awaiting quote)
+- 🔄 VPS hardening (fail2ban, UFW)
 
-### Known Vulnerabilities
-- 1 high (bigint-buffer) - transitive dep from @solana
-- 1 low (elliptic) - transitive dep from wallet-adapter-torus
+### NPM Audit
+- ✅ 0 vulnerabilities (Vite 6.4.2, express-rate-limit 8.5.0)
 
 ---
 
@@ -258,15 +298,49 @@ pnpm --filter @osanvault/api test --coverage
 
 ## API Endpoints
 
-| Endpoint | Description |
-|----------|-------------|
-| `GET /health` | Health check |
-| `GET /api/properties` | List properties |
-| `GET /api/properties/:id` | Property details |
-| `GET /api/tokens/osanv` | OSANV token info |
-| `GET /api/dashboard/summary` | Dashboard summary |
-| `POST /api/auth/login` | Wallet auth |
-| `POST /api/support` | Support contact |
+### Authentication
+| Endpoint | Method | Description |
+|----------|--------|-------------|
+| `/api/auth/nonce` | POST | Generate cryptographic nonce |
+| `/api/auth/verify` | POST | Verify wallet signature & get JWT |
+| `/api/auth/wallet/:address` | GET | Get wallet user info |
+
+### Dashboard
+| Endpoint | Method | Description |
+|----------|--------|-------------|
+| `/api/dashboard/summary` | GET | Portfolio summary & stats |
+| `/api/dashboard/ledger` | GET | Transaction history (last 20) |
+| `/api/dashboard/properties-overview` | GET | Property milestones & progress |
+
+### Properties
+| Endpoint | Method | Description |
+|----------|--------|-------------|
+| `/api/properties` | GET | List all properties |
+| `/api/properties/:id` | GET | Property details |
+| `/api/properties/:id/milestones` | GET | Construction milestones |
+
+### Governance
+| Endpoint | Method | Description |
+|----------|--------|-------------|
+| `/api/governance/proposals` | GET | List proposals |
+| `/api/governance/proposals` | POST | Create proposal |
+| `/api/governance/vote` | POST | Cast vote |
+| `/api/governance/votes/:id` | GET | Proposal votes |
+
+### KYC & Compliance
+| Endpoint | Method | Description |
+|----------|--------|-------------|
+| `/api/kyc/submit` | POST | Submit KYC documents |
+| `/api/kyc/status/:wallet` | GET | KYC status |
+
+### Additional
+| Endpoint | Method | Description |
+|----------|--------|-------------|
+| `/health` | GET | Health check |
+| `/api/tokens/osanv` | GET | OSANV token info |
+| `/api/tokens/staking-status` | GET | Staking info |
+| `/api/oracle/:asset` | GET | Pyth/Switchboard price feed |
+| `/api/support` | POST | Contact support |
 
 ---
 
@@ -281,18 +355,20 @@ pnpm --filter @osanvault/api test --coverage
 
 ---
 
-## Conference
-
-**Korea Blockchain Week 2026** — Seoul, South Korea | September 29–October 1, 2026
-
----
-
 ## Team
 
 **Founder & CEO:** Olugbenga Ajayi
-- Nigerian Navy (11 years)
+- Nigerian Navy (11 years service)
 - Advanced Diploma in Security & Safety Management
 - Focus: Community development + blockchain entrepreneurship
+
+---
+
+## KBW 2026
+
+**Korea Blockchain Week 2026** — Seoul, South Korea | September 29–October 1, 2026
+
+Target: Investor engagement, platform visibility, partnerships
 
 ---
 

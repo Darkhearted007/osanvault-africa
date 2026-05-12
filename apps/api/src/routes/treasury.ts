@@ -1,5 +1,6 @@
 import { Router } from "express"
 import type { Request, Response } from "express"
+import { z } from "zod"
 import {
   getSafeBalances,
   proposeTransaction,
@@ -8,7 +9,6 @@ import {
 } from "../services/gnosisSafe.js"
 import { getTreasurySnapshot } from "../services/treasury.js"
 import { requireAdmin } from "../middleware/rbac.js"
-import { z } from "zod"
 
 const router = Router()
 

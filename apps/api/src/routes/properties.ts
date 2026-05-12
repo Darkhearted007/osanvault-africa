@@ -1,7 +1,7 @@
 import { Router } from 'express'
 import type { Request, Response } from 'express'
-import { pool } from '../db/index.js'
 import { z } from 'zod'
+import { pool } from '../db/index.js'
 import { requireAdmin, requirePropertyManager } from '../middleware/rbac.js'
 import { verifyQueueAuth } from '../middleware/verifyQueueAuth.js'
 import { logger } from '../logger.js'

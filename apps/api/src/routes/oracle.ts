@@ -1,8 +1,8 @@
 import { Router } from "express"
 import type { Request, Response } from "express"
+import { z } from "zod"
 import { getPrice, validateOraclePrice, getCacheStats, clearPriceCache } from "../services/oracle.js"
 import { requireAdmin } from "../middleware/rbac.js"
-import { z } from "zod"
 
 const router = Router()
 

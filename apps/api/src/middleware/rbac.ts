@@ -1,4 +1,5 @@
 import type { Request, Response, NextFunction } from 'express'
+import jwt from 'jsonwebtoken'
 import { pool } from '../db/index.js'
 import { logger } from '../logger.js'
 
@@ -7,6 +8,33 @@ export enum Role {
   ADMIN = 'admin',
   PROPERTY_MANAGER = 'property_manager',
   INVESTOR = 'investor',
+}
+
+interface JWTPayload {
+  userId: string
+  walletAddress: string
+  role: string
+}
+
+function extractWalletFromRequest(req: Request): { walletAddress: string; userId?: string; role?: string } | null {
+  // First try Authorization header with JWT
+  const authHeader = req.headers.authorization
+  if (authHeader?.startsWith('Bearer ')) {
+    const token = authHeader.slice(7)
+    const secret = process.env.JWT_SECRET
+    if (secret) {
+      try {
+        const decoded = jwt.verify(token, secret) as JWTPayload
+        return { walletAddress: decoded.walletAddress, userId: decoded.userId, role: decoded.role }
+      } catch {
+        logger.warn('Invalid JWT token')
+      }
+    }
+  }
+
+  // Fallback to x-wallet-address header
+  const walletAddress = req.headers['x-wallet-address'] as string || req.body.wallet_address as string
+  return walletAddress ? { walletAddress } : null
 }
 
 /**
@@ -107,16 +135,24 @@ export function requirePropertyManager() {
 export function requireAuthenticated() {
   return async (req: Request, res: Response, next: NextFunction) => {
     try {
-      const walletAddress = req.headers['x-wallet-address'] as string ||
-                           req.body.wallet_address as string
+      const auth = extractWalletFromRequest(req)
 
-      if (!walletAddress) {
+      if (!auth || !auth.walletAddress) {
         return res.status(401).json({ error: 'Authentication required' })
       }
 
+      // If we have userId from JWT, use it directly (skip DB query for performance)
+      if (auth.userId && auth.role) {
+        req.headers['x-user-id'] = auth.userId
+        req.headers['x-user-role'] = auth.role
+        req.headers['x-wallet-address'] = auth.walletAddress
+        return next()
+      }
+
+      // Fallback: query DB to get user info
       const { rows } = await pool.query(
         'SELECT id, role FROM users WHERE wallet_address = $1',
-        [walletAddress]
+        [auth.walletAddress]
       )
 
       if (!rows.length) {
