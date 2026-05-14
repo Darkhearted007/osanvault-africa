@@ -18,7 +18,7 @@
     "test:contracts:reits": "cd programs/reits && anchor test"
   },
   "devDependencies": {
-    "turbo": "^2.9.9",
+    "turbo": "^2.9.14",
     "typescript": "^5.9.3"
   },
   "pnpm": {
