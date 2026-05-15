@@ -15,7 +15,7 @@ import { startWorkers } from "./workers/index.js"
 
 import { requestLogger } from "./middleware/requestLogger.js"
 import { errorHandler } from "./middleware/errorHandler.js"
-import { apiLimiter, authLimiter, propertyLimiter, investmentLimiter, verifyLimiter } from "./middleware/rateLimit.js"
+import { apiLimiter, authLimiter, propertyLimiter, investmentLimiter } from "./middleware/rateLimit.js"
 import { inputValidator } from "./middleware/inputValidator.js"
 import { requireAdmin, requireAuthenticated } from "./middleware/rbac.js"
 import { logger } from "./logger.js"

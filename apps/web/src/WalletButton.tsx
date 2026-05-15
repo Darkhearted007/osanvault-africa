@@ -5,7 +5,8 @@ import { requestNonce, verifyWallet, setStoredJWT, clearStoredJWT, getStoredJWT,
 export function WalletButton() {
   const { publicKey, disconnect, connected, connecting, select, signMessage } = useWallet()
   const [menuOpen, setMenuOpen] = useState(false)
-  const [authStatus, setAuthStatus] = useState<string>("")
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const [_authStatus, setAuthStatus] = useState<string>("")
   const menuRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {

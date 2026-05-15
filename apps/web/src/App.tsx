@@ -10,7 +10,7 @@ import { PropertyCard } from "./components/PropertyCard"
 import { LedgerRows } from "./components/LedgerRows"
 import { StakingTab } from "./components/StakingTab"
 import { GovernanceTab } from "./components/GovernanceTab"
-import { getDashboardSummary, getLedger, getProperties, getStoredJWT } from "./api"
+import { getDashboardSummary, getLedger, getProperties } from "./api"
 import "./index.css"
 
 interface PortfolioData {
@@ -49,7 +49,6 @@ export default function App() {
 
   useEffect(() => {
     if (!connected || !publicKey) return
-    const wallet = publicKey.toBase58()
 
     const fetchData = async () => {
       setLoading(true)

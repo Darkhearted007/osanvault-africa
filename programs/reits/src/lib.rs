@@ -1,3 +1,6 @@
+#![allow(unexpected_cfgs)]
+#![allow(clippy::diverging_sub_expression)]
+
 use anchor_lang::prelude::*;
 use anchor_spl::token::{self, Mint, Token, TokenAccount, Transfer};
 
@@ -73,7 +76,8 @@ pub mod reits {
         let shares_to_issue = (amount as u128)
             .checked_mul(1_000_000_000) // 9 decimals
             .ok_or(ReitError::OverflowError)?
-            .checked_div(reit.nav_per_share as u128) as u64;
+            .checked_div(reit.nav_per_share as u128)
+            .ok_or(ReitError::InvalidAmount)? as u64;
 
         let new_shares_issued = reit
             .shares_issued
@@ -114,12 +118,12 @@ pub mod reits {
 
         require!(total_yield > 0, ReitError::InvalidAmount);
         require!(
-            total_yield <= ctx.accounts.treasury_token.amount,
+            total_yield <= ctx.accounts.treasury.amount,
             ReitError::InvalidAmount
         );
 
         let cpi_accounts = Transfer {
-            from: ctx.accounts.treasury_token.to_account_info(),
+            from: ctx.accounts.treasury.to_account_info(),
             to: ctx.accounts.recipient_token.to_account_info(),
             authority: ctx.accounts.treasury.to_account_info(),
         };
@@ -328,6 +332,8 @@ pub enum ReitError {
     SharesExhausted,
     #[msg("Minimum investment not met")]
     MinInvestment,
+    #[msg("Invalid amount")]
+    InvalidAmount,
     #[msg("Overflow error")]
     OverflowError,
 }

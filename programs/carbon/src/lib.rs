@@ -1,3 +1,6 @@
+#![allow(unexpected_cfgs)]
+#![allow(clippy::diverging_sub_expression)]
+
 use anchor_lang::prelude::*;
 use anchor_spl::token::{self, Mint, Token, TokenAccount, Transfer};
 
@@ -29,7 +32,7 @@ pub mod carbon {
         project.status = 1; // Active
         project.verifier = ctx.accounts.verifier.key();
 
-        msg!("Carbon project {} registered - {} credits", name, total_carbon_credits);
+        msg!("Carbon project {} registered - {} credits", project.name, total_carbon_credits);
         Ok(())
     }
 

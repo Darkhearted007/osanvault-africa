@@ -1,3 +1,6 @@
+#![allow(unexpected_cfgs)]
+#![allow(clippy::diverging_sub_expression)]
+
 use anchor_lang::prelude::*;
 use anchor_spl::token::{self, Token, TokenAccount, Transfer};
 
@@ -31,7 +34,7 @@ pub mod landbank {
         pool.status = 1; // Active
         pool.annual_appreciation_bps = 800; // 8%
 
-        msg!("LandBank pool {} created", name);
+        msg!("LandBank pool {} created", pool.name);
         Ok(())
     }
 
@@ -74,7 +77,7 @@ pub mod landbank {
         let total_value = pool.total_acres
             .checked_mul(pool.target_price_per_acre)
             .ok_or(LandError::OverflowError)?;
-        let ownership = (amount as u128 * 10000 / total_value as u128) as u64;
+        let ownership = ((u128::from(amount) * 10_000) / u128::from(total_value)) as u64;
 
         let user_position = &mut ctx.accounts.user_position;
         user_position.contribution = user_position
@@ -292,6 +295,11 @@ pub struct SellLand<'info> {
     #[account(mut)]
     pub pool: Account<'info, LandPool>,
 
+    #[account(mut)]
+    pub owner: Signer<'info>,
+    #[account(mut)]
+    pub seller: Signer<'info>,
+
     #[account(
         init,
         payer = seller,
@@ -301,10 +309,6 @@ pub struct SellLand<'info> {
     )]
     pub sale: Account<'info, LandSale>,
 
-    #[account(mut)]
-    pub owner: Signer<'info>,
-    #[account(mut)]
-    pub seller: Signer<'info>,
     pub system_program: Program<'info, System>,
 }
 

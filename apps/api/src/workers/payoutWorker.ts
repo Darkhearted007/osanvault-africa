@@ -61,7 +61,6 @@ export function startPayoutWorker() {
     {
       connection: redis,
       concurrency: 5,
-      maxRetriesPerCycle: MAX_RETRIES,
     }
   )
 

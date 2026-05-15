@@ -1,3 +1,6 @@
+#![allow(unexpected_cfgs)]
+#![allow(clippy::diverging_sub_expression)]
+
 use anchor_lang::prelude::*;
 use anchor_spl::token::{self, Mint, Token, TokenAccount, Transfer};
 
@@ -29,7 +32,7 @@ pub mod minerals {
         site.royalty_bps = 500; // 5%
         site.royalty_recipient = ctx.accounts.owner.key();
 
-        msg!("Mineral site {} registered - type: {}", name, mineral_type);
+        msg!("Mineral site {} registered - type: {}", site.name, site.mineral_type);
         Ok(())
     }
 

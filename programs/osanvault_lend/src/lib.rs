@@ -1,15 +1,15 @@
+#![allow(unexpected_cfgs)]
+#![allow(clippy::diverging_sub_expression)]
+
 use anchor_lang::prelude::*;
 use anchor_spl::token::{self, Mint, Token, TokenAccount, Transfer};
+use std::str::FromStr;
 
 declare_id!("3ZX5svRbpgvNVQXpwj7cQG2MZs97KVnV3azCkSiwU3CR");
 
 #[program]
 pub mod osanvault_lend {
     use super::*;
-
-    pub fn get_pool_pda(program_id: &Pubkey) -> (Pubkey, u8) {
-        Pubkey::find_program_address(&[b"lend-pool"], program_id)
-    }
 
     pub fn deposit_collateral(ctx: Context<Deposit>, amount: u64) -> Result<()> {
         let pool = &mut ctx.accounts.pool;
@@ -46,8 +46,8 @@ pub mod osanvault_lend {
         let price = ctx.accounts.price_feed.get_value()?;
         let collateral_amount = ctx.accounts.user_position.collateral_amount;
 
-        let collateral_value = (collateral_amount as u128)
-            .checked_mul(price as u128)
+        let collateral_value = u128::from(collateral_amount)
+            .checked_mul(u128::from(price))
             .ok_or(LendError::OverflowError)?
             / (10_u128.pow(8)); // Price is 8 decimal
 
@@ -58,7 +58,7 @@ pub mod osanvault_lend {
 
         require!(amount <= max_loan, LendError::InsufficientCollateral);
 
-        let fee = (amount as u64)
+        let fee = amount
             .checked_mul(pool.fee_bps as u64)
             .ok_or(LendError::OverflowError)?
             / 10000;
@@ -73,7 +73,7 @@ pub mod osanvault_lend {
             .checked_add(fee)
             .ok_or(LendError::OverflowError)?;
 
-        let (pool_pda, bump) = get_pool_pda(&ID);
+        let (_pool_pda, bump) = get_pool_pda(&ID);
         let seeds = &[b"lend-pool".as_ref(), &[bump]];
         let signer = &[&seeds[..]];
 
@@ -94,7 +94,7 @@ pub mod osanvault_lend {
     }
 
     pub fn repay(ctx: Context<Repay>, amount: u64) -> Result<()> {
-        let pool = &mut ctx.accounts.pool;
+        let _pool = &mut ctx.accounts.pool;
 
         require!(amount > 0, LendError::InvalidAmount);
 
@@ -130,13 +130,13 @@ pub mod osanvault_lend {
         // Get oracle price
         let price = ctx.accounts.price_feed.get_value()?;
 
-        let collateral_value = (position.collateral_amount as u128)
-            .checked_mul(price as u128)
+        let collateral_value = u128::from(position.collateral_amount)
+            .checked_mul(u128::from(price))
             .ok_or(LendError::OverflowError)?
             / (10_u128.pow(8));
 
-        let debt_value = (position.borrowed_amount as u128)
-            .checked_mul(price as u128)
+        let debt_value = u128::from(position.borrowed_amount)
+            .checked_mul(u128::from(price))
             .ok_or(LendError::OverflowError)?
             / (10_u128.pow(8));
 
@@ -156,13 +156,13 @@ pub mod osanvault_lend {
         );
 
         // Calculate liquidation amount (50% of debt)
-        let liquidate_amount = (position.borrowed_amount as u64)
+        let liquidate_amount = position.borrowed_amount
             .checked_mul(5000)
             .ok_or(LendError::OverflowError)?
             / 10000;
 
         // Transfer collateral to liquidator
-        let collateral_to_liquidator = (liquidate_amount as u64)
+        let collateral_to_liquidator = liquidate_amount
             .checked_mul(11000) // 10% bonus
             .ok_or(LendError::OverflowError)?
             .checked_div(10000)
@@ -184,7 +184,7 @@ pub mod osanvault_lend {
             .ok_or(LendError::UnderflowError)?;
 
         // Transfer collateral to liquidator
-        let (pool_pda, bump) = get_pool_pda(&ID);
+        let (_pool_pda, bump) = get_pool_pda(&ID);
         let seeds = &[b"lend-pool".as_ref(), &[bump]];
         let signer = &[&seeds[..]];
 
@@ -247,6 +247,10 @@ pub mod osanvault_lend {
         msg!("Pool unpaused");
         Ok(())
     }
+}
+
+pub fn get_pool_pda(program_id: &Pubkey) -> (Pubkey, u8) {
+    Pubkey::find_program_address(&[b"lend-pool"], program_id)
 }
 
 // ORACLE INTEGRATION - Pyth Network

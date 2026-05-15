@@ -1,3 +1,6 @@
+#![allow(unexpected_cfgs)]
+#![allow(clippy::diverging_sub_expression)]
+
 use anchor_lang::prelude::*;
 
 declare_id!("9x81xZ2Kqjc5zbVAsX7Kqwv4HSo1HSkWkC3LUorZ8n55");
@@ -12,7 +15,7 @@ pub mod oracle {
     use super::*;
 
     pub fn get_price(ctx: Context<GetPrice>) -> Result<u64> {
-        let price_data = &ctx.accounts.price_feed;
+        let price_data = &*ctx.accounts.price_feed;
         let price = pyth_decode_price(price_data)?;
         check_price_freshness(price_data)?;
         Ok(price)
@@ -21,7 +24,7 @@ pub mod oracle {
     pub fn get_price_with_confidence(
         ctx: Context<GetPriceWithConfidence>,
     ) -> Result<PriceWithConfidence> {
-        let price_data = &ctx.accounts.price_feed;
+        let price_data = &*ctx.accounts.price_feed;
         let (price, conf) = pyth_decode_price_with_confidence(price_data)?;
         check_price_freshness(price_data)?;
 
@@ -68,8 +71,8 @@ pub struct GetPriceWithConfidence<'info> {
 
 #[derive(Accounts)]
 pub struct GetPriceFallback<'info> {
-    pub pyth_price_feed: AccountInfo<'info>,
-    pub switchboard_feed: AccountInfo<'info>,
+    pub pyth_price_feed: UncheckedAccount<'info>,
+    pub switchboard_feed: UncheckedAccount<'info>,
 }
 
 #[derive(AnchorSerialize, AnchorDeserialize)]
@@ -132,9 +135,9 @@ fn try_get_switchboard_price(feed: &AccountInfo) -> Option<u64> {
             let decimal = u32::from_le_bytes(data[16..20].try_into().ok()?);
 
             let price_u64 = if decimal >= 18 {
-                (value as u64).saturating_div(10u64.pow((decimal - 18) as u32))
+                (value as u64).saturating_div(10u64.pow(decimal - 18))
             } else {
-                (value as u64).saturating_mul(10u64.pow((18 - decimal) as u32))
+                (value as u64).saturating_mul(10u64.pow(18 - decimal))
             };
 
             return Some(price_u64);
@@ -148,7 +151,7 @@ fn select_best_price(pyth: Option<u64>, switchboard: Option<u64>) -> Result<(u64
         (Some(p), None) => Ok((p, "PYTH".to_string())),
         (None, Some(s)) => Ok((s, "SWITCHBOARD".to_string())),
         (Some(p), Some(s)) => {
-            let diff = if p > s { p - s } else { s - p };
+            let diff = p.abs_diff(s);
             let avg = (p + s) / 2;
             let tolerance = avg / 100;
 
