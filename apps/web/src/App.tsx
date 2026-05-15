@@ -37,11 +37,14 @@ export default function App() {
   const [portfolio, setPortfolio] = useState<PortfolioData>(MOCK_PORTFOLIO)
   const [ledger, setLedger] = useState<LedgerEntry[]>(MOCK_LEDGER)
   const [loading, setLoading] = useState(false)
+  const [error, setError] = useState<string | null>(null)
 
   useEffect(() => {
     getProperties()
       .then(d => { if (d?.data?.length) setProperties(d.data) })
-      .catch(() => {})
+      .catch(() => {
+        setProperties(MOCK_PROPERTIES)
+      })
   }, [])
 
   useEffect(() => {
@@ -50,6 +53,7 @@ export default function App() {
 
     const fetchData = async () => {
       setLoading(true)
+      setError(null)
       try {
         const summaryData = await getDashboardSummary()
         if (summaryData?.data) {
@@ -67,6 +71,7 @@ export default function App() {
         }
       } catch (err) {
         console.error("Failed to fetch portfolio data:", err)
+        setError("Failed to load portfolio data. Using cached values.")
       } finally {
         setLoading(false)
       }
@@ -149,6 +154,19 @@ export default function App() {
         <div className="tab-content">
           <p className="welcome">Welcome back{shortAddr ? `, ${shortAddr}` : ""}! 👋</p>
           {loading && <p className="section-sub">Loading portfolio...</p>}
+          {error && (
+            <div style={{
+              padding: "0.75rem",
+              backgroundColor: "#fef2f2",
+              border: "1px solid #fecaca",
+              borderRadius: "8px",
+              color: "#dc2626",
+              marginBottom: "1rem",
+              fontSize: "0.875rem"
+            }}>
+              {error}
+            </div>
+          )}
           <PortfolioCard data={portfolio} />
           <div className="stats-grid">
             <StatCard label="OSANV Balance" value={fmt(portfolio.osanvBalance)} sub={`$${fmt(portfolio.osanvUSD)} USD`} accent="var(--primary-600)" />

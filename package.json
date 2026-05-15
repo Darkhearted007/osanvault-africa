@@ -11,7 +11,11 @@
     "dev:api": "pnpm --filter @osanvault/api dev",
     "dev:web": "pnpm --filter web dev",
     "build:api": "pnpm --filter @osanvault/api build",
-    "build:web": "pnpm --filter web build"
+    "build:web": "pnpm --filter web build",
+    "test:contracts": "cd programs && anchor test",
+    "test:contracts:core": "cd programs/osanvault_core && anchor test",
+    "test:contracts:lend": "cd programs/osanvault_lend && anchor test",
+    "test:contracts:reits": "cd programs/reits && anchor test"
   },
   "devDependencies": {
     "turbo": "^2.9.9",

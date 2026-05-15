@@ -1,6 +1,5 @@
 use anchor_lang::prelude::*;
 use anchor_spl::token::{self, Mint, Token, TokenAccount, Transfer};
-use std::str::FromStr;
 
 declare_id!("3ZX5svRbpgvNVQXpwj7cQG2MZs97KVnV3azCkSiwU3CR");
 
@@ -8,8 +7,8 @@ declare_id!("3ZX5svRbpgvNVQXpwj7cQG2MZs97KVnV3azCkSiwU3CR");
 pub mod osanvault_lend {
     use super::*;
 
-    fn get_pool_pda() -> (Pubkey, u8) {
-        Pubkey::find_program_address(&[b"lend-pool"], &crate::ID)
+    pub fn get_pool_pda(program_id: &Pubkey) -> (Pubkey, u8) {
+        Pubkey::find_program_address(&[b"lend-pool"], program_id)
     }
 
     pub fn deposit_collateral(ctx: Context<Deposit>, amount: u64) -> Result<()> {
@@ -74,7 +73,7 @@ pub mod osanvault_lend {
             .checked_add(fee)
             .ok_or(LendError::OverflowError)?;
 
-        let (pool_pda, bump) = get_pool_pda();
+        let (pool_pda, bump) = get_pool_pda(&ID);
         let seeds = &[b"lend-pool".as_ref(), &[bump]];
         let signer = &[&seeds[..]];
 
@@ -145,7 +144,7 @@ pub mod osanvault_lend {
         let health_bps = if debt_value > 0 {
             ((collateral_value as u64) * 10000)
                 .checked_div(debt_value as u64)
-                .unwrap_or(0)
+                .ok_or(LendError::UnderflowError)?
         } else {
             10000
         };
@@ -167,7 +166,7 @@ pub mod osanvault_lend {
             .checked_mul(11000) // 10% bonus
             .ok_or(LendError::OverflowError)?
             .checked_div(10000)
-            .unwrap_or(liquidate_amount);
+            .ok_or(LendError::UnderflowError)?;
 
         require!(
             collateral_to_liquidator <= position.collateral_amount,
@@ -185,7 +184,7 @@ pub mod osanvault_lend {
             .ok_or(LendError::UnderflowError)?;
 
         // Transfer collateral to liquidator
-        let (pool_pda, bump) = get_pool_pda();
+        let (pool_pda, bump) = get_pool_pda(&ID);
         let seeds = &[b"lend-pool".as_ref(), &[bump]];
         let signer = &[&seeds[..]];
 

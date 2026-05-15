@@ -47,16 +47,13 @@ jobs:
   api-test:
     name: API Health
     runs-on: ubuntu-22.04
-    # TEMPORARILY DISABLED - Requires GitHub secrets (POSTGRES_PASSWORD, REDIS_PASSWORD, JWT_SECRET, QUEUE_SECRET)
-    # Enable after configuring secrets in repo Settings > Secrets
-    if: false
 
     services:
       postgres:
         image: postgres:16-alpine
         env:
           POSTGRES_USER: osanvault
-          POSTGRES_PASSWORD: ${{ secrets.POSTGRES_PASSWORD }}
+          POSTGRES_PASSWORD: ${{ secrets.POSTGRES_PASSWORD || 'test_password' }}
           POSTGRES_DB: osanvault_db
         ports:
           - 5432:5432
@@ -94,19 +91,19 @@ jobs:
       - name: Load schema
         run: psql -U osanvault -d osanvault_db -f infra/init.sql
         env:
-          PGPASSWORD: ${{ secrets.POSTGRES_PASSWORD }}
+          PGPASSWORD: ${{ secrets.POSTGRES_PASSWORD || 'test_password' }}
           PGHOST: localhost
 
       - name: Create env file
         run: |
           cat > apps/api/.env << 'ENVEOF'
-          DATABASE_URL=postgresql://osanvault:${{ secrets.POSTGRES_PASSWORD }}@localhost:5432/osanvault_db
-          REDIS_URL=redis://:${{ secrets.REDIS_PASSWORD }}@localhost:6379
+          DATABASE_URL=postgresql://osanvault:${{ secrets.POSTGRES_PASSWORD || 'test_password' }}@localhost:5432/osanvault_db
+          REDIS_URL=redis://:${{ secrets.REDIS_PASSWORD || 'test_redis' }}@localhost:6379
           PORT=3001
           NODE_ENV=test
           CORS_ORIGIN=http://localhost:5173
-          JWT_SECRET=${{ secrets.JWT_SECRET }}
-          QUEUE_SECRET=${{ secrets.QUEUE_SECRET }}
+          JWT_SECRET=${{ secrets.JWT_SECRET || 'test_jwt_secret_32_chars_minimum' }}
+          QUEUE_SECRET=${{ secrets.QUEUE_SECRET || 'test_queue_secret_32_chars' }}
           ENVEOF
 
       - name: Start API and test health

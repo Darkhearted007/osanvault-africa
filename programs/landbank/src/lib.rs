@@ -1,5 +1,5 @@
 use anchor_lang::prelude::*;
-use anchor_spl::token::{self, Mint, Token, TokenAccount, Transfer};
+use anchor_spl::token::{self, Token, TokenAccount, Transfer};
 
 declare_id!("FRsKDe4vdmRczcXSvub2oAgCgs4uo4LttxvXrwfg1NkT");
 
@@ -20,7 +20,7 @@ pub mod landbank {
             LandError::MinContributionTooLow
         ); // Min $10
 
-        pool.name = name;
+        pool.name = name.clone();
         pool.owner = ctx.accounts.owner.key();
         pool.treasury = ctx.accounts.treasury.key();
         pool.total_acres = 0;
@@ -69,8 +69,11 @@ pub mod landbank {
         require!(amount >= pool.min_contribution, LandError::BelowMinimum);
         require!(pool.target_price_per_acre > 0, LandError::InvalidPrice);
 
-        // Calculate ownership percentage
-        let total_value = pool.total_acres * pool.target_price_per_acre;
+        // Calculate ownership percentage with overflow protection
+        require!(pool.total_acres > 0, LandError::InvalidAcres);
+        let total_value = pool.total_acres
+            .checked_mul(pool.target_price_per_acre)
+            .ok_or(LandError::OverflowError)?;
         let ownership = (amount as u128 * 10000 / total_value as u128) as u64;
 
         let user_position = &mut ctx.accounts.user_position;
@@ -300,7 +303,8 @@ pub struct SellLand<'info> {
 
     #[account(mut)]
     pub owner: Signer<'info>,
-    pub seller: Account<'info, TokenAccount>,
+    #[account(mut)]
+    pub seller: Signer<'info>,
     pub system_program: Program<'info, System>,
 }
 
