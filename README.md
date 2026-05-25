@@ -1,397 +1,372 @@
 # ÒsánVault Africa
 
-<div align="center">
+**Institutional-grade African blockchain infrastructure for tokenized real-world assets (RWA)**
 
-![Platform Status](https://img.shields.io/badge/Status-Production%20Ready-brightgreen)
-![Stack](https://img.shields.io/badge/Stack-Solana%20%2B%20React%20%2B%20Node.js-000000)
-![License](https://img.shields.io/badge/License-MIT-blue)
-
-**Compliance-first, blockchain-based real estate tokenization for African markets.**
-
-Enable fractional real estate investment from $10 equivalent, with on-chain dividend distribution and regulatory clarity for Nigeria, Ghana, Kenya, and South Africa.
-
-[Website](https://osanvaultafrica.com) · [Documentation](https://docs.osanvaultafrica.com) · [API](https://api.osanvaultafrica.com)
-
-</div>
+![Status](https://img.shields.io/badge/status-development-yellow)
+![Network](https://img.shields.io/badge/network-Polygon%20%7C%20Arbitrum-purple)
+![Smart Contracts](https://img.shields.io/badge/contracts-solidity%200.8.24-blue)
+![License](https://img.shields.io/badge/license-MIT-green)
 
 ---
 
-## Platform Overview
+## 🏗️ Overview
 
-| Attribute | Value |
-|-----------|-------|
-| **Token** | OSANV (500M supply) on Solana |
-| **Minimum Investment** | $10 USD equivalent |
-| **Target Markets** | Nigeria, Ghana, Kenya, South Africa |
-| **Regulatory Pathway** | Nigeria SEC ARIP Sandbox |
-| **Frontend Build** | ✅ Passing |
-| **Backend Build** | ✅ Passing |
-| **API Routes** | 16+ endpoints |
-| **Smart Contracts** | 7 Anchor programs | |
+ÒsánVault is building a **production-grade Web3 platform** for tokenizing real-world assets across Africa, with institutional-grade security, governance transparency, and community participation frameworks.
+
+### Core Capabilities
+- **Tokenized Real Estate**: Fractionalized property ownership with legal compliance
+- **Land Banking**: Transparent land reserve management with community participation
+- **Mineral-backed Economics**: Transparent mineral project participation structures
+- **Staking & Yield**: 4-tier staking system (Bronze 8% → Platinum 22% APR)
+- **Treasury & Governance**: DAO-lite governance with institutional controls
+- **Indigenous-Rights Aware**: Respect for customary ownership and local governance
+
+### Network Deployment
+- **Testnet**: Polygon Amoy
+- **Mainnet**: Polygon (primary) + Arbitrum (expansion)
+- **Future**: Multi-chain to African layer 2s
 
 ---
 
-## Project Structure
+## 📋 Project Structure
 
 ```
-osanvault-africa/
-├── apps/
-│   ├── web/                   # React + Vite + TypeScript frontend
-│   └── api/                   # Node.js + Express backend
-├── programs/                  # Anchor/Rust smart contracts (Solana)
-│   ├── osanvault_core/        # Platform, property, investment, OSANV mint, RBAC
-│   ├── osanvault_lend/        # DeFi lending with liquidation engine
-│   ├── reits/                 # Real estate investment trusts
-│   ├── minerals/              # Tokenized minerals
-│   ├── carbon/               # Carbon credit tokenization
-│   ├── landbank/             # Land acquisition pooling
-│   └── oracle/               # Pyth + Switchboard price feeds
-├── bots/                      # AUTOIVEST Bot Suite
-│   ├── dca-bot/              # Dollar-cost averaging
-│   ├── dividend-drip/        # Automatic dividend reinvestment
-│   ├── lp-manager/          # Automated liquidity pool management
-│   ├── portfolio-rebalancer/ # On-chain portfolio rebalancing
-│   └── property-scraper/     # Property data collection
-├── infra/                    # Infrastructure configs
-│   ├── docker-compose.yml    # Development stack
-│   ├── docker-compose.prod.yml # Production stack
-│   ├── nginx.prod.conf       # Production nginx
-│   └── init.sql              # Database schema
-├── scripts/                  # Deployment & utility scripts
-├── docs/                     # Documentation
-└── packages/                 # Shared libraries
+Osanvault/
+├── contracts/           # 7 Solidity smart contracts
+│   ├── token/           # OSANVToken.sol (ERC20+Permit+Burnable+AccessControl)
+│   ├── staking/         # StakingVault.sol (4-tier staking system)
+│   ├── vesting/         # TeamVesting.sol + TreasuryVault.sol
+│   ├── governance/      # Governance.sol (DAO-lite proposals)
+│   ├── fees/            # FeeRouter.sol (20/30/40/10 distribution)
+│   └── property/        # PropertyNFT.sol (ERC1155 properties)
+├── tests/               # 104 comprehensive test cases
+│   ├── OSANVToken.test.ts (11 tests)
+│   ├── StakingVault.test.ts (20 tests)
+│   ├── Governance.test.ts (16 tests)
+│   └── ... (7 total test suites)
+├── scripts/             # Deployment & initialization scripts
+├── backend/             # NestJS API server
+├── frontend/            # Next.js 15+ UI
+├── infrastructure/      # Docker & CI/CD
+└── docs/                # Architecture & compliance docs
 ```
 
 ---
 
-## Quick Start
+## 🚀 Quick Start
 
 ### Prerequisites
-
-- **Node.js** 18+ (20+ recommended)
-- **pnpm** 8+ (10+ recommended)
-- **Docker** (for smart contract development)
-- **PostgreSQL** 14+ (for local development)
-- **Redis** 7+ (for queue processing)
+- **Node.js** ≥ 22.0.0 (see `.nvmrc`)
+- **npm** ≥ 10.0.0
+- **Git** (for version control)
+- **WSL2** or Linux (recommended for development)
 
 ### Installation
 
 ```bash
-# Clone and install
+# 1. Clone repository
 git clone https://github.com/Darkhearted007/osanvault-africa.git
 cd osanvault-africa
-pnpm install
-```
 
-### Development
+# 2. Install dependencies
+npm install
 
-```bash
-# Start all services with Docker
-docker-compose -f infra/docker-compose.yml up -d
+# 3. Configure environment
+cp .env.example .env
+# Edit .env with your settings
 
-# Start frontend (http://localhost:5173)
-pnpm --filter web dev
+# 4. Compile smart contracts
+npm run compile
 
-# Start API (http://localhost:3001)
-pnpm --filter api dev
+# 5. Run tests
+npm run test
 
-# Run tests
-pnpm test
+# 6. Deploy to local network
+npm run deploy:local
 
-# Build all packages
-pnpm build
-```
-
-### Environment Variables
-
-Copy the example env file:
-
-```bash
-cp apps/api/.env.example apps/api/.env
-```
-
-See `.env.production.example` for production configuration.
-
----
-
-## Tech Stack
-
-| Layer | Technology |
-|-------|------------|
-| **Frontend** | React 19 + Vite 6 + TypeScript |
-| **Wallet** | @solana/wallet-adapter (Phantom, Solflare, Backpack, Ledger) |
-| **Backend** | Node.js 24 + Express + TypeScript |
-| **Database** | PostgreSQL 15 + Redis 7 |
-| **Smart Contracts** | Anchor 0.30.1 + Rust (Solana) |
-| **Oracles** | Pyth Network (primary) + Switchboard (fallback) |
-| **Container** | Docker + Docker Compose |
-| **Monorepo** | pnpm + Turborepo |
-| **CI/CD** | GitHub Actions |
-
----
-
-## Architecture
-
-### Frontend (apps/web)
-- **Framework:** React 19 + Vite 6 + TypeScript
-- **Wallet:** Phantom, Solflare, Backpack, Ledger, Coinbase
-- **Styling:** Custom CSS with dark African fintech theme
-- **Auth:** JWT stored in localStorage, auto-refresh on wallet connect
-
-### Backend (apps/api)
-- **Runtime:** Node.js + Express + TypeScript
-- **Database:** PostgreSQL with direct `pg` pool (15 tables)
-- **Cache/Queue:** Redis + BullMQ for async jobs
-- **Security:** RBAC, rate limiting, circuit breaker, health checks
-- **Auth:** Ed25519 wallet signature verification → JWT (24h expiry)
-
-### Database Schema
-- `users`, `properties`, `investments`, `dividends`
-- `governance_proposals`, `governance_votes`
-- `kyc_submissions`, `audit_log`, `lending_positions`
-- `dca_plans`, `lp_positions`, `liquidation_events`
-- Row-Level Security (RLS) on investments, dividends, audit_log
-
-### Smart Contracts
-- **Framework:** Anchor 0.30.1 + Rust
-- **7 Programs:** osanvault_core, osanvault_lend, reits, minerals, carbon, landbank, oracle
-- **Security:** RBAC, dual oracle (Pyth + Switchboard), multisig treasury
-
----
-
-## Smart Contracts
-
-| Contract | Program ID | Description |
-|----------|------------|-------------|
-| `osanvault_core` | `5bNkJDyJaE3rZ93ahWaA8MPTxQvCG6dC9jkTanLV2qRF` | Core platform, RBAC, OSANV mint |
-| `osanvault_lend` | `3ZX5svRbpgvNVQXpwj7cQG2MZs97KVnV3azCkSiwU3CR` | DeFi lending, 25% liquidation |
-| `reits` | `EUJWumAPhQVeTK3CAuBKh9SFf1AvqrmvTty37RKJxmf1` | 5% yield REITs |
-| `minerals` | `6oNLPSirAwbmTohpfUtUk2UHSLfsVnvHguP9ZdwcGRzF` | 5% royalty minerals |
-| `carbon` | `H2hzHypyQxJpDiGWgpYSDN56JdyLzpPkrHcAD2cxnZUb` | Carbon credit tokenization |
-| `landbank` | `FRsKDe4vdmRczcXSvub2oAgCgs4uo4LttxvXrwfg1NkT` | 8% appreciation land banking |
-| `oracle` | `9x81xZ2Kqjc5zbVAsX7Kqwv4HSo1HSkWkC3LUorZ8n55` | Dual-source price feeds |
-
----
-
-## AUTOIVEST Bot Suite
-
-| Bot | Purpose |
-|-----|---------|
-| **DCA Bot** | Dollar-cost averaging execution |
-| **Dividend DRIP** | Automatic dividend reinvestment |
-| **LP Manager** | Automated liquidity pool management |
-| **Portfolio Rebalancer** | On-chain portfolio rebalancing |
-
----
-
-## Revenue Model
-
-| Stream | Rate |
-|--------|------|
-| Platform fees | 1.5% |
-| AUM management | 0.5% |
-| Secondary market | 0.3% |
-| Property onboarding | Fixed per listing |
-
----
-
-## Deployment
-
-### Development (Local)
-
-```bash
-# Start infrastructure
-docker-compose -f infra/docker-compose.yml up -d
-
-# Start API
-pnpm --filter api dev
-
-# Start Web
-pnpm --filter web dev
-```
-
-### Production (Docker)
-
-```bash
-# Build and start production stack
-docker-compose -f infra/docker-compose.prod.yml up -d --build
-```
-
-### Production (Manual)
-
-```bash
-# 1. Build all packages
-pnpm build
-
-# 2. Set environment variables
-cp .env.production.example .env
-# Edit .env with production values
-
-# 3. Start services with PM2
-pm2 start ecosystem.config.js --env production
-```
-
-### Production (Nginx + PM2)
-
-```bash
-# 1. Configure nginx
-sudo cp infra/nginx.prod.conf /etc/nginx/sites-available/osanvault
-sudo nginx -t && sudo systemctl reload nginx
-
-# 2. Start API with PM2
-pm2 start ecosystem.config.js
-
-# 3. Start frontend
-cd apps/web && npx serve dist -l 5173 -s &
+# 7. Deploy to Amoy testnet
+npm run deploy:amoy
 ```
 
 ---
 
-## Security
+## 📦 Smart Contracts
 
-### Implemented
-- ✅ Wallet-based JWT authentication (Ed25519 signature verification)
-- ✅ RBAC on all smart contracts and API endpoints
-- ✅ Dual oracle: Pyth Network (primary) + Switchboard (fallback)
-- ✅ Gnosis Safe 3-of-5 multisig treasury
-- ✅ 29 internal security tests
-- ✅ Rate limiting on all API endpoints
-- ✅ Input validation and sanitization (Zod)
-- ✅ Helmet security headers
-- ✅ CORS configuration
-- ✅ Redis nonce storage (5min expiry, single-use)
-- ✅ Audit logging on all state-changing operations
+### 1. OSANVToken (500M supply)
+- **Standard**: ERC20 + ERC20Permit + ERC20Burnable + AccessControl + Pausable
+- **Max Supply**: 500,000,000 OSANV
+- **Burn Floor**: 250,000,000 OSANV (cannot burn below)
+- **Roles**: PAUSER_ROLE, TREASURY_ROLE, BURNER_ROLE
+- **Allocation**:
+  - 25% Public Sale (125M)
+  - 20% Ecosystem (100M)
+  - 15% Team Vesting (75M)
+  - 15% Treasury (75M)
+  - 10% Liquidity (50M)
+  - 15% Admin Reserve (75M)
 
-### In Progress
-- 🔄 Security audit (CertiK contacted, awaiting quote)
-- 🔄 VPS hardening (fail2ban, UFW)
+### 2. StakingVault
+- **4 Tiers**:
+  - Bronze: 8% APR, 30 days lock
+  - Silver: 12% APR, 90 days lock
+  - Gold: 18% APR, 180 days lock
+  - Platinum: 22% APR, 365 days lock
+- **Security**: updateRewards modifier + rewardDebt anti-flash-loan protection
+- **Features**: Configurable APR, early withdrawal penalties, governance-adjustable emissions
 
-### NPM Audit
-- ✅ 0 vulnerabilities (Vite 6.4.2, express-rate-limit 8.5.0)
+### 3. TreasuryVault
+- **Daily Withdrawal Limits**: Configurable by governance
+- **24-hour Auto-reset**: Daily limit resets after 24 hours
+- **Safety**: SafeERC20 for token transfers
+- **Emergency**: Treasury pause functionality
+
+### 4. Governance
+- **DAO-lite Model**: Proposal → Voting → Execution
+- **State Machine**: Pending → Active → Succeeded → Queued → Executed
+- **Quorum**: ≥4% of token supply
+- **Timelock Support**: Ready for delayed execution
+
+### 5. TeamVesting
+- **Multi-beneficiary**: Separate vests for team members
+- **Features**: Per-beneficiary cliff, linear vesting, safe removal
+- **Mechanism**: Swap-and-pop removal to prevent O(n) operations
+
+### 6. FeeRouter
+- **Fee Distribution**: 20% burn | 30% treasury | 40% staking | 10% ecosystem
+- **Burn Logic**: 5% minimum burn, governance-adjustable
+- **Low-level calls**: Direct token burning mechanism
+
+### 7. PropertyNFT
+- **Standard**: ERC1155 (supports both fungible + semi-fungible)
+- **Features**: Fractionalized property ownership, jurisdiction enforcement
+- **Metadata**: IPFS integration ready, URI storage, batch minting
+- **Supply Caps**: Per-property cap enforcement
 
 ---
 
-## Regulatory
-
-- **Primary:** Nigeria SEC ARIP Sandbox pathway
-- **Required:** SCUML Registration, DAOP Classification
-- **Compliance:** Fidelity Bond Compliance
-
----
-
-## Testing
+## 🧪 Testing
 
 ```bash
 # Run all tests
-pnpm test
-
-# Run API tests only
-pnpm --filter @osanvault/api test
+npm run test
 
 # Run with coverage
-pnpm --filter @osanvault/api test --coverage
+npm run test:coverage
+
+# Watch mode
+npm run test:watch
+
+# Run specific test file
+npx hardhat test tests/OSANVToken.test.ts
 ```
 
-**Test Results:** 48 tests passing (19 integration + 29 security)
+**Test Coverage**: 104 tests across 7 contracts
+- 11 OSANVToken tests
+- 20 StakingVault tests
+- 16 Governance tests
+- 14 TreasuryVault tests
+- 14 TeamVesting tests
+- 12 FeeRouter tests
+- 17 PropertyNFT tests
 
 ---
 
-## API Endpoints
+## 🔐 Security Architecture
 
-### Authentication
-| Endpoint | Method | Description |
-|----------|--------|-------------|
-| `/api/auth/nonce` | POST | Generate cryptographic nonce |
-| `/api/auth/verify` | POST | Verify wallet signature & get JWT |
-| `/api/auth/wallet/:address` | GET | Get wallet user info |
+### Ownership Separation
+- Deployer ≠ Treasury Owner ≠ Governance Authority ≠ Emergency Controls
+- Multisig-ready (Gnosis Safe compatible)
+- Separate roles for PAUSER, TREASURY, BURNER
 
-### Dashboard
-| Endpoint | Method | Description |
-|----------|--------|-------------|
-| `/api/dashboard/summary` | GET | Portfolio summary & stats |
-| `/api/dashboard/ledger` | GET | Transaction history (last 20) |
-| `/api/dashboard/properties-overview` | GET | Property milestones & progress |
+### Burn Floor Protection
+- Minimum supply: 250M OSANV (hardcoded, immutable)
+- Cannot burn below floor (enforced in quarterlyBurn)
+- Governance cannot override burn floor
 
-### Properties
-| Endpoint | Method | Description |
-|----------|--------|-------------|
-| `/api/properties` | GET | List all properties |
-| `/api/properties/:id` | GET | Property details |
-| `/api/properties/:id/milestones` | GET | Construction milestones |
+### Anti-Manipulation
+- StakingVault: updateRewards modifier on all state changes
+- rewardDebt tracking prevents flash-loan attacks
+- Time-locked governance for critical changes
 
-### Governance
-| Endpoint | Method | Description |
-|----------|--------|-------------|
-| `/api/governance/proposals` | GET | List proposals |
-| `/api/governance/proposals` | POST | Create proposal |
-| `/api/governance/vote` | POST | Cast vote |
-| `/api/governance/votes/:id` | GET | Proposal votes |
-
-### KYC & Compliance
-| Endpoint | Method | Description |
-|----------|--------|-------------|
-| `/api/kyc/submit` | POST | Submit KYC documents |
-| `/api/kyc/status/:wallet` | GET | KYC status |
-
-### Additional
-| Endpoint | Method | Description |
-|----------|--------|-------------|
-| `/health` | GET | Health check |
-| `/api/tokens/osanv` | GET | OSANV token info |
-| `/api/tokens/staking-status` | GET | Staking info |
-| `/api/oracle/:asset` | GET | Pyth/Switchboard price feed |
-| `/api/support` | POST | Contact support |
+### Emergency Controls
+- Pause/unpause for all token transfers
+- Treasury emergency halt
+- Governance pause for proposals
 
 ---
 
-## Scripts
+## 📊 Tokenomics
 
-| Script | Purpose |
-|--------|---------|
-| `scripts/deploy-token.ts` | Deploy OSANV token |
-| `scripts/deploy-all.sh` | Deploy all contracts |
-| `scripts/dev-start.sh` | Start dev environment |
-| `scripts/dev-stop.sh` | Stop dev environment |
+```
+Total Supply: 500,000,000 OSANV
+Burn Floor: 250,000,000 OSANV (50%)
 
----
+Quarterly Burn Mechanism:
+  - Treasury can burn up to 20% of protocol fees
+  - Subject to burn floor enforcement
+  - Governs inflation via on-chain governance
 
-## Team
+Staking Rewards:
+  - Annual yields: 8% → 22% depending on tier
+  - Funded by protocol treasury
+  - Adjustable by governance (min 2% timelock)
 
-**Founder & CEO:** Olugbenga Ajayi
-- Nigerian Navy (11 years service)
-- Advanced Diploma in Security & Safety Management
-- Focus: Community development + blockchain entrepreneurship
-
----
-
-## KBW 2026
-
-**Korea Blockchain Week 2026** — Seoul, South Korea | September 29–October 1, 2026
-
-Target: Investor engagement, platform visibility, partnerships
+Fee Distribution:
+  - Burn: 20%
+  - Treasury: 30%
+  - Staking rewards: 40%
+  - Ecosystem development: 10%
+```
 
 ---
 
-## Contact
+## 🌍 Land Rights & Compliance Framework
 
-- **Email:** Olugbenga1000@gmail.com
-- **Phone:** +2347065056103
-- **Website:** osanvaultafrica.com
-- **Support:** Olugbenga1000@gmail.com
+### Architectural Principles
+✓ Respect indigenous land systems
+✓ Support customary ownership structures
+✓ Comply with African sovereign mineral laws
+✓ Enable host community participation
+✓ Support government regulatory workflows
+
+### Initial Approach
+**NOT** raw on-chain land ownership claims, but rather:
+- Economic participation rights
+- SPV-backed revenue rights
+- Regulated custodial interests
+- Title-verified properties with legal documentation
+
+### Features Built
+- Document verification system
+- Survey/GIS integration ready
+- Immutable audit trails
+- Community participation support
+- Host community reserve allocations
+- Mineral licensing verification
 
 ---
 
-## License
+## 🛠️ Development
 
-MIT License - See LICENSE file for details
+### Local Development
+```bash
+# Terminal 1: Start local Hardhat node
+npx hardhat node
+
+# Terminal 2: Deploy contracts
+npm run deploy:local
+
+# Terminal 3: Start backend (NestJS)
+npm run backend:dev
+
+# Terminal 4: Start frontend (Next.js)
+npm run frontend:dev
+```
+
+### Compilation
+```bash
+npm run compile           # Standard compilation
+npm run compile -- --force # Force recompilation
+```
+
+### Linting & Formatting
+```bash
+npm run lint              # Check code style
+npm run format            # Auto-format code
+```
 
 ---
 
-## Contributing
+## 🚀 Deployment
+
+### Amoy Testnet (Primary Testing)
+```bash
+# 1. Configure .env with PRIVATE_KEY and AMOY_RPC_URL
+# 2. Fund deployer with MATIC on Amoy faucet
+# 3. Deploy
+npm run deploy:amoy
+
+# View on Polygonscan Amoy
+# https://amoy.polygonscan.com/
+```
+
+### Polygon Mainnet (Production)
+```bash
+# 1. Review security audit results
+# 2. Configure .env with mainnet credentials
+# 3. Fund deployer with sufficient MATIC
+# 4. Deploy
+npm run deploy:polygon
+
+# View on Polygonscan
+# https://polygonscan.com/
+```
+
+### Arbitrum (Expansion)
+- Deployment scripts ready
+- Will activate after Polygon mainnet stability
+
+---
+
+## 📚 Documentation
+
+- **[ARCHITECTURE.md](./docs/ARCHITECTURE.md)** - System design, module overview, data flows
+- **[TOKENOMICS.md](./docs/TOKENOMICS.md)** - Token economics, allocation, burn mechanics
+- **[GOVERNANCE.md](./docs/GOVERNANCE.md)** - DAO-lite governance, proposal lifecycle
+- **[DEPLOYMENT.md](./docs/DEPLOYMENT.md)** - Step-by-step mainnet deployment guide
+- **[API.md](./docs/API.md)** - Backend REST API reference
+- **[SECURITY.md](./docs/SECURITY.md)** - Security model, audit findings, risk assessment
+
+---
+
+## 🤝 Contributing
+
+We welcome contributions from developers, security researchers, and community members.
 
 1. Fork the repository
-2. Create a feature branch
-3. Make changes and test
-4. Submit a pull request
+2. Create feature branch (`git checkout -b feature/amazing-feature`)
+3. Commit changes with professional messages (`git commit -m 'feat: add amazing feature'`)
+4. Push to branch (`git push origin feature/amazing-feature`)
+5. Open Pull Request with detailed description
 
-**Note:** All PRs must include a security consideration note in the description.
+### Code Standards
+- All code must be production-ready
+- Strong typing everywhere (TypeScript/Solidity)
+- Comprehensive tests required
+- Security audit for smart contracts
+- NatSpec comments on all public functions
+
+---
+
+## 📖 License
+
+MIT License - see [LICENSE](./LICENSE) file for details
+
+---
+
+## 👥 Team
+
+**Founder**: Olugbenga Ajayi
+**Vision**: Build institutional-grade African blockchain infrastructure
+
+---
+
+## 📞 Contact
+
+- **Website**: https://osanvault.africa
+- **Email**: hello@osanvault.africa
+- **Twitter**: @osanvault
+- **GitHub**: https://github.com/osanvault
+
+---
+
+## ⚖️ Disclaimer
+
+This project is in active development. Smart contracts are not yet audited. Do not use in production without proper security audit and legal review.
+
+**African Compliance Notice**: This platform respects sovereign rights, indigenous land systems, and local governance structures. All implementations are designed with legal experts and community stakeholders.
+
+---
+
+**Last Updated**: 2026-05-25
+**Status**: Smart Contracts Phase Complete • Backend in Development • Frontend in Development
