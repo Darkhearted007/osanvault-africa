@@ -1,66 +1,16 @@
-Business Source License 1.1
+MIT License
 
-License text copyright (c) 2017 MariaDB Corporation Ab, All Rights Reserved.
-"Business Source License" is a trademark of MariaDB Corporation Ab.
+Copyright (c) 2026 ÒsánVault Africa
 
------------------------------------------------------------------------------
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
 
-Parameters
-
-Licensor: ÒsánVault Africa ("Licensor")
-
-Licensed Work: ÒsánVault Africa — OSANV Ecosystem
-The Licensed Work includes all smart contracts, scripts, configurations,
-documentation, and associated software in this repository, including but not
-limited to:
-- OSANVToken (ERC-20 token contract)
-- StakingVault (tiered staking contract)
-- TreasuryVault (multisig treasury contract)
-- Governance (DAO-lite governance contract)
-- TeamVesting (vesting contract)
-- FeeRouter (fee distribution contract)
-- PropertyNFT (real estate NFT contract)
-- OsanCarbon (carbon credit tokenization contract)
-- Any associated deploy scripts, tests, and configuration files
-
-The Licensed Work is (c) 2026 ÒsánVault Africa
-
-Additional Use Grant: Any person may use, copy, modify, and distribute the
-Licensed Work for non-commercial, educational, research, or personal purposes,
-provided that such use does not constitute:
-(a) A commercial offering of the Licensed Work or a substantially similar
-    software system as a service or product that competes with the Licensor's
-    business;
-(b) A tokenization platform, real-world asset protocol, or carbon credit
-    system that directly competes with ÒsánVault Africa's offerings;
-(c) Use of the ÒsánVault™, OSANV™, or OsanCarbon™ trademarks without
-    explicit written permission.
-
-Production use of the Licensed Work on any blockchain mainnet requires a
-separate commercial license from the Licensor.
-
-Change Date: 2035-12-31
-
-Change License: MIT (as defined in the MIT License file distributed with the
-Licensed Work)
-
------------------------------------------------------------------------------
-
-Terms
-
-The Licensor hereby grants you the right to copy, modify, create derivative
-works, redistribute, and make non-production use of the Licensed Work. The
-Licensor may make an Additional Use Grant, above, permitting limited
-production use.
-
-Effective on the Change Date, or the fourth anniversary of the first publicly
-available distribution of a specific version of the Licensed Work under this
-License, whichever comes first, the Licensed Work will become available
-under the terms of the Change License.
-
-You may not use the Licensed Work for any commercial use that directly
-competes with the Licensor's business offerings without explicit written
-permission from the Licensor.
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
 
 THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
 IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
@@ -70,28 +20,30 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 
------------------------------------------------------------------------------
+================================================================================
 
-ADDITIONAL NOTICE FOR AFRICAN RWA SYSTEMS
+ADDITIONAL NOTICE FOR SMART CONTRACTS
 
-The Licensed Work is designed to facilitate tokenization of real-world assets
-in Africa. Users and implementers are responsible for:
+The smart contracts in this project are not audited. Please conduct thorough
+security audits before deploying to production networks.
+
+DISCLAIMER FOR AFRICAN RWA SYSTEMS
+
+This software is designed to facilitate tokenization of real-world assets in
+Africa. Users are responsible for:
 
 1. Complying with all applicable local, national, and international laws
-2. Obtaining proper regulatory approval for asset tokenization
-3. Verifying the integrity and authenticity of underlying assets
-4. Ensuring proper community participation and benefit-sharing arrangements
-5. Respecting indigenous land rights and customary ownership systems
-6. Following all government regulatory frameworks for digital assets
-7. Obtaining necessary financial services licenses where required
+2. Obtaining proper regulatory approval for RWA tokenization
+3. Respecting indigenous land systems and customary ownership structures
+4. Ensuring proper title verification and legal documentation
+5. Managing community participation and benefit-sharing arrangements
+6. Following all government regulatory frameworks
 
-The ÒsánVault project and its contributors disclaim responsibility for:
-- Regulatory violations by users or implementers
-- Fraudulent or invalid underlying assets
+The ÒsánVault project and contributors disclaim responsibility for:
+- Regulatory violations by users
+- Improper asset tokenization
 - Violation of indigenous or community rights
-- Unauthorized claim of tokenized asset ownership
+- Unauthorized claim of land or resource ownership
 - Non-compliance with local regulations
-- Any loss resulting from use of this software
 
-ÒsánVault™, OSANV™, OsanCarbon™, and "Own a piece of Africa, one piece at a
-time." are trademarks of ÒsánVault Africa. All rights reserved.
+================================================================================

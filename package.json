@@ -1,39 +1,38 @@
 {
-  "name": "osanvault-africa",
-  "version": "1.0.0",
-  "description": "ÒsánVault Africa - OsanCarbon carbon credit tokenization contracts",
-  "author": "Olugbenga Ajayi <hello@osanvault.africa>",
-  "license": "BUSL-1.1",
+  "name": "@osanvault/root",
+  "version": "0.1.0",
   "private": true,
-  "type": "commonjs",
+  "packageManager": "pnpm@10.33.2",
   "scripts": {
-    "compile": "hardhat compile --force",
-    "test": "hardhat test",
-    "test:gas": "REPORT_GAS=true hardhat test",
-    "deploy:amoy": "hardhat run scripts/deploy.ts --network amoy",
-    "deploy:local": "hardhat run scripts/deploy.ts --network localhost",
-    "verify:amoy": "hardhat run scripts/verify.ts --network amoy",
-    "deploy:all": "hardhat run scripts/masterDeploy.ts --network amoy",
-    "deploy:all:local": "hardhat run scripts/masterDeploy.ts --network localhost"
+    "dev": "turbo run dev",
+    "build": "turbo run build",
+    "test": "turbo run test",
+    "lint": "turbo run lint",
+    "dev:api": "pnpm --filter @osanvault/api dev",
+    "dev:web": "pnpm --filter web dev",
+    "build:api": "pnpm --filter @osanvault/api build",
+    "build:web": "pnpm --filter web build",
+    "test:contracts": "cd programs && anchor test",
+    "test:contracts:core": "cd programs/osanvault_core && anchor test",
+    "test:contracts:lend": "cd programs/osanvault_lend && anchor test",
+    "test:contracts:reits": "cd programs/reits && anchor test"
   },
   "devDependencies": {
-    "@nomicfoundation/hardhat-chai-matchers": "^2.0.0",
-    "@nomicfoundation/hardhat-ethers": "^3.0.0",
-    "@nomicfoundation/hardhat-network-helpers": "^1.0.0",
-    "@nomicfoundation/hardhat-verify": "^2.0.0",
-    "@openzeppelin/contracts": "^5.0.2",
-    "@typechain/ethers-v6": "^0.5.0",
-    "@typechain/hardhat": "^9.0.0",
-    "@types/chai": "^4.2.0",
-    "@types/mocha": ">=9.1.0",
-    "@types/node": "^20.10.6",
-    "chai": "^4.2.0",
-    "dotenv": "^16.3.1",
-    "ethers": "^6.4.0",
-    "hardhat": "^2.28.0",
-    "hardhat-gas-reporter": "^2.0.0",
-    "ts-node": "^10.9.2",
-    "typechain": "^8.3.0",
-    "typescript": "^5.3.3"
+    "turbo": "^2.9.14",
+    "typescript": "^6.0.3"
+  },
+  "pnpm": {
+    "overrides": {
+      "uuid": "^14.0.0",
+      "file-type": ">=21.3.2",
+      "esbuild": ">=0.25.0",
+      "protobufjs": ">=7.6.0",
+      "lodash": ">=4.18.0",
+      "@solana/spl-token@0.4.14": "npm:@solana/spl-token@0.4.6"
+    }
+  },
+  "engines": {
+    "node": ">=18.0.0",
+    "pnpm": ">=8.0.0"
   }
 }
