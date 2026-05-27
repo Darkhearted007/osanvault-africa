@@ -4,7 +4,7 @@
 use anchor_lang::prelude::*;
 use anchor_spl::token::{self, Mint, Token, TokenAccount, Transfer};
 
-declare_id!("5bNkJDyJaE3rZ93ahWaA8MPTxQvCG6dC9jkTanLV2qRF");
+declare_id!("3sUigsaHXRZU5hG9ALGgwid4KEvAuVAa763coQ5re46L");
 
 #[program]
 pub mod osanvault_core {

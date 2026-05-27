@@ -5,7 +5,7 @@ use anchor_lang::prelude::*;
 use anchor_spl::token::{self, Mint, Token, TokenAccount, Transfer};
 use std::str::FromStr;
 
-declare_id!("3ZX5svRbpgvNVQXpwj7cQG2MZs97KVnV3azCkSiwU3CR");
+declare_id!("5RTF7Spas1rp3RAExCQuV54iVxxmcSdw7n7tVqhrfCjy");
 
 #[program]
 pub mod osanvault_lend {

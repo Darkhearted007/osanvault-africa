@@ -4,7 +4,7 @@
 use anchor_lang::prelude::*;
 use anchor_spl::token::{self, Token, TokenAccount, Transfer};
 
-declare_id!("FRsKDe4vdmRczcXSvub2oAgCgs4uo4LttxvXrwfg1NkT");
+declare_id!("8MoKRwQnwaHtnre5hyPtA2e4pPATZGojECTWydXdcNr6");
 
 #[program]
 pub mod landbank {

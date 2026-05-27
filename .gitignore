@@ -67,4 +67,5 @@ secrets/
 
 # Documentation builds
 docs/_build/
-site/
+site/target/
+Cargo.lock

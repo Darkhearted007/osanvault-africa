@@ -1,5 +1,5 @@
 [toolchain]
-anchor_version = "1.0.2"
+anchor_version = "0.30.1"
 
 [features]
 resolution = true
@@ -15,13 +15,13 @@ osanvault_lend = "3ZX5svRbpgvNVQXpwj7cQG2MZs97KVnV3azCkSiwU3CR"
 reits = "EUJWumAPhQVeTK3CAuBKh9SFf1AvqrmvTty37RKJxmf1"
 
 [programs.localnet]
-carbon = "H2hzHypyQxJpDiGWgpYSDN56JdyLzpPkrHcAD2cxnZUb"
-landbank = "FRsKDe4vdmRczcXSvub2oAgCgs4uo4LttxvXrwfg1NkT"
-minerals = "6oNLPSirAwbmTohpfUtUk2UHSLfsVnvHguP9ZdwcGRzF"
-oracle = "9x81xZ2Kqjc5zbVAsX7Kqwv4HSo1HSkWkC3LUorZ8n55"
-osanvault_core = "5bNkJDyJaE3rZ93ahWaA8MPTxQvCG6dC9jkTanLV2qRF"
-osanvault_lend = "3ZX5svRbpgvNVQXpwj7cQG2MZs97KVnV3azCkSiwU3CR"
-reits = "EUJWumAPhQVeTK3CAuBKh9SFf1AvqrmvTty37RKJxmf1"
+carbon = "6q7XJMxH97MawQf3b22QPijgL8HHmZj5oayg3jLy6SJa"
+landbank = "8MoKRwQnwaHtnre5hyPtA2e4pPATZGojECTWydXdcNr6"
+minerals = "Bw6nZmM1hNJuUzRPnBFXQwTq7XxdG3Di1aiqsbTNwkRh"
+oracle = "GBLYNdgrRgZvkzsXi4YJFbUmgd61yDZieA49JhhkC1X2"
+osanvault_core = "3sUigsaHXRZU5hG9ALGgwid4KEvAuVAa763coQ5re46L"
+osanvault_lend = "5RTF7Spas1rp3RAExCQuV54iVxxmcSdw7n7tVqhrfCjy"
+reits = "F55u2CE36czqvDhYVrtTmo541c81Bax1gu6LvMoyRm5X"
 
 [provider]
 cluster = "localnet"
@@ -38,6 +38,3 @@ test = "yarn run ts-mocha -p ./tsconfig.json -t 1000000 tests/**/*.ts"
 startup_wait = 60000
 shutdown_wait = 2000
 upgradeable = false
-
-[profile.release]
-overflow-checks = true

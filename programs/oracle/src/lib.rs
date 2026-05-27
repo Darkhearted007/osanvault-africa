@@ -3,7 +3,7 @@
 
 use anchor_lang::prelude::*;
 
-declare_id!("9x81xZ2Kqjc5zbVAsX7Kqwv4HSo1HSkWkC3LUorZ8n55");
+declare_id!("GBLYNdgrRgZvkzsXi4YJFbUmgd61yDZieA49JhhkC1X2");
 
 pub const PYTH_PRICE_FEED_SIZE: usize = 3312;
 pub const MAX_PRICE_AGE_SECONDS: i64 = 60;

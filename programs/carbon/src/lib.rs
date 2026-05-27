@@ -4,7 +4,7 @@
 use anchor_lang::prelude::*;
 use anchor_spl::token::{self, Mint, Token, TokenAccount, Transfer};
 
-declare_id!("H2hzHypyQxJpDiGWgpYSDN56JdyLzpPkrHcAD2cxnZUb");
+declare_id!("6q7XJMxH97MawQf3b22QPijgL8HHmZj5oayg3jLy6SJa");
 
 #[program]
 pub mod carbon {
