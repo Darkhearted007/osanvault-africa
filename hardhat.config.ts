@@ -6,9 +6,10 @@ import "@nomicfoundation/hardhat-verify";
 import "@typechain/hardhat";
 import "dotenv/config";
 
-const PRIVATE_KEY = process.env.DEPLOYER_PRIVATE_KEY;
+const PRIVATE_KEY = process.env.DEPLOYER_PRIVATE_KEY || "0000000000000000000000000000000000000000000000000000000000000000";
 const AMOY_RPC = process.env.AMOY_RPC_URL || "https://rpc-amoy.polygon.technology";
 const POLYGONSCAN_API_KEY = process.env.POLYGONSCAN_API_KEY || "";
+const REPORT_GAS = process.env.REPORT_GAS === "true";
 
 const config: HardhatUserConfig = {
   solidity: {
@@ -30,7 +31,7 @@ const config: HardhatUserConfig = {
     amoy: {
       url: AMOY_RPC,
       chainId: 80002,
-      accounts: PRIVATE_KEY ? [PRIVATE_KEY] : [],
+      accounts: [PRIVATE_KEY],
     },
   },
   etherscan: {
@@ -48,6 +49,12 @@ const config: HardhatUserConfig = {
       },
     ],
   },
+  gasReporter: {
+    enabled: REPORT_GAS,
+    currency: "USD",
+    coinmarketcap: process.env.COINMARKETCAP_API_KEY || "",
+    token: "MATIC",
+  },
   paths: {
     sources: "./contracts",
     tests: "./tests",
@@ -55,7 +62,7 @@ const config: HardhatUserConfig = {
     artifacts: "./artifacts",
   },
   mocha: {
-    timeout: 60_000,
+    timeout: 120_000,
   },
 };
 

@@ -1,25 +1,71 @@
 # Dependencies
 node_modules/
+package-lock.json
+yarn.lock
+pnpm-lock.yaml
 
 # Build outputs
 artifacts/
 cache/
 typechain-types/
 dist/
+build/
+.turbo/
 
 # Environment
 .env
 .env.local
+.env.*.local
 
-# IDE
+# IDE & Editor
 .vscode/
 .idea/
 *.swp
 *.swo
+*~
 .DS_Store
+
+# Testing
+coverage/
+coverage.json
+.nyc_output/
+
+# Frontend
+**/.next/
+**/out/
+**/.expo/
+**/*.tsbuildinfo
+
+# Backend
+**/.eslintcache
+**/node_modules/.cache
 
 # Logs
 *.log
+logs/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+lerna-debug.log*
 
 # OS
+.DS_Store
 Thumbs.db
+
+# Temporary files
+*.tmp
+*.temp
+.tmp/
+
+# Contract deployment artifacts
+deployments/
+deployments.json
+
+# Security
+.env.production.local
+secrets/
+
+# Documentation builds
+docs/_build/
+site/target/
+Cargo.lock

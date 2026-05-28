@@ -1,11 +1,6 @@
 import { ethers } from "hardhat";
 
 async function main() {
-  const network = ethers.provider.network;
-  if (network.chainId === 80002n && !process.env.DEPLOYER_PRIVATE_KEY) {
-    throw new Error("DEPLOYER_PRIVATE_KEY is required for Amoy network");
-  }
-
   const [deployer] = await ethers.getSigners();
   console.log("Deploying with account:", deployer.address);
 

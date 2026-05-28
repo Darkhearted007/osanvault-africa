@@ -1,69 +1,19 @@
-Business Source License 1.1
+                                 Apache License
+                           Version 2.0, January 2004
+                        http://www.apache.org/licenses/
 
-License text copyright (c) 2017 MariaDB Corporation Ab, All Rights Reserved.
-"Business Source License" is a trademark of MariaDB Corporation Ab.
+   TERMS AND CONDITIONS FOR USE, REPRODUCTION, AND DISTRIBUTION
 
------------------------------------------------------------------------------
+   Copyright 2026 ÒsánVault Africa
 
-Parameters
+   Licensed under the Apache License, Version 2.0 (the "License");
+   you may not use this file except in compliance with the License.
+   You may obtain a copy of the License at
 
-Licensor: ÒsánVault Africa
+       http://www.apache.org/licenses/LICENSE-2.0
 
-Licensed Work: OsanCarbon - Carbon Credit Tokenization Contracts
-The Licensed Work is (c) 2026 ÒsánVault Africa
-
-Additional Use Grant: Any person may use the Licensed Work for any purpose,
-provided that such use does not constitute a commercial offering of the
-Licensed Work or a substantially similar software as a service or product
-that directly competes with the Licensor's business.
-
-Change Date: 2030-12-31
-
-Change License: MIT (as defined in the MIT License file distributed with the
-Licensed Work)
-
------------------------------------------------------------------------------
-
-Terms
-
-The Licensor hereby grants you the right to copy, modify, create derivative
-works, redistribute, and make non-production use of the Licensed Work. The
-Licensor may make an Additional Use Grant, above, permitting limited
-production use.
-
-Effective on the Change Date, or the fourth anniversary of the first publicly
-available distribution of a specific version of the Licensed Work under this
-License, whichever comes first, the Licensed Work will become available
-under the terms of the Change License.
-
-You may not use the Licensed Work for any commercial use that directly
-competes with the Licensor's business offerings without explicit written
-permission from the Licensor.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-SOFTWARE.
-
------------------------------------------------------------------------------
-
-ADDITIONAL NOTICE FOR AFRICAN RWA SYSTEMS
-
-The Licensed Work is designed to facilitate tokenization of carbon credits and
-real-world assets in Africa. Users are responsible for:
-
-1. Complying with all applicable local, national, and international laws
-2. Obtaining proper regulatory approval for carbon credit tokenization
-3. Verifying the integrity and authenticity of carbon credit projects
-4. Ensuring proper community participation and benefit-sharing arrangements
-5. Following all government regulatory frameworks for carbon markets
-
-The ÒsánVault project and contributors disclaim responsibility for:
-- Regulatory violations by users
-- Fraudulent or invalid carbon credits
-- Violation of indigenous or community rights
-- Unauthorized claim of carbon offset ownership
-- Non-compliance with local regulations
+   Unless required by applicable law or agreed to in writing, software
+   distributed under the License is distributed on an "AS IS" BASIS,
+   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+   See the License for the specific language governing permissions and
+   limitations under the License.
