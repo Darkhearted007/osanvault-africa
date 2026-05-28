@@ -1,0 +1,116 @@
+You are implementing a production-grade frontend for OsanCarbon, an ERC-1155 carbon credit tokenization platform on Polygon Amoy. The existing monorepo is at `/mnt/c/Users/HomePC/Desktop/Osanvault/osanvault-africa`.
+## Project Context
+- Root: Hardhat + TypeScript smart contract project
+- Contract: `contracts/OsanCarbon.sol` (ERC-1155 with AccessControl, Pausable, Supply tracking)
+- Deployed to: Polygon Amoy testnet (chain ID 80002)
+- TypeChain types already exist at `typechain-types/` 
+- Zero frontend code exists yet
+- Working tree is clean
+## Your Task
+### Phase 1 — Scaffold the Frontend Monorepo
+Create a `frontend/` directory at the repo root using Next.js 15 App Router with TypeScript strict mode.
+1. **Initialize the project:**
+   - `npx create-next-app@latest frontend --typescript --tailwind --app --src-dir --no-turbopack --import-alias "@/*"`
+   - Install core deps: `wagmi v2`, `viem v2`, `@rainbow-me/rainbowkit`, `@tanstack/react-query`, `framer-motion`, `lucide-react`
+   - Install optional: `mapbox-gl`, `recharts`, `sonner` (toasts), `@radix-ui/react-dialog`
+2. **Copy contract types:**
+   - Copy `typechain-types/contracts/OsanCarbon.ts` → `frontend/src/lib/abi/OsanCarbon.ts`
+   - Extract the ABI JSON array from `typechain-types/factories/contracts/OsanCarbon__factory.ts` and save as `frontend/src/lib/abi/OsanCarbonAbi.ts` (export as `const OsanCarbonAbi = [...]`)
+   - Save the contract address as a config constant (placeholder until deploy).
+3. **Configure Wagmi + RainbowKit:**
+   - Create `frontend/src/lib/wagmi.ts`:
+     - Import `@rainbow-me/rainbowkit`, configure chains (Polygon Amoy with chain ID 80002, Amoy RPC at `https://rpc-amoy.polygon.technology`)
+     - Export `getDefaultConfig` with project name "OsanVault Africa"
+   - Create `frontend/src/lib/contract.ts`:
+     - Export `OSANCARBON_ADDRESS` (placeholder `0x...`), `OSANCARBON_ABI` from the extracted ABI
+     - Create typed helper functions using viem's `getContract` that return a typed contract instance
+   - Update `frontend/src/app/layout.tsx`:
+     - Wrap with `WagmiProvider`, `QueryClientProvider`, `RainbowKitProvider`
+     - Use `ConnectButton` from RainbowKit in a header
+4. **Design System (Tailwind + CSS variables):**
+   - Edit `frontend/src/app/globals.css` with CSS custom properties for "Earth & Ledger" brand:
+     - Colors: deep terracotta `#A63D2F`, savanna gold `#E8B84B`, forest green `#1A3C34`, cream `#F5F0E8`, charcoal `#1A1A1A`
+     - Add a subtle noise/grain texture as a CSS `::before` overlay on `body`
+     - Import Satoshi font (from `@fontsource/satoshi` or Google Fonts alternative) for headings
+     - Import Inter or Söhne for body text
+   - Configure `tailwind.config.ts` with the custom color tokens
+5. **Create the root layout with navigation:**
+   - Responsive header: Logo ("ÒsánVault Africa") on left, nav links (Projects, Portfolio, Retire), RainbowKit `ConnectButton` on right
+   - Footer with contract address, network badge, social links
+   - Dark/light mode toggle using `next-themes`
+   - Default to light/warm theme
+### Phase 2 — Landing Dashboard
+Create `frontend/src/app/page.tsx`:
+1. **Hero Section:**
+   - Full-width hero with gradient background (terracotta → forest green)
+   - Tagline: "Tokenizing Africa's Carbon Future"
+   - Subtitle: "Verified carbon credits from African climate projects, on-chain"
+   - Animated counter showing total credits issued (fetched from contract via viem `readContract`)
+   - "Explore Projects" and "Retire Credits" CTA buttons
+2. **Stats Bar:**
+   - 4 stat cards in a row: Total Projects, Total Issued, Total Retired, Active Verifiers
+   - Each fetches data from the contract via `publicClient.readContract` using the view functions: `getProjectCount()`, sum of `getProjectTotalIssued()` across projects, etc.
+3. **Featured Projects Section:**
+   - Horizontal scrollable row of project cards
+   - Each card: project name, region badge, methodology tag, issued amount, verification status pill
+   - Click navigates to `/projects/[id]`
+4. **Recent Activity Feed:**
+   - Sidebar or bottom section showing recent `CreditsIssued` and `CreditsRetired` events
+   - Fetch via `publicClient.getLogs` filtering by contract address
+   - Show: action type, project ID, amount, timestamp (relative), truncated address
+   - Auto-refresh every 30 seconds with `@tanstack/react-query` refetchInterval
+### Phase 3 — Projects Browse & Detail
+Create route group `frontend/src/app/projects/`:
+1. **Browse Page** (`page.tsx`):
+   - Split layout: left 60% = Mapbox interactive Africa map with project pins, right 40% = filterable project list
+   - Map shows pins at project coordinates (from metadata URI — initially use random African coordinates for demo)
+   - Filter sidebar: region dropdown (West Africa, East Africa, Southern Africa, etc.), methodology checkboxes (VCS, GS, Plan Vivo), vintage year range slider, verification status toggle
+   - Project list: card per project with name, region, vintage, methodology, issued/retired progress bar, verification badge
+   - Pagination or infinite scroll
+2. **Detail Page** (`[id]/page.tsx`):
+   - Hero section: project name, region flag emoji, vintage year, verification badge
+   - Supply chart using Recharts: bar chart of issued vs retired over time (mock data initially, wire up to events later)
+   - Info panel: methodology description, registry link, verifier address with link to Polygonscan
+   - Action buttons: "Retire Credits" (opens retire flow), "View on Explorer" (Polygonscan link)
+   - Activity timeline: list of CreditsIssued/CreditsRetired events for this project ID
+### Phase 4 — Wallet-Connected Portfolio
+Create `frontend/src/app/portfolio/page.tsx`:
+1. **Gate with wallet connect** (if not connected, show prompt with RainbowKit ConnectButton)
+2. **Portfolio summary card**: total credits held, number of projects, total retired historically
+3. **Holdings table**: columns — Project Name, Token Balance, % of Total Supply, Actions (Retire, Transfer)
+4. **Retirement history**: timeline of past retirements by this user address
+5. Fetches data by calling `balanceOf(address, projectId)` for each project and aggregating
+### Phase 5 — Retirement Flow
+Create `frontend/src/app/retire/page.tsx` (and a `retire/[projectId]/` route):
+1. **Step 1 — Select Project & Amount:**
+   - If navigated from project detail, pre-select the project
+   - Dropdown to pick project, amount input with max button (uses `balanceOf`)
+   - Show project name, current balance, credit price (mock $ value)
+2. **Step 2 — Reason:**
+   - Text input with auto-suggest buttons: "🌍 Corporate ESG offset", "✈️ Travel offset", "🌱 Personal carbon footprint", "🏢 Compliance obligation"
+   - Optional retirement note
+3. **Step 3 — Confirmation:**
+   - Summary card: project, amount, reason, estimated CO2e impact
+   - "Confirm Retirement" button → calls `contract.write.retireCredits([projectId, amount, reason])` via `useWriteContract`
+   - Loading state with transaction hash display
+   - Success state: animated celebration (Framer Motion), confetti effect, "Download Certificate" button
+4. **Certificate generation:**
+   - On-chain proof: tx hash, block number, project ID, amount, timestamp
+   - Render as a styled HTML page that can be printed to PDF
+   - Store in Next.js API route at `/api/certificate` that generates the HTML with styling
+### Implementation Notes
+- **All contract reads** should use Viem's `publicClient` directly in Server Components where possible, or `useReadContract` in Client Components
+- **All contract writes** use wagmi's `useWriteContract` + `useWaitForTransactionReceipt` pattern
+- **Error handling**: use `sonner` toast for tx confirmations and errors
+- **Loading states**: use Framer Motion skeleton loaders for all data-fetching views
+- **Mobile responsive**: all pages must work on mobile (stack layouts, hamburger nav)
+- **Follow existing code style**: the Hardhat project uses TypeScript, consistent naming, no comments
+- **DO NOT modify any existing files** in the Hardhat project root (contracts/, scripts/, hardhat.config.ts, etc.)
+- **DO NOT commit** — just create working code
+### Verification
+After Phases 1-5, run:
+- `cd frontend && npm run build` — must compile with zero errors
+- `cd frontend && npm run lint` — must pass
+- Check that `layout.tsx` renders the app without hydration errors
+- Verify contract reads work by checking if `getProjectCount` returns a number
+Start with Phase 1 only. After it compiles and builds successfully, proceed to Phase 2, and so on.

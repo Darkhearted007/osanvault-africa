@@ -1,0 +1,433 @@
+# ÒsánVault Africa — Institutional Analytics & Government Intelligence Dashboard
+
+You are a senior software architect, fintech systems engineer, data visualization expert, blockchain infrastructure engineer, and institutional product designer.
+
+Your task is to build a production-grade institutional analytics dashboard for ÒsánVault Africa.
+
+This system is NOT a generic crypto dashboard.
+
+It is a sovereign-grade African asset intelligence and governance platform combining:
+
+* real estate infrastructure,
+* land registry intelligence,
+* blockchain asset management,
+* institutional treasury analytics,
+* government PPP monitoring,
+* governance systems,
+* and tokenized infrastructure visibility.
+
+The platform should feel like:
+
+* Bloomberg Terminal,
+* BlackRock Aladdin,
+* Palantir,
+* sovereign infrastructure analytics,
+* institutional fintech.
+
+The dashboard must support:
+
+* investors,
+* administrators,
+* governments,
+* treasury managers,
+* compliance officers,
+* and ecosystem operators.
+
+---
+
+# CORE PURPOSE
+
+Build an “African Asset Intelligence Platform” for ÒsánVault Africa.
+
+The system should visualize:
+
+* tokenized real estate,
+* land ownership infrastructure,
+* regional development projects,
+* treasury allocations,
+* governance participation,
+* staking performance,
+* carbon credit infrastructure,
+* and state partnership analytics.
+
+The architecture should support:
+
+* Ekiti State pilots,
+* Oyo State pilots,
+* future Pan-African expansion.
+
+---
+
+# TECHNOLOGY STACK
+
+## Frontend
+
+Use:
+
+* Next.js
+* React
+* TypeScript
+* TailwindCSS
+* shadcn/ui
+* Framer Motion
+* Recharts
+
+## Backend
+
+Use:
+
+* Python FastAPI
+* PostgreSQL
+* Prisma-compatible structures
+* Redis (optional)
+* Pandas
+* NumPy
+
+## Blockchain
+
+Integrate conceptually with:
+
+* Polygon
+* Arbitrum
+
+Contracts:
+
+* LandRegistry.sol
+* PropertyNFT.sol
+* TreasuryVault.sol
+* Governance.sol
+* OSANVToken.sol
+* StakingVault.sol
+
+---
+
+# VISUAL DESIGN
+
+The interface must feel:
+
+* institutional,
+* elegant,
+* dark luxury,
+* data-centric,
+* trustworthy,
+* premium.
+
+DO NOT design:
+
+* meme coin dashboards,
+* neon crypto casinos,
+* cluttered DeFi UIs.
+
+Design inspiration:
+
+* Bloomberg
+* BlackRock
+* Coinbase Institutional
+* modern African sovereign infrastructure
+
+---
+
+# COLOR SYSTEM
+
+Primary:
+
+* Emerald: #0E7C66
+* Deep Emerald: #064E3B
+
+Accent:
+
+* Gold: #D4AF37
+
+Background:
+
+* #07111A
+* #0F172A
+* #111827
+
+Text:
+
+* #F8FAFC
+* #94A3B8
+
+---
+
+# REQUIRED DASHBOARD MODULES
+
+# 1. EXECUTIVE OVERVIEW DASHBOARD
+
+Purpose:
+Institutional overview of the ÒsánVault ecosystem.
+
+Widgets:
+
+* total tokenized assets
+* treasury value
+* active properties
+* active investors
+* governance participation
+* rental yield metrics
+* staking participation
+* regional investment metrics
+* chain activity
+* treasury reserves
+
+Include:
+
+* live charts
+* animated metrics
+* performance trends
+
+---
+
+# 2. LAND REGISTRY INTELLIGENCE DASHBOARD
+
+Purpose:
+Government-grade land ownership visibility.
+
+Features:
+
+* parcel registry
+* ownership verification
+* NFT issuance tracking
+* regional land allocation
+* land disputes flags
+* ownership transfer history
+* GIS-style visualization
+* land tokenization status
+
+Must support:
+
+* Ekiti
+* Oyo
+* future African states
+
+---
+
+# 3. PROPERTY INVESTMENT ANALYTICS
+
+Features:
+
+* property valuation
+* yield performance
+* occupancy metrics
+* investor participation
+* ROI trends
+* token distribution
+* funding status
+* property rankings
+
+Include:
+
+* luxury residential
+* commercial properties
+* landbanking
+* infrastructure projects
+
+---
+
+# 4. TREASURY INTELLIGENCE PANEL
+
+Purpose:
+Institutional treasury monitoring.
+
+Features:
+
+* reserve allocations
+* treasury inflows/outflows
+* protocol-owned liquidity
+* staking reserve analytics
+* operational allocations
+* ecosystem sustainability metrics
+* treasury diversification
+
+Visualize:
+
+* charts
+* pie allocations
+* trend analytics
+* reserve health scores
+
+---
+
+# 5. GOVERNANCE ANALYTICS DASHBOARD
+
+Features:
+
+* proposal activity
+* voting participation
+* quorum analytics
+* delegate influence
+* governance history
+* treasury proposal tracking
+
+Must feel:
+institutional and transparent.
+
+---
+
+# 6. STAKING & YIELD ANALYTICS
+
+Features:
+
+* staking TVL
+* staking APY
+* lock periods
+* staking pool utilization
+* rewards analytics
+* yield forecasts
+
+---
+
+# 7. GOVERNMENT PPP DASHBOARD
+
+Purpose:
+Public-private partnership monitoring.
+
+Features:
+
+* state partnership metrics
+* infrastructure funding flows
+* land development tracking
+* investment participation
+* regional treasury analytics
+* mineral tokenization visibility
+* carbon credit infrastructure
+
+This should look:
+government-grade and executive-level.
+
+---
+
+# 8. CARBON CREDIT INTELLIGENCE
+
+Features:
+
+* tokenized carbon metrics
+* environmental impact
+* regional sustainability tracking
+* carbon issuance
+* carbon trading metrics
+
+---
+
+# 9. ADMIN CONTROL CENTER
+
+Features:
+
+* property approvals
+* KYC monitoring
+* payout approvals
+* governance controls
+* treasury controls
+* oracle monitoring
+* audit logs
+* security alerts
+
+Must feel:
+enterprise-grade.
+
+---
+
+# FRONTEND ROUTES
+
+Create:
+
+* /dashboard
+* /land-registry
+* /properties
+* /treasury
+* /governance
+* /staking
+* /government
+* /carbon
+* /admin
+
+---
+
+# DATA ARCHITECTURE
+
+Use:
+
+* modular APIs
+* reusable services
+* clean architecture
+* typed responses
+* scalable state management
+
+Create:
+
+* services/api
+* services/contracts
+* hooks
+* stores
+* shared types
+
+---
+
+# RESPONSIVENESS
+
+Must support:
+
+* desktop
+* tablets
+* mobile
+* ultra-wide institutional displays
+
+---
+
+# ANIMATIONS
+
+Use Framer Motion carefully:
+
+* elegant transitions
+* premium motion
+* subtle animations
+* professional feel
+
+---
+
+# UX REQUIREMENTS
+
+Include:
+
+* loading states
+* skeleton loaders
+* empty states
+* disconnected wallet states
+* graceful error handling
+* dark mode optimized UI
+
+---
+
+# ADDITIONAL REQUIREMENTS
+
+* Strict TypeScript
+* Clean component structure
+* Reusable dashboard widgets
+* Enterprise-grade layout system
+* Realistic mock data where APIs are incomplete
+* Production-quality code
+* Vercel-ready deployment
+* Docker compatibility
+
+---
+
+# DELIVERABLE EXPECTATIONS
+
+Generate:
+
+* full dashboard architecture
+* reusable institutional component system
+* analytics pages
+* charts
+* KPI cards
+* maps/registry visualizations
+* treasury analytics
+* governance analytics
+* executive dashboards
+* admin interfaces
+* responsive layouts
+* scalable frontend/backend integration
+
+The result should look like:
+“African sovereign-grade digital asset and infrastructure intelligence platform.”

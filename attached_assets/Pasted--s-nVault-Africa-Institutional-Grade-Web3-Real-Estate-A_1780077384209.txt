@@ -1,0 +1,529 @@
+# ÒsánVault Africa — Institutional Grade Web3 Real Estate & Asset Infrastructure Platform
+
+You are a senior principal software architect, institutional fintech designer, blockchain engineer, DevOps engineer, and product strategist.
+
+Your task is to build a production-grade frontend and connected application ecosystem for ÒsánVault Africa — a Pan-African tokenized real-world asset platform focused on real estate, land ownership, REITs, staking, governance, treasury management, and blockchain-powered infrastructure.
+
+This is NOT a meme coin project.
+
+This is an institutional-grade African asset infrastructure platform comparable in ambition to:
+
+* BlackRock digital assets
+* Coinbase Institutional
+* Ondo Finance
+* RealT
+* Centrifuge
+* Polygon institutional tooling
+* Tokenized sovereign infrastructure platforms
+
+The system must feel:
+
+* premium,
+* scalable,
+* secure,
+* modern,
+* investor-ready,
+* and globally competitive.
+
+---
+
+# PROJECT CONTEXT
+
+ÒsánVault Africa enables:
+
+* tokenized African real estate,
+* fractional ownership,
+* land registry integration,
+* rental yield distribution,
+* staking,
+* governance,
+* treasury management,
+* carbon credit tokenization,
+* and future cross-border African asset infrastructure.
+
+The project already contains:
+
+* Solidity smart contracts,
+* backend/API structure,
+* monorepo architecture,
+* infra/devops structure,
+* treasury systems,
+* governance systems,
+* staking systems,
+* property NFT systems.
+
+Your responsibility is to build the FRONTEND + PLATFORM EXPERIENCE around the protocol infrastructure.
+
+---
+
+# EXISTING ARCHITECTURE
+
+Repository structure already contains:
+
+* apps/web
+* apps/api
+* apps/admin
+* evm/contracts
+* shared/sdk
+* shared/types
+* packages/shared
+* prisma
+* infra
+* bots
+* typechain-types
+
+Assume backend services and contracts already exist.
+
+DO NOT rebuild the blockchain backend from scratch.
+
+Instead:
+
+* integrate with existing architecture,
+* organize code professionally,
+* create scalable frontend systems,
+* and build reusable institutional-grade components.
+
+---
+
+# CORE TECHNOLOGY STACK
+
+Use:
+
+## Frontend
+
+* Next.js (latest stable)
+* React
+* TypeScript
+* TailwindCSS
+* shadcn/ui
+* Framer Motion
+
+## Web3
+
+* Wagmi
+* Viem
+* RainbowKit
+* Ethers.js (only if necessary)
+
+## State/Data
+
+* Zustand
+* React Query / TanStack Query
+* Axios
+
+## Charts
+
+* Recharts
+
+## Forms
+
+* React Hook Form
+* Zod
+
+## Backend Integration
+
+* REST APIs
+* Prisma-compatible data structures
+* Shared SDK integration
+
+## Deployment
+
+* Vercel-ready frontend
+* Docker-compatible
+* Production-ready environment variables
+
+---
+
+# BLOCKCHAIN TARGETS
+
+Primary networks:
+
+* Polygon
+* Arbitrum
+
+Testnets:
+
+* Polygon Amoy
+* Arbitrum Sepolia
+
+Wallets:
+
+* MetaMask
+* WalletConnect
+* Coinbase Wallet
+
+---
+
+# DESIGN LANGUAGE
+
+The UI must NOT resemble:
+
+* meme coin websites,
+* gambling dashboards,
+* neon cyberpunk casinos,
+* low-quality crypto clones.
+
+The design must resemble:
+
+* institutional fintech,
+* African sovereign infrastructure,
+* premium asset management platforms,
+* Bloomberg terminals,
+* Coinbase Institutional,
+* BlackRock digital products.
+
+Visual tone:
+
+* dark luxury,
+* deep emerald,
+* gold accents,
+* cinematic but restrained,
+* minimal,
+* high trust,
+* premium typography,
+* sophisticated motion design.
+
+---
+
+# COLOR SYSTEM
+
+Primary:
+
+* Emerald: #0E7C66
+* Deep Emerald: #064E3B
+
+Accent:
+
+* Gold: #D4AF37
+* Soft Gold: #E7C766
+
+Background:
+
+* #07111A
+* #0F172A
+* #111827
+
+Text:
+
+* #F8FAFC
+* #94A3B8
+
+---
+
+# TYPOGRAPHY
+
+Use:
+
+* Inter
+* Manrope
+* Space Grotesk (headings)
+
+---
+
+# REQUIRED APPLICATIONS
+
+Build all major frontend surfaces.
+
+---
+
+# 1. LANDING PAGE
+
+Create an institutional-grade landing page.
+
+Must include:
+
+* cinematic hero section,
+* African future-city visuals,
+* tokenized real estate positioning,
+* ecosystem overview,
+* protocol metrics,
+* roadmap,
+* governance overview,
+* treasury explanation,
+* staking/yield explanation,
+* compliance/security section,
+* ecosystem verticals,
+* CTA sections,
+* mobile responsiveness.
+
+Headline concept:
+“Own a Piece of Africa.”
+
+Subheadline should communicate:
+tokenized ownership infrastructure for African assets.
+
+---
+
+# 2. INVESTOR DASHBOARD
+
+Route:
+
+* /dashboard
+
+Features:
+
+* total portfolio value,
+* staking positions,
+* owned properties,
+* rental yield history,
+* treasury exposure,
+* governance power,
+* rewards claiming,
+* wallet balances,
+* chain switching,
+* recent transactions.
+
+Use realistic institutional charts.
+
+---
+
+# 3. PROPERTY MARKETPLACE
+
+Route:
+
+* /properties
+
+Features:
+
+* property cards,
+* property detail pages,
+* property images,
+* valuation metrics,
+* APY/yield,
+* ownership percentage,
+* NFT ownership visualization,
+* filters,
+* search,
+* property status,
+* funding progress bars.
+
+Include:
+
+* luxury apartments,
+* commercial assets,
+* land banking opportunities,
+* African city-focused investment products.
+
+---
+
+# 4. PROPERTY DETAIL PAGE
+
+Route:
+
+* /properties/[id]
+
+Features:
+
+* property gallery,
+* ROI projections,
+* blockchain ownership metrics,
+* investment breakdown,
+* token distribution,
+* documents,
+* smart contract references,
+* map integration,
+* rent distribution metrics.
+
+---
+
+# 5. GOVERNANCE PORTAL
+
+Route:
+
+* /governance
+
+Features:
+
+* proposal creation,
+* proposal voting,
+* treasury proposals,
+* quorum display,
+* proposal execution,
+* governance analytics,
+* delegate system.
+
+Must feel institutional.
+
+---
+
+# 6. STAKING PORTAL
+
+Route:
+
+* /staking
+
+Features:
+
+* staking APY,
+* lock periods,
+* rewards calculator,
+* claim interface,
+* historical rewards,
+* staking tiers,
+* treasury-backed staking pools.
+
+---
+
+# 7. TREASURY DASHBOARD
+
+Route:
+
+* /treasury
+
+Features:
+
+* treasury allocations,
+* reserve metrics,
+* protocol-owned liquidity,
+* asset distribution,
+* ecosystem revenue,
+* staking reserves,
+* operational treasury analytics.
+
+---
+
+# 8. ADMIN PANEL
+
+Route:
+
+* /admin
+
+Features:
+
+* property approvals,
+* KYC monitoring,
+* payout management,
+* governance administration,
+* treasury administration,
+* oracle controls,
+* analytics,
+* audit logs.
+
+Must feel enterprise-grade.
+
+---
+
+# 9. ECOSYSTEM PAGES
+
+Build:
+
+* /about
+* /roadmap
+* /security
+* /developers
+* /tokenomics
+* /partners
+
+---
+
+# SMART CONTRACT INTEGRATION
+
+Integrate with these contracts conceptually:
+
+* OSANVToken.sol
+* StakingVault.sol
+* Governance.sol
+* TreasuryVault.sol
+* PropertyNFT.sol
+* LandRegistry.sol
+* FeeRouter.sol
+* OsanCarbon.sol
+
+Use clean abstraction layers:
+
+* services/contracts
+* hooks
+* SDK utilities
+
+Do NOT hardcode everything directly into components.
+
+---
+
+# FRONTEND ARCHITECTURE
+
+Use scalable structure:
+
+src/
+app/
+components/
+components/ui/
+components/dashboard/
+components/property/
+components/governance/
+hooks/
+lib/
+services/
+services/contracts/
+services/api/
+services/wallet/
+store/
+styles/
+config/
+types/
+
+---
+
+# ANIMATIONS
+
+Use Framer Motion elegantly:
+
+* subtle transitions,
+* premium motion,
+* no excessive flashy animations.
+
+---
+
+# RESPONSIVENESS
+
+Must be:
+
+* fully mobile responsive,
+* tablet optimized,
+* widescreen optimized,
+* production quality.
+
+---
+
+# ADDITIONAL REQUIREMENTS
+
+* Use TypeScript strictly.
+* Use reusable component systems.
+* Use clean architecture patterns.
+* Use scalable state management.
+* Create realistic placeholder data where backend APIs are incomplete.
+* Build production-quality UI.
+* Use modular layouts.
+* Add loading states and skeletons.
+* Add empty states.
+* Add wallet disconnected states.
+* Add error handling UX.
+
+---
+
+# DELIVERABLE EXPECTATIONS
+
+Generate:
+
+* complete frontend architecture,
+* component system,
+* pages,
+* layouts,
+* routing,
+* contract integration scaffolding,
+* modern dashboards,
+* reusable UI system,
+* institutional animations,
+* responsive design,
+* deployable codebase.
+
+The output should look like:
+a venture-capital-ready institutional African fintech/Web3 infrastructure platform.
+
+This should feel capable of raising:
+
+* grants,
+* institutional funding,
+* strategic partnerships,
+* and government-level interest.
+
+Build with long-term scalability and institutional trust as the primary design philosophy.
