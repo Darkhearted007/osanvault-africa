@@ -94,7 +94,7 @@ function ProjectCard({ project }: { project: CarbonProject }) {
 }
 
 function RetireWizard({ projects }: { projects: CarbonProject[] }) {
-  const { isConnected } = useAccount();
+  const { isConnected, address } = useAccount();
   const [step, setStep] = useState<RetireStep>(1);
   const [selectedId, setSelectedId] = useState(projects[0]?.id ?? 1);
   const [amount, setAmount] = useState("");
@@ -122,7 +122,13 @@ function RetireWizard({ projects }: { projects: CarbonProject[] }) {
       address: OSANCARBON_ADDRESS,
       abi: OsanCarbonAbi,
       functionName: "retireCredits",
-      args: [BigInt(selectedId), BigInt(Math.floor(parseFloat(amount) * 1e18)), reason + (note ? ` — ${note}` : "")],
+      args: [
+        BigInt(selectedId),
+        BigInt(Math.floor(parseFloat(amount) * 1e18)),
+        address ?? "0x0000000000000000000000000000000000000000",
+        reason + (note ? ` — ${note}` : ""),
+        "",
+      ],
     });
   }
 
