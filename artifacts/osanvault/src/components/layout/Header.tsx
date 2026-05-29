@@ -17,13 +17,14 @@ const SECONDARY_NAV = [
   { href: "/staking", label: "Staking", icon: TrendingUp },
   { href: "/governance", label: "Governance", icon: Vote },
   { href: "/carbon", label: "Carbon Credits", icon: Leaf },
-  { href: "/issuer", label: "List a Property", icon: BadgeCheck },
   { href: "/whitelist", label: "Whitelist", icon: UserCheck },
   { href: "/admin", label: "Admin", icon: Shield },
   { href: "/portfolio", label: "Portfolio", icon: Briefcase },
 ];
 
-const MOBILE_ALL_NAV = [...PRIMARY_NAV, ...SECONDARY_NAV];
+const ISSUER_LINK = { href: "/issuer", label: "List a Property", icon: BadgeCheck };
+
+const MOBILE_ALL_NAV = [...PRIMARY_NAV, ISSUER_LINK, ...SECONDARY_NAV];
 
 export default function Header() {
   const [location] = useLocation();
@@ -62,6 +63,20 @@ export default function Header() {
                 <span className="relative">{link.label}</span>
               </Link>
             ))}
+
+            {/* List a Property — always-visible CTA tab */}
+            <Link
+              href="/issuer"
+              className={cn(
+                "relative ml-1 flex items-center gap-1.5 rounded-md border px-3 py-1.5 text-[13px] font-medium transition-all duration-150",
+                isActive("/issuer")
+                  ? "border-primary/60 bg-primary/15 text-primary"
+                  : "border-primary/25 bg-primary/8 text-primary/75 hover:border-primary/50 hover:bg-primary/15 hover:text-primary"
+              )}
+            >
+              <BadgeCheck className="h-3.5 w-3.5 shrink-0" />
+              <span>List a Property</span>
+            </Link>
 
             <div className="relative ml-0.5">
               <button
