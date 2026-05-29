@@ -13,6 +13,7 @@ import {
 } from "@/lib/mock-data";
 import { shortenAddress, explorerAddress } from "@/lib/contract";
 import Layout from "@/components/layout/Layout";
+import CinematicPageHeader from "@/components/ui/CinematicPageHeader";
 
 const MOCK_PROPERTY_HOLDINGS = [
   { propertyId: 1, tokens: 500 },
@@ -105,7 +106,16 @@ export default function PortfolioPage() {
 
   return (
     <Layout>
-      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-8">
+      <CinematicPageHeader
+        icon={Wallet}
+        eyebrow="Portfolio"
+        title="My Portfolio"
+        subtitle="Property fractions, carbon credits, staking positions and full transaction history"
+        imageUrl="https://images.unsplash.com/photo-1494522855154-9297ac14b55f?auto=format&fit=crop&w=1920&q=80"
+        kbVariant={5}
+        imagePosition="center 50%"
+      />
+      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-6">
         {/* Header */}
         <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-8">
           <div>

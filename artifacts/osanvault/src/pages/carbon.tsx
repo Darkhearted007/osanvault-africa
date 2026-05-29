@@ -16,6 +16,7 @@ import type { CarbonProject } from "@workspace/api-client-react";
 import { useListCarbonProjects, useGetPlatformStats } from "@workspace/api-client-react";
 import { OSANCARBON_ADDRESS, OsanCarbonAbi, IS_CONTRACT_DEPLOYED, explorerTx } from "@/lib/contract";
 import Layout from "@/components/layout/Layout";
+import CinematicPageHeader from "@/components/ui/CinematicPageHeader";
 
 const REASON_PRESETS = [
   { emoji: "🌍", label: "Corporate ESG offset" },
@@ -330,7 +331,21 @@ export default function CarbonPage() {
 
   return (
     <Layout>
-      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-8">
+      <CinematicPageHeader
+        icon={Leaf}
+        eyebrow="Layer 5 · Carbon"
+        title="Carbon Credits"
+        subtitle="Verified tCO₂e from 5 African climate projects — ERC-1155 on-chain retirement"
+        imageUrl="https://images.unsplash.com/photo-1586348943529-beaae6c28db9?auto=format&fit=crop&w=1920&q=80"
+        kbVariant={1}
+        imagePosition="center 40%"
+        stats={[
+          { label: "tCO₂e Issued", value: "57.4K", color: "text-emerald-400" },
+          { label: "Projects", value: "5" },
+          { label: "Verified", value: "4", color: "text-primary" },
+        ]}
+      />
+      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-6">
         {/* Header */}
         <motion.div initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} className="mb-8">
           <h1 className="text-3xl font-bold text-foreground">Carbon Credits</h1>

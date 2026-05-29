@@ -10,6 +10,7 @@ import {
 import { Link } from "wouter";
 import { formatNgn } from "@/lib/mock-data";
 import Layout from "@/components/layout/Layout";
+import CinematicPageHeader from "@/components/ui/CinematicPageHeader";
 
 const STATE_PARTNERS = [
   {
@@ -133,7 +134,21 @@ const activePartners = STATE_PARTNERS.filter(s => s.status === "active").length;
 export default function GovernmentPage() {
   return (
     <Layout>
-      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-8">
+      <CinematicPageHeader
+        icon={Building2}
+        eyebrow="Government Intelligence"
+        title="Government PPP"
+        subtitle="State public-private partnership programs and regulatory compliance dashboard"
+        imageUrl="https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?auto=format&fit=crop&w=1920&q=80"
+        kbVariant={4}
+        imagePosition="center 50%"
+        stats={[
+          { label: "State Partners", value: "6", color: "text-primary" },
+          { label: "Active Projects", value: "14" },
+          { label: "Compliance", value: "100%", color: "text-emerald-400" },
+        ]}
+      />
+      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-6">
         {/* Header */}
         <motion.div initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} className="mb-8">
           <p className="text-xs font-semibold text-primary uppercase tracking-widest mb-2">Government Intelligence</p>

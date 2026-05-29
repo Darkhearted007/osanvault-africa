@@ -253,6 +253,28 @@
   background-clip: text;
 }
 
+/* ── Ken Burns cinematic animations ── */
+@keyframes kb-1 {
+  0%   { transform: scale(1.05) translate(0%,    0%);    }
+  100% { transform: scale(1.13) translate(-1.8%, -1.2%); }
+}
+@keyframes kb-2 {
+  0%   { transform: scale(1.05) translate(1.2%,  0.8%);  }
+  100% { transform: scale(1.12) translate(-0.6%, -1.8%); }
+}
+@keyframes kb-3 {
+  0%   { transform: scale(1.06) translate(-1.2%, 1.2%);  }
+  100% { transform: scale(1.13) translate(1.4%,  -0.6%); }
+}
+@keyframes kb-4 {
+  0%   { transform: scale(1.07) translate(0.8%,  -0.8%); }
+  100% { transform: scale(1.13) translate(-1.4%, 0.6%);  }
+}
+@keyframes kb-5 {
+  0%   { transform: scale(1.04) translate(-0.6%, 0.6%);  }
+  100% { transform: scale(1.11) translate(1.8%,  -1.4%); }
+}
+
 /* Mesh gradient background */
 .bg-mesh {
   background-color: hsl(212 58% 6%);
