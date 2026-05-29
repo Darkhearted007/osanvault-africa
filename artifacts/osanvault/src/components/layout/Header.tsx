@@ -46,41 +46,45 @@ export default function Header() {
             <OsanVaultLockup markSize={30} />
           </Link>
 
-          {/* Scrollable nav row — flex-1 so it fills space between logo and wallet */}
-          <nav className="hidden lg:flex flex-1 min-w-0 overflow-x-auto scrollbar-hide items-center gap-0.5">
-            {PRIMARY_NAV.map((link) => (
+          {/* Nav row — scrollable primary links + More dropdown outside the overflow container */}
+          <nav className="hidden lg:flex flex-1 min-w-0 items-center">
+            {/* Scrollable primary links — overflow-x only, no y clipping */}
+            <div className="flex min-w-0 flex-1 overflow-x-auto scrollbar-hide items-center gap-0.5">
+              {PRIMARY_NAV.map((link) => (
+                <Link
+                  key={link.href}
+                  href={link.href}
+                  className={cn(
+                    "relative shrink-0 rounded-md px-3 py-1.5 text-[13px] font-medium transition-all duration-150",
+                    isActive(link.href)
+                      ? "text-white"
+                      : "text-white/45 hover:text-white/85"
+                  )}
+                >
+                  {isActive(link.href) && (
+                    <span className="absolute inset-0 rounded-md bg-white/[0.07]" />
+                  )}
+                  <span className="relative">{link.label}</span>
+                </Link>
+              ))}
+
+              {/* List a Property — always-visible CTA tab */}
               <Link
-                key={link.href}
-                href={link.href}
+                href="/issuer"
                 className={cn(
-                  "relative rounded-md px-3 py-1.5 text-[13px] font-medium transition-all duration-150",
-                  isActive(link.href)
-                    ? "text-white"
-                    : "text-white/45 hover:text-white/85"
+                  "relative ml-1 shrink-0 flex items-center gap-1.5 rounded-md border px-3 py-1.5 text-[13px] font-medium transition-all duration-150",
+                  isActive("/issuer")
+                    ? "border-primary/60 bg-primary/15 text-primary"
+                    : "border-primary/25 bg-primary/8 text-primary/75 hover:border-primary/50 hover:bg-primary/15 hover:text-primary"
                 )}
               >
-                {isActive(link.href) && (
-                  <span className="absolute inset-0 rounded-md bg-white/[0.07]" />
-                )}
-                <span className="relative">{link.label}</span>
+                <BadgeCheck className="h-3.5 w-3.5 shrink-0" />
+                <span>List a Property</span>
               </Link>
-            ))}
+            </div>
 
-            {/* List a Property — always-visible CTA tab */}
-            <Link
-              href="/issuer"
-              className={cn(
-                "relative ml-1 flex items-center gap-1.5 rounded-md border px-3 py-1.5 text-[13px] font-medium transition-all duration-150",
-                isActive("/issuer")
-                  ? "border-primary/60 bg-primary/15 text-primary"
-                  : "border-primary/25 bg-primary/8 text-primary/75 hover:border-primary/50 hover:bg-primary/15 hover:text-primary"
-              )}
-            >
-              <BadgeCheck className="h-3.5 w-3.5 shrink-0" />
-              <span>List a Property</span>
-            </Link>
-
-            <div className="relative ml-0.5">
+            {/* More dropdown — lives OUTSIDE the overflow container so the menu isn't clipped */}
+            <div className="relative ml-0.5 shrink-0">
               <button
                 onClick={() => setMoreOpen(!moreOpen)}
                 className={cn(
@@ -92,9 +96,9 @@ export default function Header() {
               </button>
               {moreOpen && (
                 <>
-                  <div className="fixed inset-0 z-10" onClick={() => setMoreOpen(false)} />
+                  <div className="fixed inset-0 z-40" onClick={() => setMoreOpen(false)} />
                   <div
-                    className="absolute right-0 top-full mt-1.5 z-20 w-48 rounded-xl border border-white/[0.08] py-1.5 shadow-2xl"
+                    className="absolute right-0 top-full mt-1.5 z-50 w-48 rounded-xl border border-white/[0.08] py-1.5 shadow-2xl"
                     style={{ background: "rgba(10, 15, 28, 0.98)", backdropFilter: "blur(24px)" }}
                   >
                     {SECONDARY_NAV.map((link) => {

@@ -19,6 +19,14 @@ import Layout from "@/components/layout/Layout";
 import CinematicPageHeader from "@/components/ui/CinematicPageHeader";
 import RetirementCertificate, { generateCertId, type CertificateData } from "@/components/ui/RetirementCertificate";
 
+const PROJECT_IMAGES: Record<number, string> = {
+  1: "https://images.unsplash.com/photo-1448375240586-882707db888b?auto=format&fit=crop&w=800&q=65",
+  2: "https://images.unsplash.com/photo-1509391366360-2e959784a276?auto=format&fit=crop&w=800&q=65",
+  3: "https://images.unsplash.com/photo-1504233529578-6d46baba6d34?auto=format&fit=crop&w=800&q=65",
+  4: "https://images.unsplash.com/photo-1486325212027-8081e485255e?auto=format&fit=crop&w=800&q=65",
+  5: "https://images.unsplash.com/photo-1505118380757-91f5f5632de0?auto=format&fit=crop&w=800&q=65",
+};
+
 const REASON_PRESETS = [
   { emoji: "🌍", label: "Corporate ESG offset" },
   { emoji: "✈️", label: "Travel offset" },
@@ -28,14 +36,25 @@ const REASON_PRESETS = [
 
 type RetireStep = 1 | 2 | 3 | "success";
 
-function ProjectCard({ project }: { project: CarbonProject }) {
+function ProjectCard({ project, imageUrl }: { project: CarbonProject; imageUrl?: string }) {
   const issuedBig = BigInt(project.totalIssued);
   const retiredBig = BigInt(project.totalRetired);
   const retiredPct = issuedBig > 0n
     ? Math.round(Number((retiredBig * 100n) / issuedBig))
     : 0;
   return (
-    <div className="bg-card border border-card-border rounded-xl p-5">
+    <div className="bg-card border border-card-border rounded-xl overflow-hidden">
+      {imageUrl && (
+        <div className="h-36 overflow-hidden">
+          <img
+            src={imageUrl}
+            alt={project.name}
+            className="w-full h-full object-cover transition-transform duration-500 hover:scale-105"
+            loading="lazy"
+          />
+        </div>
+      )}
+      <div className="p-5">
       <div className="flex items-start justify-between mb-3">
         <div className="flex items-center gap-2.5">
           <span className="text-2xl">{project.flag}</span>
@@ -88,6 +107,7 @@ function ProjectCard({ project }: { project: CarbonProject }) {
             style={{ width: `${retiredPct}%` }}
           />
         </div>
+      </div>
       </div>
     </div>
   );
@@ -448,7 +468,7 @@ export default function CarbonPage() {
             <h2 className="text-lg font-semibold text-foreground mb-4">Climate Projects</h2>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               {projects.map((p) => (
-                <ProjectCard key={p.id} project={p} />
+                <ProjectCard key={p.id} project={p} imageUrl={PROJECT_IMAGES[p.id]} />
               ))}
             </div>
           </div>
