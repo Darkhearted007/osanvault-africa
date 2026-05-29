@@ -33,6 +33,10 @@ export default function PropertyDetailPage() {
   const { isConnected } = useAccount();
 
   const [tokenAmount, setTokenAmount] = useState("");
+  // All hooks must be called unconditionally before any early returns
+  const { writeContract, data: txHash, isPending } = useWriteContract();
+  const { isLoading: isConfirming } = useWaitForTransactionReceipt({ hash: txHash });
+
   const parsedAmount = parseInt(tokenAmount) || 0;
   const totalCostNgn = parsedAmount * (property?.tokenPrice ?? 0);
 
@@ -66,9 +70,6 @@ export default function PropertyDetailPage() {
   }
 
   const pct = fundingPct(property);
-
-  const { writeContract, data: txHash, isPending } = useWriteContract();
-  const { isLoading: isConfirming } = useWaitForTransactionReceipt({ hash: txHash });
 
   function handleInvest() {
     if (!isConnected || !property || parsedAmount <= 0) return;
