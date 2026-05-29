@@ -12,6 +12,15 @@ import { useListProperties, useGetPlatformStats } from "@workspace/api-client-re
 import Layout from "@/components/layout/Layout";
 import CinematicPageHeader from "@/components/ui/CinematicPageHeader";
 
+const PROPERTY_IMAGES: Record<number, string> = {
+  1: "https://images.unsplash.com/photo-1586348943529-beaae6c28db9?auto=format&fit=crop&w=800&q=70",
+  2: "https://images.unsplash.com/photo-1509391366360-2e959784a276?auto=format&fit=crop&w=800&q=70",
+  3: "https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?auto=format&fit=crop&w=800&q=70",
+  4: "https://images.unsplash.com/photo-1512917774080-9991f1c4c750?auto=format&fit=crop&w=800&q=70",
+  5: "https://images.unsplash.com/photo-1518005020951-eccb494ad742?auto=format&fit=crop&w=800&q=70",
+  6: "https://images.unsplash.com/photo-1560185893-a55cbc8c57e8?auto=format&fit=crop&w=800&q=70",
+};
+
 type FilterType = "All" | "LandBank" | "Commercial" | "Residential" | "Industrial" | "Mixed";
 type FilterStatus = "All" | "live" | "funding" | "closed";
 
@@ -31,26 +40,42 @@ const TYPE_COLORS: Record<string, string> = {
 
 function PropertyCard({ property }: { property: Property }) {
   const pct = fundingPct(property);
+  const cardImg = PROPERTY_IMAGES[property.id as keyof typeof PROPERTY_IMAGES];
   return (
     <Link href={`/properties/${property.id}`}>
       <motion.div
         whileHover={{ y: -2 }}
-        className="bg-card border border-card-border rounded-xl overflow-hidden shadow-sm hover:shadow-md transition-all cursor-pointer h-full flex flex-col"
+        className="bg-card border border-card-border rounded-xl overflow-hidden shadow-sm hover:shadow-lg transition-all cursor-pointer h-full flex flex-col group"
       >
-        {/* Gradient header */}
+        {/* Photo header */}
         <div
-          className="h-28 flex items-end p-4"
+          className="h-36 relative overflow-hidden"
           style={{ background: `linear-gradient(135deg, ${property.gradientFrom}, ${property.gradientTo})` }}
         >
-          <div className="flex items-center justify-between w-full">
-            <span className="text-3xl">{property.flag}</span>
-            <div className="flex items-center gap-2">
-              <span className={`text-xs font-medium px-2 py-0.5 rounded-full capitalize ${STATUS_COLORS[property.status]}`}>
-                {property.status}
-              </span>
-              <span className={`text-xs font-medium px-2 py-0.5 rounded-full ${TYPE_COLORS[property.type]}`}>
-                {property.type}
-              </span>
+          {cardImg && (
+            <img
+              src={cardImg}
+              alt={property.name}
+              loading="lazy"
+              decoding="async"
+              className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+            />
+          )}
+          {/* dark-to-transparent overlay for readability */}
+          <div className="absolute inset-0" style={{ background: "linear-gradient(to bottom, rgba(7,14,26,0.15) 0%, rgba(7,14,26,0.60) 100%)" }} />
+          {/* brand tint */}
+          <div className="absolute inset-0" style={{ background: `linear-gradient(135deg, ${property.gradientFrom}55 0%, transparent 65%)` }} />
+          <div className="absolute inset-0 flex items-end p-4 z-10">
+            <div className="flex items-center justify-between w-full">
+              <span className="text-3xl drop-shadow">{property.flag}</span>
+              <div className="flex items-center gap-2">
+                <span className={`text-xs font-medium px-2 py-0.5 rounded-full capitalize backdrop-blur-sm ${STATUS_COLORS[property.status]}`}>
+                  {property.status}
+                </span>
+                <span className={`text-xs font-medium px-2 py-0.5 rounded-full backdrop-blur-sm ${TYPE_COLORS[property.type]}`}>
+                  {property.type}
+                </span>
+              </div>
             </div>
           </div>
         </div>
