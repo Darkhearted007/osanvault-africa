@@ -9,6 +9,7 @@ import {
   FileText, Hash, Search, ExternalLink, RefreshCw,
   Building2, ChevronRight,
 } from "lucide-react";
+import { IS_CONTRACT_DEPLOYED, LAND_REGISTRY_CONTRACT, explorerAddress } from "@/lib/contract";
 import Layout from "@/components/layout/Layout";
 
 const PARCELS = [
