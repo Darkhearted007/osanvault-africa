@@ -3,7 +3,7 @@ import { motion } from "framer-motion";
 import { Link } from "wouter";
 import {
   ArrowRight, Building2, Coins, Shield, Globe, Leaf, TrendingUp,
-  Users, ChevronRight, Zap, BarChart3, Lock,
+  Users, ChevronRight, Zap, BarChart3, Lock, Star,
 } from "lucide-react";
 import {
   PLATFORM_STATS,
@@ -396,7 +396,7 @@ export default function HomePage() {
       <section className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-20">
         <motion.div
           variants={fadeUp} initial="hidden" whileInView="visible" viewport={{ once: true }}
-          className="relative overflow-hidden rounded-2xl p-10 text-center"
+          className="relative overflow-hidden rounded-2xl p-10 sm:p-14 text-center"
         >
           {/* Panoramic architectural background */}
           <div className="absolute inset-0 overflow-hidden rounded-2xl">
@@ -411,21 +411,40 @@ export default function HomePage() {
             <div className="absolute inset-0 rounded-2xl" style={{ background: "linear-gradient(135deg, rgba(14,124,102,0.45) 0%, rgba(7,14,26,0.75) 50%, rgba(212,175,55,0.25) 100%)" }} />
             <div className="absolute inset-0 bg-grid-overlay opacity-25 rounded-2xl" />
           </div>
-          {/* Border shimmer */}
           <div className="absolute inset-0 rounded-2xl" style={{ border: "1px solid rgba(14,124,102,0.35)", boxShadow: "inset 0 0 60px rgba(14,124,102,0.08), 0 0 80px rgba(14,124,102,0.10)" }} />
 
           <div className="relative z-10">
+            {/* Early access badge */}
+            <div className="inline-flex items-center gap-1.5 rounded-full border border-amber-400/30 bg-amber-400/10 px-4 py-1.5 text-xs font-semibold text-amber-400 uppercase tracking-widest mb-6">
+              <Star className="h-3 w-3" />
+              Pre-Launch — Early Access Open
+            </div>
+
             <h2 className="font-display text-3xl sm:text-4xl font-bold text-white mb-4">
               Ready to own a piece of Africa?
             </h2>
-            <p className="text-white/55 mb-8 max-w-md mx-auto text-sm" style={{ textShadow: "0 1px 4px rgba(0,0,0,0.5)" }}>
-              Join {PLATFORM_STATS.totalInvestors.toLocaleString()} investors already building wealth through African real estate tokenization.
+            <p className="text-white/55 mb-8 max-w-lg mx-auto text-sm" style={{ textShadow: "0 1px 4px rgba(0,0,0,0.5)" }}>
+              Join early investors securing priority allocation in Africa's first institutional
+              real estate tokenization platform. No wallet needed to register.
             </p>
-            <Link href="/properties">
-              <button className="inline-flex items-center gap-2.5 bg-primary hover:bg-primary/90 text-white font-semibold px-8 py-4 rounded-xl text-sm transition-all shadow-[0_0_32px_rgba(14,124,102,0.5)] hover:shadow-[0_0_56px_rgba(14,124,102,0.65)]">
-                Explore Properties <ArrowRight className="h-4 w-4" />
-              </button>
-            </Link>
+
+            <div className="flex flex-col sm:flex-row items-center justify-center gap-3">
+              <Link href="/early-access">
+                <button className="inline-flex items-center gap-2.5 bg-amber-400 hover:bg-amber-300 text-black font-bold px-8 py-4 rounded-xl text-sm transition-all shadow-[0_0_32px_rgba(212,160,23,0.4)] hover:shadow-[0_0_56px_rgba(212,160,23,0.6)]">
+                  <Star className="h-4 w-4" />
+                  Request Early Access
+                </button>
+              </Link>
+              <Link href="/properties">
+                <button className="inline-flex items-center gap-2.5 border border-white/20 bg-white/8 hover:bg-white/15 text-white font-semibold px-8 py-4 rounded-xl text-sm transition-all backdrop-blur-sm">
+                  Explore Properties <ArrowRight className="h-4 w-4" />
+                </button>
+              </Link>
+            </div>
+
+            <p className="text-white/30 text-xs mt-6">
+              SEC ARIP Sandbox · Polygon Network · Dual Land Verification
+            </p>
           </div>
         </motion.div>
       </section>

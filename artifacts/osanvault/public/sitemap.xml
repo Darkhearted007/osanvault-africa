@@ -53,6 +53,13 @@
   </url>
 
   <url>
+    <loc>https://osanvaultafrica.com/early-access</loc>
+    <lastmod>2026-05-29</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.90</priority>
+  </url>
+
+  <url>
     <loc>https://osanvaultafrica.com/whitelist</loc>
     <lastmod>2026-05-29</lastmod>
     <changefreq>monthly</changefreq>

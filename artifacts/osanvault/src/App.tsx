@@ -22,6 +22,7 @@ import LegalSecAripPage from "@/pages/legal-sec-arip";
 import LegalTermsPage from "@/pages/legal-terms";
 import LegalPrivacyPage from "@/pages/legal-privacy";
 import LegalRiskPage from "@/pages/legal-risk";
+import EarlyAccessPage from "@/pages/early-access";
 import NotFound from "@/pages/not-found";
 
 function ScrollToTop() {
@@ -57,6 +58,7 @@ function Router() {
         <Route path="/terms" component={LegalTermsPage} />
         <Route path="/privacy" component={LegalPrivacyPage} />
         <Route path="/risk-disclosure" component={LegalRiskPage} />
+        <Route path="/early-access" component={EarlyAccessPage} />
         <Route component={NotFound} />
       </Switch>
     </>

@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Link, useLocation } from "wouter";
 import { ConnectButton } from "@rainbow-me/rainbowkit";
-import { Menu, X, ChevronDown, LayoutDashboard, Building2, Map, Landmark, Vault, TrendingUp, Vote, Leaf, Shield, Briefcase, BadgeCheck, UserCheck } from "lucide-react";
+import { Menu, X, ChevronDown, LayoutDashboard, Building2, Map, Landmark, Vault, TrendingUp, Vote, Leaf, Shield, Briefcase, BadgeCheck, UserCheck, Star } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { OsanVaultLockup } from "@/components/ui/OsanVaultLogo";
 
@@ -24,7 +24,8 @@ const SECONDARY_NAV = [
 
 const ISSUER_LINK = { href: "/issuer", label: "List a Property", icon: BadgeCheck };
 
-const MOBILE_ALL_NAV = [...PRIMARY_NAV, ISSUER_LINK, ...SECONDARY_NAV];
+const EARLY_ACCESS_LINK = { href: "/early-access", label: "Early Investor Access", icon: Star };
+const MOBILE_ALL_NAV = [EARLY_ACCESS_LINK, ...PRIMARY_NAV, ISSUER_LINK, ...SECONDARY_NAV];
 
 export default function Header() {
   const [location] = useLocation();
@@ -122,6 +123,18 @@ export default function Header() {
           </nav>
 
           <div className="shrink-0 flex items-center gap-3">
+            <Link
+              href="/early-access"
+              className={cn(
+                "hidden lg:flex items-center gap-1.5 rounded-lg border px-3 py-1.5 text-[13px] font-semibold transition-all duration-150",
+                isActive("/early-access")
+                  ? "border-amber-400/60 bg-amber-400/15 text-amber-400"
+                  : "border-amber-400/30 bg-amber-400/8 text-amber-400/80 hover:border-amber-400/55 hover:bg-amber-400/15 hover:text-amber-400"
+              )}
+            >
+              <Star className="h-3 w-3 shrink-0" />
+              Early Access
+            </Link>
             <div className="hidden md:block">
               <ConnectButton accountStatus="avatar" chainStatus="icon" showBalance={false} />
             </div>

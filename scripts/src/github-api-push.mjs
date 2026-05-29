@@ -98,7 +98,7 @@ async function main() {
   }
   console.log(`Remote tree has ${Object.keys(remoteFiles).length} blobs.`);
 
-  // ── 5. Local tree ───────────────────────────────────────────────────────────
+  // ── 5. Local tree (HEAD + working-tree changes) ─────────────────────────────
   const lsTree = execSync('git --no-optional-locks ls-tree -r HEAD', { cwd: CWD, encoding: 'utf8' })
     .trim().split('\n').filter(Boolean)
     .map(line => {
@@ -106,11 +106,33 @@ async function main() {
       const meta = line.slice(0, tab).split(' ');
       return { mode: meta[0], type: meta[1], sha: meta[2], path: line.slice(tab + 1) };
     });
-  console.log(`Local tree has ${lsTree.length} blobs.`);
+
+  // Overlay working-tree modifications and untracked files not yet committed.
+  // git diff HEAD gives modified/deleted tracked files; ls-files --others gives untracked.
+  const modifiedLines = execSync(
+    'git --no-optional-locks diff HEAD --name-only', { cwd: CWD, encoding: 'utf8' }
+  ).trim().split('\n').filter(Boolean);
+  const untrackedLines = execSync(
+    'git --no-optional-locks ls-files --others --exclude-standard', { cwd: CWD, encoding: 'utf8' }
+  ).trim().split('\n').filter(Boolean);
+
+  const workingTreePaths = new Set([...modifiedLines, ...untrackedLines]);
+
+  // Mark modified tracked files with a sentinel SHA so they always upload.
+  const lsTreeMap = new Map(lsTree.map(f => [f.path, f]));
+  for (const p of modifiedLines) {
+    if (lsTreeMap.has(p)) lsTreeMap.get(p).sha = 'dirty-' + p;
+    else lsTreeMap.set(p, { mode: '100644', type: 'blob', sha: 'dirty-' + p, path: p });
+  }
+  for (const p of untrackedLines) {
+    if (!lsTreeMap.has(p)) lsTreeMap.set(p, { mode: '100644', type: 'blob', sha: 'new-' + p, path: p });
+  }
+  const localTree = Array.from(lsTreeMap.values());
+  console.log(`Local tree has ${localTree.length} blobs (${workingTreePaths.size} working-tree changes).`);
 
   // ── 6. Diff: only upload files that are new or changed ──────────────────────
-  const toUpload = lsTree.filter(f => remoteFiles[f.path] !== f.sha);
-  const toRemove = Object.keys(remoteFiles).filter(p => !lsTree.find(f => f.path === p));
+  const toUpload = localTree.filter(f => remoteFiles[f.path] !== f.sha);
+  const toRemove = Object.keys(remoteFiles).filter(p => !localTree.find(f => f.path === p));
   console.log(`\nDiff: ${toUpload.length} new/changed, ${toRemove.length} deleted.`);
 
   if (toUpload.length === 0 && toRemove.length === 0) {
