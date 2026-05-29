@@ -19,10 +19,10 @@ const FOOTER_LINKS = {
     { label: "Security", href: "/about#security" },
   ],
   Legal: [
-    { label: "SEC ARIP Sandbox", href: "#" },
-    { label: "Terms of Service", href: "#" },
-    { label: "Privacy Policy", href: "#" },
-    { label: "Risk Disclosure", href: "#" },
+    { label: "SEC ARIP Sandbox", href: "/sec-arip" },
+    { label: "Terms of Service", href: "/terms" },
+    { label: "Privacy Policy", href: "/privacy" },
+    { label: "Risk Disclosure", href: "/risk-disclosure" },
   ],
 };
 

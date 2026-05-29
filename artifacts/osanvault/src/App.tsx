@@ -18,6 +18,10 @@ import IssuerPage from "@/pages/issuer";
 import WhitelistPage from "@/pages/whitelist";
 import AboutPage from "@/pages/about";
 import TokenomicsPage from "@/pages/tokenomics";
+import LegalSecAripPage from "@/pages/legal-sec-arip";
+import LegalTermsPage from "@/pages/legal-terms";
+import LegalPrivacyPage from "@/pages/legal-privacy";
+import LegalRiskPage from "@/pages/legal-risk";
 import NotFound from "@/pages/not-found";
 
 function ScrollToTop() {
@@ -49,6 +53,10 @@ function Router() {
         <Route path="/whitelist" component={WhitelistPage} />
         <Route path="/about" component={AboutPage} />
         <Route path="/tokenomics" component={TokenomicsPage} />
+        <Route path="/sec-arip" component={LegalSecAripPage} />
+        <Route path="/terms" component={LegalTermsPage} />
+        <Route path="/privacy" component={LegalPrivacyPage} />
+        <Route path="/risk-disclosure" component={LegalRiskPage} />
         <Route component={NotFound} />
       </Switch>
     </>
