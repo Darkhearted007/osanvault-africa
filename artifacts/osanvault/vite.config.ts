@@ -57,6 +57,7 @@ export default defineConfig({
   build: {
     outDir: path.resolve(import.meta.dirname, "dist/public"),
     emptyOutDir: true,
+    sourcemap: true,
     rollupOptions: {
       output: {
         manualChunks: {
@@ -75,6 +76,13 @@ export default defineConfig({
     allowedHosts: true,
     fs: {
       strict: true,
+    },
+    headers: {
+      "X-Content-Type-Options":    "nosniff",
+      "X-Frame-Options":           "DENY",
+      "Referrer-Policy":           "strict-origin-when-cross-origin",
+      "Permissions-Policy":        "camera=(), microphone=(), geolocation=(), payment=()",
+      "Cross-Origin-Opener-Policy":"same-origin",
     },
   },
   preview: {

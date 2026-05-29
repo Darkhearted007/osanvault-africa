@@ -18,9 +18,15 @@ export const polygonAmoy = defineChain({
   testnet: true,
 });
 
+const WC_PROJECT_ID =
+  import.meta.env.VITE_WALLETCONNECT_PROJECT_ID ?? "b86f11c788305f48bcdea105398e43bd";
+
 export const wagmiConfig = getDefaultConfig({
-  appName: "OsanVault Africa",
-  projectId: "b86f11c788305f48bcdea105398e43bd",
-  chains: [polygonAmoy],
-  ssr: false,
+  appName:        "OsanVault Africa",
+  appDescription: "Africa's institutional-grade real estate tokenization platform on Polygon.",
+  appUrl:         "https://osanvaultafrica.com",
+  appIcon:        "https://osanvaultafrica.com/favicon.png",
+  projectId:      WC_PROJECT_ID,
+  chains:         [polygonAmoy],
+  ssr:            false,
 });
