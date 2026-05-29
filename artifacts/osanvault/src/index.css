@@ -137,8 +137,8 @@
   --sidebar-accent-foreground: 220 40% 8%;
   --sidebar-ring: 168 79% 40%;
 
-  --app-font-sans: "Inter", "SF Pro Text", -apple-system, sans-serif;
-  --app-font-display: "Space Grotesk", "Manrope", "Inter", sans-serif;
+  --app-font-sans: "Space Grotesk", "SF Pro Text", -apple-system, ui-sans-serif, sans-serif;
+  --app-font-display: "Space Grotesk", ui-sans-serif, sans-serif;
   --app-font-serif: Georgia, serif;
   --app-font-mono: "Fira Code", Menlo, monospace;
   --radius: 0.625rem;

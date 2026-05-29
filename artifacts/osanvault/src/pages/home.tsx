@@ -22,16 +22,16 @@ const fadeUp = {
 /* ── Cinematic image pools ─────────────────────────────────────────────────── */
 
 const HERO_SLIDES: CinematicSlide[] = [
-  // Aerial city at night — institutional dark skyline
-  { url: "https://images.unsplash.com/photo-1486325212027-8081e485255e?auto=format&fit=crop&w=1920&q=80", kb: 1, position: "center 40%" },
+  // Aerial city at night — institutional dark skyline (first slide: slightly higher quality for LCP)
+  { url: "https://images.unsplash.com/photo-1486325212027-8081e485255e?auto=format&fit=crop&w=1920&q=65", kb: 1, position: "center 40%" },
   // Blue-hour city skyline — twilight tower panoramic
-  { url: "https://images.unsplash.com/photo-1477959858617-67f85cf4f1df?auto=format&fit=crop&w=1920&q=80", kb: 2, position: "center 30%" },
+  { url: "https://images.unsplash.com/photo-1477959858617-67f85cf4f1df?auto=format&fit=crop&w=1920&q=50", kb: 2, position: "center 30%" },
   // Luxury residential tower — premium high-rise exterior
-  { url: "https://images.unsplash.com/photo-1512917774080-9991f1c4c750?auto=format&fit=crop&w=1920&q=80", kb: 3, position: "center 50%" },
+  { url: "https://images.unsplash.com/photo-1512917774080-9991f1c4c750?auto=format&fit=crop&w=1920&q=50", kb: 3, position: "center 50%" },
   // Modern luxury villa — high-value residential
-  { url: "https://images.unsplash.com/photo-1580587771525-78b9dba3b914?auto=format&fit=crop&w=1920&q=80", kb: 4, position: "center 45%" },
+  { url: "https://images.unsplash.com/photo-1580587771525-78b9dba3b914?auto=format&fit=crop&w=1920&q=50", kb: 4, position: "center 45%" },
   // Smart glass tower facade — institutional commercial
-  { url: "https://images.unsplash.com/photo-1494522855154-9297ac14b55f?auto=format&fit=crop&w=1920&q=80", kb: 5, position: "center 50%" },
+  { url: "https://images.unsplash.com/photo-1494522855154-9297ac14b55f?auto=format&fit=crop&w=1920&q=50", kb: 5, position: "center 50%" },
 ];
 
 /* Property card photo map — keyed by property ID */
@@ -46,9 +46,9 @@ const PROPERTY_IMAGES: Record<number, string> = {
 
 /* Section background images */
 const SECTION_BG = {
-  verticals: "https://images.unsplash.com/photo-1486325212027-8081e485255e?auto=format&fit=crop&w=1920&q=60",
-  trust:     "https://images.unsplash.com/photo-1546436836-07a91091f160?auto=format&fit=crop&w=1920&q=60",
-  cta:       "https://images.unsplash.com/photo-1477959858617-67f85cf4f1df?auto=format&fit=crop&w=1920&q=70",
+  verticals: "https://images.unsplash.com/photo-1486325212027-8081e485255e?auto=format&fit=crop&w=1920&q=40",
+  trust:     "https://images.unsplash.com/photo-1546436836-07a91091f160?auto=format&fit=crop&w=1920&q=40",
+  cta:       "https://images.unsplash.com/photo-1477959858617-67f85cf4f1df?auto=format&fit=crop&w=1920&q=45",
 };
 
 /* ── Platform content ──────────────────────────────────────────────────────── */

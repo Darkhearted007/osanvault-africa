@@ -58,13 +58,18 @@ export default defineConfig({
     outDir: path.resolve(import.meta.dirname, "dist/public"),
     emptyOutDir: true,
     sourcemap: true,
+    minify: "esbuild",
+    cssMinify: true,
+    target: "es2020",
+    reportCompressedSize: false,
     rollupOptions: {
       output: {
         manualChunks: {
-          "vendor-react":  ["react", "react-dom"],
-          "vendor-web3":   ["wagmi", "viem", "@rainbow-me/rainbowkit"],
-          "vendor-charts": ["recharts"],
-          "vendor-motion": ["framer-motion"],
+          "vendor-react":      ["react", "react-dom"],
+          "vendor-wagmi":      ["wagmi", "viem"],
+          "vendor-rainbowkit": ["@rainbow-me/rainbowkit"],
+          "vendor-charts":     ["recharts"],
+          "vendor-motion":     ["framer-motion"],
         },
       },
     },
@@ -82,7 +87,7 @@ export default defineConfig({
       "X-Frame-Options":           "DENY",
       "Referrer-Policy":           "strict-origin-when-cross-origin",
       "Permissions-Policy":        "camera=(), microphone=(), geolocation=(), payment=()",
-      "Cross-Origin-Opener-Policy":"same-origin",
+      "Cross-Origin-Opener-Policy":"same-origin-allow-popups",
     },
   },
   preview: {
