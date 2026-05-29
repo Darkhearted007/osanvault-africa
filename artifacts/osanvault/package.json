@@ -1,6 +1,7 @@
 {
   "name": "@workspace/osanvault",
-  "version": "0.0.0",
+  "version": "0.1.0",
+  "description": "OsanVault Africa web application — React 18, Vite, wagmi v2, RainbowKit, Tailwind CSS v4",
   "private": true,
   "type": "module",
   "scripts": {

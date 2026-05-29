@@ -1,6 +1,7 @@
 {
   "name": "@workspace/db",
-  "version": "0.0.0",
+  "version": "0.1.0",
+  "description": "Drizzle ORM schema, migrations, and type-safe PostgreSQL query helpers",
   "private": true,
   "type": "module",
   "exports": {

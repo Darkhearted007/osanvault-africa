@@ -1,6 +1,7 @@
 {
   "name": "@workspace/api-server",
-  "version": "0.0.0",
+  "version": "0.1.0",
+  "description": "Express 5 REST API — Drizzle ORM, Zod validation, Pino structured logging",
   "private": true,
   "type": "module",
   "scripts": {

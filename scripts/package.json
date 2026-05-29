@@ -1,14 +1,13 @@
 {
   "name": "@workspace/scripts",
-  "version": "0.0.0",
+  "version": "0.1.0",
+  "description": "Database seed utilities and GitHub API sync tooling",
   "private": true,
   "type": "module",
   "scripts": {
-    "hello": "tsx ./src/hello.ts",
     "seed": "tsx ./src/seed-osanvault.ts",
     "typecheck": "tsc -p tsconfig.json --noEmit",
-    "github-sync": "node ./src/github-api-push.mjs",
-    "github-sync-git": "node ./src/push-to-github.mjs"
+    "github-sync": "node ./src/github-api-push.mjs"
   },
   "dependencies": {
     "@workspace/db": "workspace:*",

@@ -1,6 +1,7 @@
 {
   "name": "@workspace/osanvault-mobile",
-  "version": "0.0.0",
+  "version": "0.1.0",
+  "description": "OsanVault Africa mobile companion app — Expo SDK, React Native",
   "private": true,
   "main": "expo-router/entry",
   "scripts": {
