@@ -208,7 +208,7 @@ export default function RetirementCertificate({ data, onClose }: Props) {
                   {/* Signatures */}
                   <div style={{ display: "grid", gridTemplateColumns: "1fr auto 1fr", gap: "24px", alignItems: "end", marginBottom: "28px", fontFamily: "sans-serif" }}>
                     <div style={{ textAlign: "center" }}>
-                      <div style={{ borderBottom: "1px solid #1a1a1a", marginBottom: "6px", height: "32px", display: "flex", alignItems: "flex-end", justifyContent: "center" }}>
+                      <div style={{ borderBottom: "1px solid #1a1a1a", marginBottom: "6px", paddingBottom: "3px", textAlign: "center" }}>
                         <span style={{ fontSize: "16px", color: "#0d3320", fontStyle: "italic" }}>Olugbenga Ajayi</span>
                       </div>
                       <div style={{ fontSize: "9px", color: "#888" }}>Chief Executive Officer</div>

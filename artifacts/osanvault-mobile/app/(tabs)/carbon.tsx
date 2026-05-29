@@ -261,8 +261,9 @@ function RetirePanel({ projects }: { projects: CarbonProject[] }) {
               {/* Signatures & Seal */}
               <View style={styles.certSigRow}>
                 <View style={styles.certSigBlock}>
-                  <Text style={styles.certSigCursive}>Olugbenga Ajayi</Text>
-                  <View style={styles.certSigLine} />
+                  <View style={styles.certSigLineWrap}>
+                    <Text style={styles.certSigCursive}>Olugbenga Ajayi</Text>
+                  </View>
                   <Text style={styles.certSigRole}>Chief Executive Officer</Text>
                 </View>
 
@@ -728,7 +729,8 @@ const styles = StyleSheet.create({
 
   certSigRow: { flexDirection: 'row', alignItems: 'flex-end', gap: 8, marginBottom: 16 },
   certSigBlock: { flex: 1, alignItems: 'center' },
-  certSigCursive: { fontSize: 13, color: '#0d3320', fontStyle: 'italic', marginBottom: 4 },
+  certSigLineWrap: { borderBottomWidth: 1, borderBottomColor: '#1a1a1a', paddingBottom: 3, marginBottom: 4, alignSelf: 'stretch', alignItems: 'center' },
+  certSigCursive: { fontSize: 13, color: '#0d3320', fontStyle: 'italic' },
   certSigLine: { width: '100%', height: 1, backgroundColor: '#1a1a1a', marginBottom: 4 },
   certSigName: { fontSize: 7, color: '#555', letterSpacing: 0.5, textAlign: 'center' },
   certSigRole: { fontSize: 7, color: '#888', textAlign: 'center', marginTop: 1 },
