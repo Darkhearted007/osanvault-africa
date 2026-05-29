@@ -229,10 +229,11 @@ export default function PropertyDetailPage() {
               {isConnected ? (
                 <>
                   <div className="mb-4">
-                    <label className="text-xs font-medium text-muted-foreground uppercase tracking-wider mb-2 block">
+                    <label htmlFor="token-amount" className="text-xs font-medium text-muted-foreground uppercase tracking-wider mb-2 block">
                       Number of Tokens
                     </label>
                     <input
+                      id="token-amount"
                       type="number"
                       min="1"
                       value={tokenAmount}

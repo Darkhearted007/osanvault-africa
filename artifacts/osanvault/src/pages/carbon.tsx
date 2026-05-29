@@ -290,9 +290,10 @@ function RetireWizard({ projects }: { projects: CarbonProject[] }) {
               </select>
             </div>
             <div className="mb-5">
-              <label className="text-xs font-medium text-muted-foreground mb-1.5 block uppercase tracking-wider">Amount (tCO₂e)</label>
+              <label htmlFor="carbon-retire-amount" className="text-xs font-medium text-muted-foreground mb-1.5 block uppercase tracking-wider">Amount (tCO₂e)</label>
               <div className="relative">
                 <input
+                  id="carbon-retire-amount"
                   type="number" min="0.001" step="0.001" value={amount}
                   onChange={(e) => setAmount(e.target.value)} placeholder="e.g. 100"
                   className="w-full rounded-lg border border-border bg-background px-3 py-2.5 text-sm text-foreground pr-16 focus:outline-none focus:ring-2 focus:ring-primary/30"
@@ -331,11 +332,13 @@ function RetireWizard({ projects }: { projects: CarbonProject[] }) {
             </div>
             <input
               type="text" value={reason} onChange={(e) => setReason(e.target.value)}
+              aria-label="Custom retirement reason"
               placeholder="Or enter custom reason..."
               className="w-full rounded-lg border border-border bg-background px-3 py-2.5 text-sm text-foreground mb-3 focus:outline-none focus:ring-2 focus:ring-primary/30"
             />
             <textarea
               value={note} onChange={(e) => setNote(e.target.value)} rows={2}
+              aria-label="Additional retirement note"
               placeholder="Additional note (optional)..."
               className="w-full rounded-lg border border-border bg-background px-3 py-2.5 text-sm text-foreground mb-5 focus:outline-none focus:ring-2 focus:ring-primary/30 resize-none"
             />

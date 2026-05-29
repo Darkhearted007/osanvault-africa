@@ -130,7 +130,7 @@ export default function EarlyAccessPage() {
       <section className="relative overflow-hidden">
         <div className="absolute inset-0">
           <img
-            src="https://images.unsplash.com/photo-1486325212027-8081e485255e?auto=format&fit=crop&w=1920&q=80"
+            src="https://images.unsplash.com/photo-1486325212027-8081e485255e?auto=format&fit=crop&w=1920&q=65"
             alt=""
             className="absolute inset-0 w-full h-full object-cover"
             style={{ objectPosition: "center 40%" }}

@@ -260,10 +260,11 @@ export default function StakingPage() {
                   </div>
 
                   <div className="mb-4">
-                    <label className="text-xs font-medium text-muted-foreground mb-1.5 block uppercase tracking-wider">
+                    <label htmlFor={`stake-amount-${tier.name}`} className="text-xs font-medium text-muted-foreground mb-1.5 block uppercase tracking-wider">
                       Amount (OSANV)
                     </label>
                     <input
+                      id={`stake-amount-${tier.name}`}
                       type="number"
                       value={stakeAmount}
                       onChange={(e) => setStakeAmount(e.target.value)}
