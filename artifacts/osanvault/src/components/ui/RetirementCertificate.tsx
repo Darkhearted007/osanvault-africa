@@ -209,7 +209,7 @@ export default function RetirementCertificate({ data, onClose }: Props) {
                   <div style={{ display: "grid", gridTemplateColumns: "1fr auto 1fr", gap: "24px", alignItems: "end", marginBottom: "28px", fontFamily: "sans-serif" }}>
                     <div style={{ textAlign: "center" }}>
                       <div style={{ borderBottom: "1px solid #1a1a1a", marginBottom: "6px", height: "32px", display: "flex", alignItems: "flex-end", justifyContent: "center" }}>
-                        <span style={{ fontSize: "18px", color: "#0d3320", fontStyle: "italic" }}>O. Ajayi</span>
+                        <span style={{ fontSize: "16px", color: "#0d3320", fontStyle: "italic" }}>Olugbenga Ajayi</span>
                       </div>
                       <div style={{ fontSize: "10px", color: "#555", letterSpacing: "0.5px" }}>OLUGBENGA AJAYI</div>
                       <div style={{ fontSize: "9px", color: "#888" }}>Chief Executive Officer</div>
