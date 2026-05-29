@@ -1,2 +1,14 @@
 User-agent: *
 Allow: /
+
+# Private / app-only routes — no indexing value
+Disallow: /admin
+Disallow: /issuer
+Disallow: /government
+Disallow: /dashboard
+Disallow: /portfolio
+
+# Crawl rate (be polite)
+Crawl-delay: 2
+
+Sitemap: https://osanvaultafrica.com/sitemap.xml

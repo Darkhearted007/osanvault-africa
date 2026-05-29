@@ -3,20 +3,99 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1" />
-    <title>ÒsánVault Africa — Institutional Real Estate on the Blockchain</title>
-    <meta name="description" content="Own a piece of Africa. Institutional-grade tokenized real estate across Nigeria, Ghana, Kenya and beyond — powered by Polygon." />
-    <meta name="robots" content="index, follow" />
-    <meta property="og:title" content="ÒsánVault Africa — Institutional Real Estate on the Blockchain" />
-    <meta property="og:description" content="Own a piece of Africa. Tokenized real estate, fractional ownership, staking, governance and carbon credits — all on-chain." />
-    <meta property="og:type" content="website" />
-    <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:title" content="ÒsánVault Africa" />
-    <meta name="twitter:description" content="Own a piece of Africa. Institutional-grade tokenized real estate on Polygon." />
-    <link rel="icon" type="image/png" href="/favicon.png" />
-    <link rel="apple-touch-icon" href="/favicon.png" />
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Manrope:wght@400;500;600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+    <!-- ── Primary Meta ──────────────────────────────────────────────────── -->
+    <title>OsanVault Africa — Tokenized Real Estate on Polygon</title>
+    <meta name="description" content="Africa's institutional-grade real estate tokenization platform. Own fractional shares of premium properties in Nigeria, Ghana and Kenya from ₦1,000 — powered by Polygon blockchain." />
+    <meta name="keywords" content="real estate tokenization Africa, fractional property investment Nigeria, blockchain real estate, Polygon real estate, OSANV token, property NFT Africa, tokenized property Ghana Kenya" />
+    <meta name="author" content="OsanVault Africa" />
+    <meta name="application-name" content="OsanVault Africa" />
+    <meta name="theme-color" content="#0d1f0f" />
+    <meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1" />
+    <link rel="canonical" href="https://osanvaultafrica.com/" />
+
+    <!-- ── Open Graph ─────────────────────────────────────────────────────── -->
+    <meta property="og:type"        content="website" />
+    <meta property="og:site_name"   content="OsanVault Africa" />
+    <meta property="og:url"         content="https://osanvaultafrica.com/" />
+    <meta property="og:title"       content="OsanVault Africa — Tokenized Real Estate on Polygon" />
+    <meta property="og:description" content="Own fractional shares of premium African real estate from ₦1,000. Institutional-grade SPVs, carbon credits, staking and governance — all on-chain." />
+    <meta property="og:image"       content="https://osanvaultafrica.com/opengraph.jpg" />
+    <meta property="og:image:width"  content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt"    content="OsanVault Africa — Tokenized Real Estate Platform" />
+    <meta property="og:locale"       content="en_NG" />
+
+    <!-- ── Twitter Card ──────────────────────────────────────────────────── -->
+    <meta name="twitter:card"        content="summary_large_image" />
+    <meta name="twitter:site"        content="@OsanVaultAfrica" />
+    <meta name="twitter:title"       content="OsanVault Africa — Tokenized Real Estate on Polygon" />
+    <meta name="twitter:description" content="Own fractional shares of premium African real estate from ₦1,000. Institutional-grade SPVs on Polygon blockchain." />
+    <meta name="twitter:image"       content="https://osanvaultafrica.com/opengraph.jpg" />
+    <meta name="twitter:image:alt"   content="OsanVault Africa — Tokenized Real Estate Platform" />
+
+    <!-- ── Icons ─────────────────────────────────────────────────────────── -->
+    <link rel="icon"             type="image/png"  href="/favicon.png" />
+    <link rel="apple-touch-icon"                   href="/favicon.png" />
+    <link rel="shortcut icon"    type="image/png"  href="/favicon.png" />
+
+    <!-- ── Fonts ─────────────────────────────────────────────────────────── -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Manrope:wght@400;500;600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+
+    <!-- ── JSON-LD Structured Data ───────────────────────────────────────── -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@graph": [
+        {
+          "@type": "Organization",
+          "@id": "https://osanvaultafrica.com/#organization",
+          "name": "OsanVault Africa",
+          "url": "https://osanvaultafrica.com",
+          "logo": {
+            "@type": "ImageObject",
+            "url": "https://osanvaultafrica.com/favicon.png"
+          },
+          "description": "Africa's institutional-grade real estate tokenization platform built on Polygon blockchain. Fractional property ownership from ₦1,000.",
+          "foundingLocation": {
+            "@type": "Place",
+            "addressCountry": "NG"
+          },
+          "areaServed": ["NG", "GH", "KE"],
+          "sameAs": []
+        },
+        {
+          "@type": "WebSite",
+          "@id": "https://osanvaultafrica.com/#website",
+          "url": "https://osanvaultafrica.com",
+          "name": "OsanVault Africa",
+          "description": "Tokenized real estate platform for Africa on Polygon blockchain",
+          "publisher": { "@id": "https://osanvaultafrica.com/#organization" },
+          "potentialAction": {
+            "@type": "SearchAction",
+            "target": "https://osanvaultafrica.com/properties?q={search_term_string}",
+            "query-input": "required name=search_term_string"
+          }
+        },
+        {
+          "@type": "FinancialService",
+          "@id": "https://osanvaultafrica.com/#service",
+          "name": "OsanVault Real Estate Tokenization",
+          "url": "https://osanvaultafrica.com",
+          "description": "Institutional-grade fractional real estate investment across Africa via blockchain tokenization. SEC ARIP Sandbox participant.",
+          "provider": { "@id": "https://osanvaultafrica.com/#organization" },
+          "serviceType": "Real Estate Tokenization",
+          "areaServed": [
+            { "@type": "Country", "name": "Nigeria" },
+            { "@type": "Country", "name": "Ghana" },
+            { "@type": "Country", "name": "Kenya" }
+          ]
+        }
+      ]
+    }
+    </script>
   </head>
   <body>
     <div id="root"></div>
