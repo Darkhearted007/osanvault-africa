@@ -1,10 +1,19 @@
 import { useState } from "react";
 import { motion } from "framer-motion";
 import { ConnectButton } from "@rainbow-me/rainbowkit";
-import { useAccount } from "wagmi";
+import { useAccount, useWriteContract, useWaitForTransactionReceipt } from "wagmi";
+import { parseEther } from "viem";
+import { toast } from "sonner";
 import { Coins, Lock, TrendingUp, Info, Wallet, ChevronDown } from "lucide-react";
 import { STAKING_TIERS, formatOsanv } from "@/lib/mock-data";
+import {
+  IS_CONTRACT_DEPLOYED,
+  STAKING_VAULT_CONTRACT,
+  OSANV_TOKEN_ADDRESS,
+  explorerTx,
+} from "@/lib/contract";
 import Layout from "@/components/layout/Layout";
+import CinematicPageHeader from "@/components/ui/CinematicPageHeader";
 
 const MOCK_MY_STAKE = {
   tier: 1,
@@ -78,9 +87,52 @@ export default function StakingPage() {
   const estimatedYearlyReward = parsedAmount * (tier.apr / 100);
   const estimatedMonthlyReward = estimatedYearlyReward / 12;
 
+  const { writeContract, data: txHash, isPending } = useWriteContract();
+  const { isLoading: isConfirming } = useWaitForTransactionReceipt({ hash: txHash });
+
+  function handleStake() {
+    if (!isConnected || !stakeAmount) return;
+    if (!IS_CONTRACT_DEPLOYED) {
+      toast.info("StakingVault not yet deployed to Polygon Amoy. Staking will be available at launch.");
+      return;
+    }
+    writeContract({
+      ...STAKING_VAULT_CONTRACT,
+      functionName: "stake",
+      args: [BigInt(selectedTier), parseEther(stakeAmount)],
+    });
+  }
+
+  function handleUnstake() {
+    if (!isConnected || !stakeAmount) return;
+    if (!IS_CONTRACT_DEPLOYED) {
+      toast.info("StakingVault not yet deployed to Polygon Amoy. Unstaking will be available at launch.");
+      return;
+    }
+    writeContract({
+      ...STAKING_VAULT_CONTRACT,
+      functionName: "withdraw",
+      args: [parseEther(stakeAmount)],
+    });
+  }
+
   return (
     <Layout>
-      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-8">
+      <CinematicPageHeader
+        icon={Coins}
+        eyebrow="Layer 3 · Staking"
+        title="OSANV Staking"
+        subtitle="Lock OSANV tokens across four commitment tiers — earn 8–22% APR and governance weight"
+        imageUrl="https://images.unsplash.com/photo-1580587771525-78b9dba3b914?auto=format&fit=crop&w=1920&q=80"
+        kbVariant={4}
+        imagePosition="center 45%"
+        stats={[
+          { label: "Total Staked", value: "42.5M OSANV", color: "text-amber-400" },
+          { label: "Stakers", value: "3,841" },
+          { label: "Max APR", value: "22%", color: "text-emerald-400" },
+        ]}
+      />
+      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-6">
         {/* Header */}
         <motion.div initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} className="mb-8">
           <h1 className="text-3xl font-bold text-foreground">OSANV Staking</h1>
@@ -238,10 +290,13 @@ export default function StakingPage() {
                   )}
 
                   <button
-                    disabled={!stakeAmount || parsedAmount < tier.minStake}
+                    disabled={!stakeAmount || parsedAmount < tier.minStake || isPending || isConfirming}
+                    onClick={tab === "stake" ? handleStake : handleUnstake}
                     className="w-full bg-primary hover:bg-primary/90 disabled:opacity-50 disabled:cursor-not-allowed text-primary-foreground font-semibold py-3 rounded-xl text-sm transition-colors"
                   >
-                    {tab === "stake" ? `Stake ${tier.name} Tier` : "Unstake Tokens"}
+                    {isPending || isConfirming
+                      ? "Confirming…"
+                      : tab === "stake" ? `Stake ${tier.name} Tier` : "Unstake Tokens"}
                   </button>
                   {tab === "stake" && parsedAmount > 0 && parsedAmount < tier.minStake && (
                     <p className="text-xs text-amber-600 dark:text-amber-400 mt-2 text-center">

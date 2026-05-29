@@ -6,9 +6,15 @@ import {
   Building2, ExternalLink, Wallet, AlertCircle,
 } from "lucide-react";
 import { ConnectButton } from "@rainbow-me/rainbowkit";
-import { useAccount } from "wagmi";
+import { useAccount, useWriteContract, useWaitForTransactionReceipt } from "wagmi";
 import { toast } from "sonner";
 import { formatNgn, fundingPct } from "@/lib/mock-data";
+import {
+  IS_CONTRACT_DEPLOYED,
+  PROPERTY_NFT_CONTRACT,
+  LAND_REGISTRY_CONTRACT,
+  explorerTx,
+} from "@/lib/contract";
 import { useGetProperty, useListCarbonProjects } from "@workspace/api-client-react";
 import Layout from "@/components/layout/Layout";
 
@@ -61,9 +67,20 @@ export default function PropertyDetailPage() {
 
   const pct = fundingPct(property);
 
+  const { writeContract, data: txHash, isPending } = useWriteContract();
+  const { isLoading: isConfirming } = useWaitForTransactionReceipt({ hash: txHash });
+
   function handleInvest() {
-    if (!isConnected) return;
-    toast.info("Contract not yet deployed to Polygon Amoy. Investment will be available at launch.");
+    if (!isConnected || !property || parsedAmount <= 0) return;
+    if (!IS_CONTRACT_DEPLOYED) {
+      toast.info("PropertyNFT not yet deployed to Polygon Amoy. Investment will be available at launch.");
+      return;
+    }
+    writeContract({
+      ...PROPERTY_NFT_CONTRACT,
+      functionName: "mint",
+      args: [undefined as unknown as `0x${string}`, BigInt(property.id), BigInt(parsedAmount)],
+    });
   }
 
   return (
