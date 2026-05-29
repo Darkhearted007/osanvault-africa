@@ -1,8 +1,43 @@
 uploads = []
-outputs = []
 
 [[generated]]
 id = "k4FV0K6zi3VuuzFXiZuNU"
 uri = "file://attached_assets/generated_images/app_icon_for_osanvault_afa9.png"
 type = "image"
 title = "generated_image"
+
+[[generated]]
+id = "WV7xDEC4mzo-pUrjPRvnv"
+uri = "file://attached_assets/icon-v1.png"
+type = "image"
+title = "osanvault-icon-v1"
+
+[[generated]]
+id = "j8mMBgmi2xOs-I1X4neev"
+uri = "file://attached_assets/icon-v2.png"
+type = "image"
+title = "osanvault-icon-v2"
+
+[[generated]]
+id = "AckZMCrmrfQ0rfh8OhQ7W"
+uri = "file://attached_assets/icon-v3.png"
+type = "image"
+title = "osanvault-icon-v3"
+
+[[outputs]]
+id = "CX1mYTZdRrn0jKgLLkpyd"
+uri = "file://attached_assets/icon-v1.png"
+type = "image"
+title = "Option 1 — Gold building in hexagon"
+
+[[outputs]]
+id = "WGB7dmmcxGJrgPcmY8td5"
+uri = "file://attached_assets/icon-v2.png"
+type = "image"
+title = "Option 2 — Gold O with building + token ring"
+
+[[outputs]]
+id = "XX9hW7WKUipWp2IQTK5hM"
+uri = "file://attached_assets/icon-v3.png"
+type = "image"
+title = "Option 3 — Vault door with African pattern"
