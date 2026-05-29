@@ -15,6 +15,7 @@ import LandRegistryPage from "@/pages/land-registry";
 import GovernmentPage from "@/pages/government";
 import AdminPage from "@/pages/admin";
 import IssuerPage from "@/pages/issuer";
+import WhitelistPage from "@/pages/whitelist";
 import AboutPage from "@/pages/about";
 import TokenomicsPage from "@/pages/tokenomics";
 import NotFound from "@/pages/not-found";
@@ -45,6 +46,7 @@ function Router() {
         <Route path="/portfolio" component={PortfolioPage} />
         <Route path="/admin" component={AdminPage} />
         <Route path="/issuer" component={IssuerPage} />
+        <Route path="/whitelist" component={WhitelistPage} />
         <Route path="/about" component={AboutPage} />
         <Route path="/tokenomics" component={TokenomicsPage} />
         <Route component={NotFound} />

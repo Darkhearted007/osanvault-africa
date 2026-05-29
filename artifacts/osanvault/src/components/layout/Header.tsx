@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Link, useLocation } from "wouter";
 import { ConnectButton } from "@rainbow-me/rainbowkit";
-import { Menu, X, ChevronDown, LayoutDashboard, Building2, Map, Landmark, Vault, TrendingUp, Vote, Leaf, Shield, Briefcase, BadgeCheck } from "lucide-react";
+import { Menu, X, ChevronDown, LayoutDashboard, Building2, Map, Landmark, Vault, TrendingUp, Vote, Leaf, Shield, Briefcase, BadgeCheck, UserCheck } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { OsanVaultLockup } from "@/components/ui/OsanVaultLogo";
 
@@ -18,6 +18,7 @@ const SECONDARY_NAV = [
   { href: "/governance", label: "Governance", icon: Vote },
   { href: "/carbon", label: "Carbon Credits", icon: Leaf },
   { href: "/issuer", label: "List a Property", icon: BadgeCheck },
+  { href: "/whitelist", label: "Whitelist", icon: UserCheck },
   { href: "/admin", label: "Admin", icon: Shield },
   { href: "/portfolio", label: "Portfolio", icon: Briefcase },
 ];

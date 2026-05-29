@@ -5,6 +5,7 @@ import carbonRouter from "./carbon";
 import governanceRouter from "./governance";
 import activityRouter from "./activity";
 import platformStatsRouter from "./platform-stats";
+import whitelistRouter from "./whitelist";
 
 const router: IRouter = Router();
 
@@ -14,5 +15,6 @@ router.use(carbonRouter);
 router.use(governanceRouter);
 router.use(activityRouter);
 router.use(platformStatsRouter);
+router.use(whitelistRouter);
 
 export default router;
