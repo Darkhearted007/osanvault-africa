@@ -29,10 +29,12 @@ contract OsanCarbon is ERC1155, ERC1155Supply, ERC1155URIStorage, AccessControl,
         uint256 vintage;
         uint256 totalIssued;
         bool verified;
-        address verifier;
     }
 
     mapping(uint256 => Project) public projects;
+
+    /// @notice Maps projectId to the verifier address that created it.
+    ///         Used for access control on verifyProject and setMetadata.
     mapping(uint256 => address) public projectVerifier;
 
     IFeeRouter public feeRouter;
@@ -100,8 +102,7 @@ contract OsanCarbon is ERC1155, ERC1155Supply, ERC1155URIStorage, AccessControl,
             region: region_,
             vintage: vintage_,
             totalIssued: 0,
-            verified: false,
-            verifier: msg.sender
+            verified: false
         });
         projectVerifier[projectId] = msg.sender;
 
@@ -232,6 +233,8 @@ contract OsanCarbon is ERC1155, ERC1155Supply, ERC1155URIStorage, AccessControl,
         emit FeeConfigUpdated(feeRouter_, feeToken_, feePerCredit_);
     }
 
+    // ─── View functions ──────────────────────────────────────────────────────
+
     function getProject(uint256 projectId_)
         external
         view
@@ -245,8 +248,22 @@ contract OsanCarbon is ERC1155, ERC1155Supply, ERC1155URIStorage, AccessControl,
         return _nextProjectId;
     }
 
+    /// @notice Returns how many more credits can be issued for a given project.
+    function getProjectRemainingCap(uint256 projectId_)
+        external
+        view
+        returns (uint256)
+    {
+        require(projectId_ > 0 && projectId_ <= _nextProjectId, "project not found");
+        return MAX_SUPPLY_PER_PROJECT - projects[projectId_].totalIssued;
+    }
+
+    // ─── Admin ────────────────────────────────────────────────────────────────
+
     function pause() external onlyRole(PAUSER_ROLE) { _pause(); }
     function unpause() external onlyRole(PAUSER_ROLE) { _unpause(); }
+
+    // ─── Overrides ────────────────────────────────────────────────────────────
 
     function _update(
         address from,
