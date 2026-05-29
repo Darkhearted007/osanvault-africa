@@ -21,6 +21,39 @@ import { shortenAddress } from "@/lib/contract";
 import Layout from "@/components/layout/Layout";
 import CinematicPageHeader from "@/components/ui/CinematicPageHeader";
 
+/** Format activity event amounts.
+ *  - purchases  → use amountNgn (NGN value) when set
+ *  - staked/retired/vote → raw string is an 18-decimal token amount; convert
+ *    by stripping the last 18 digits and format with K/M suffix + unit label
+ */
+function formatActivityAmount(
+  type: string,
+  amount: string,
+  amountNgn?: number | null,
+): string {
+  if (amountNgn && amountNgn > 0) return formatNgn(amountNgn);
+
+  // Detect 18-decimal on-chain value (string longer than ~15 digits)
+  if (amount.length > 15) {
+    const intPart = amount.length > 18 ? amount.slice(0, amount.length - 18) : "0";
+    const n = Number(intPart);
+    const formatted =
+      n >= 1_000_000 ? `${(n / 1_000_000).toFixed(1)}M`
+      : n >= 1_000   ? `${(n / 1_000).toFixed(0)}K`
+      : n.toFixed(0);
+    const unit =
+      type === "staked" || type === "unstaked" ? " OSANV"
+      : type === "retired"                     ? " tCO₂e"
+      : type === "vote"                        ? " votes"
+      : "";
+    return `${formatted}${unit}`;
+  }
+
+  // Small number — plain token count
+  const n = Number(amount);
+  return isNaN(n) ? amount : `${n.toLocaleString()} tokens`;
+}
+
 const TVL_HISTORY = [
   { month: "Dec", tvl: 2_800_000_000 },
   { month: "Jan", tvl: 3_400_000_000 },
@@ -348,7 +381,7 @@ export default function DashboardPage() {
                     <p className="font-mono text-[10px] text-white/25">{event.address ? `${event.address.slice(0, 6)}...${event.address.slice(-4)}` : "—"}</p>
                   </div>
                   <div className="text-right shrink-0">
-                    <p className="text-xs font-semibold text-emerald-400">{event.amount}</p>
+                    <p className="text-xs font-semibold text-emerald-400">{formatActivityAmount(event.type, event.amount, event.amountNgn)}</p>
                     <p className="text-[10px] text-white/25">{new Date(event.createdAt).toLocaleDateString()}</p>
                   </div>
                 </div>
