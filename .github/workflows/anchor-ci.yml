@@ -24,7 +24,7 @@ jobs:
       RUSTUP_HOME: ${{ github.workspace }}/.rustup
 
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
 
       - name: Set up Rust
         uses: rust-lang/actions/setup@v2
