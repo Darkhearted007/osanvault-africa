@@ -263,7 +263,7 @@ function RetirePanel({ projects }: { projects: CarbonProject[] }) {
                 <View style={styles.certSigBlock}>
                   <Text style={styles.certSigCursive}>O. Ajayi</Text>
                   <View style={styles.certSigLine} />
-                  <Text style={styles.certSigName}>O. AJAYI</Text>
+                  <Text style={styles.certSigName}>OLUGBENGA AJAYI</Text>
                   <Text style={styles.certSigRole}>Chief Executive Officer</Text>
                 </View>
 
