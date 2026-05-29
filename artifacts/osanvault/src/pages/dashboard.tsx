@@ -19,6 +19,40 @@ import {
 import { useGetPlatformStats, useListProperties, useListActivity } from "@workspace/api-client-react";
 import { shortenAddress } from "@/lib/contract";
 import Layout from "@/components/layout/Layout";
+import CinematicPageHeader from "@/components/ui/CinematicPageHeader";
+
+/** Format activity event amounts.
+ *  - purchases  → use amountNgn (NGN value) when set
+ *  - staked/retired/vote → raw string is an 18-decimal token amount; convert
+ *    by stripping the last 18 digits and format with K/M suffix + unit label
+ */
+function formatActivityAmount(
+  type: string,
+  amount: string,
+  amountNgn?: number | null,
+): string {
+  if (amountNgn && amountNgn > 0) return formatNgn(amountNgn);
+
+  // Detect 18-decimal on-chain value (string longer than ~15 digits)
+  if (amount.length > 15) {
+    const intPart = amount.length > 18 ? amount.slice(0, amount.length - 18) : "0";
+    const n = Number(intPart);
+    const formatted =
+      n >= 1_000_000 ? `${(n / 1_000_000).toFixed(1)}M`
+      : n >= 1_000   ? `${(n / 1_000).toFixed(0)}K`
+      : n.toFixed(0);
+    const unit =
+      type === "staked" || type === "unstaked" ? " OSANV"
+      : type === "retired"                     ? " tCO₂e"
+      : type === "vote"                        ? " votes"
+      : "";
+    return `${formatted}${unit}`;
+  }
+
+  // Small number — plain token count
+  const n = Number(amount);
+  return isNaN(n) ? amount : `${n.toLocaleString()} tokens`;
+}
 
 const TVL_HISTORY = [
   { month: "Dec", tvl: 2_800_000_000 },
@@ -99,7 +133,7 @@ export default function DashboardPage() {
 
   const { data: statsData } = useGetPlatformStats();
   const { data: propertiesData } = useListProperties();
-  const { data: activityData } = useListActivity({ limit: "8" });
+  const { data: activityData } = useListActivity({ limit: 8 });
 
   const stats = statsData ?? PLATFORM_STATS;
   const allProperties = propertiesData ?? [];
@@ -114,7 +148,21 @@ export default function DashboardPage() {
 
   return (
     <Layout>
-      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-8">
+      <CinematicPageHeader
+        icon={BarChart3}
+        eyebrow="Analytics"
+        title="Analytics Dashboard"
+        subtitle="Protocol-wide performance metrics — TVL, staking, governance and carbon activity"
+        imageUrl="https://images.unsplash.com/photo-1486325212027-8081e485255e?auto=format&fit=crop&w=1920&q=80"
+        kbVariant={1}
+        imagePosition="center 40%"
+        stats={[
+          { label: "TVL", value: "₦9.2B", color: "text-amber-400" },
+          { label: "Investors", value: "12,841" },
+          { label: "Properties", value: "6", color: "text-primary" },
+        ]}
+      />
+      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-6">
 
         {/* ── Header ── */}
         <motion.div initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} className="mb-8">
@@ -333,7 +381,7 @@ export default function DashboardPage() {
                     <p className="font-mono text-[10px] text-white/25">{event.address ? `${event.address.slice(0, 6)}...${event.address.slice(-4)}` : "—"}</p>
                   </div>
                   <div className="text-right shrink-0">
-                    <p className="text-xs font-semibold text-emerald-400">{event.amount}</p>
+                    <p className="text-xs font-semibold text-emerald-400">{formatActivityAmount(event.type, event.amount, event.amountNgn)}</p>
                     <p className="text-[10px] text-white/25">{new Date(event.createdAt).toLocaleDateString()}</p>
                   </div>
                 </div>

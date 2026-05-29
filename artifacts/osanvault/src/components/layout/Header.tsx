@@ -1,28 +1,30 @@
 import { useState } from "react";
 import { Link, useLocation } from "wouter";
 import { ConnectButton } from "@rainbow-me/rainbowkit";
-import { Menu, X, ChevronDown, LayoutDashboard, Building2, Map, Landmark, Vault, TrendingUp, Vote, Leaf, Shield, Briefcase, BadgeCheck } from "lucide-react";
+import { Menu, X, ChevronDown, LayoutDashboard, Building2, Map, Landmark, Vault, TrendingUp, Vote, Leaf, Shield, Briefcase, BadgeCheck, UserCheck } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { OsanVaultLockup } from "@/components/ui/OsanVaultLogo";
 
 const PRIMARY_NAV = [
   { href: "/dashboard", label: "Dashboard", icon: LayoutDashboard },
   { href: "/properties", label: "Properties", icon: Building2 },
-  { href: "/land-registry", label: "Land Registry", icon: Map },
-  { href: "/government", label: "Government", icon: Landmark },
-  { href: "/treasury", label: "Treasury", icon: Vault },
-];
-
-const SECONDARY_NAV = [
-  { href: "/staking", label: "Staking", icon: TrendingUp },
-  { href: "/governance", label: "Governance", icon: Vote },
   { href: "/carbon", label: "Carbon Credits", icon: Leaf },
-  { href: "/issuer", label: "List a Property", icon: BadgeCheck },
-  { href: "/admin", label: "Admin", icon: Shield },
+  { href: "/staking", label: "Staking", icon: TrendingUp },
   { href: "/portfolio", label: "Portfolio", icon: Briefcase },
 ];
 
-const MOBILE_ALL_NAV = [...PRIMARY_NAV, ...SECONDARY_NAV];
+const SECONDARY_NAV = [
+  { href: "/governance", label: "Governance", icon: Vote },
+  { href: "/land-registry", label: "Land Registry", icon: Map },
+  { href: "/government", label: "Government", icon: Landmark },
+  { href: "/treasury", label: "Treasury", icon: Vault },
+  { href: "/whitelist", label: "Whitelist", icon: UserCheck },
+  { href: "/admin", label: "Admin", icon: Shield },
+];
+
+const ISSUER_LINK = { href: "/issuer", label: "List a Property", icon: BadgeCheck };
+
+const MOBILE_ALL_NAV = [...PRIMARY_NAV, ISSUER_LINK, ...SECONDARY_NAV];
 
 export default function Header() {
   const [location] = useLocation();
@@ -61,6 +63,20 @@ export default function Header() {
                 <span className="relative">{link.label}</span>
               </Link>
             ))}
+
+            {/* List a Property — always-visible CTA tab */}
+            <Link
+              href="/issuer"
+              className={cn(
+                "relative ml-1 flex items-center gap-1.5 rounded-md border px-3 py-1.5 text-[13px] font-medium transition-all duration-150",
+                isActive("/issuer")
+                  ? "border-primary/60 bg-primary/15 text-primary"
+                  : "border-primary/25 bg-primary/8 text-primary/75 hover:border-primary/50 hover:bg-primary/15 hover:text-primary"
+              )}
+            >
+              <BadgeCheck className="h-3.5 w-3.5 shrink-0" />
+              <span>List a Property</span>
+            </Link>
 
             <div className="relative ml-0.5">
               <button
