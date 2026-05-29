@@ -13,6 +13,7 @@ import {
   explorerTx,
 } from "@/lib/contract";
 import Layout from "@/components/layout/Layout";
+import CinematicPageHeader from "@/components/ui/CinematicPageHeader";
 
 const MOCK_MY_STAKE = {
   tier: 1,
@@ -117,7 +118,21 @@ export default function StakingPage() {
 
   return (
     <Layout>
-      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-8">
+      <CinematicPageHeader
+        icon={Coins}
+        eyebrow="Layer 3 · Staking"
+        title="OSANV Staking"
+        subtitle="Lock OSANV tokens across four commitment tiers — earn 8–22% APR and governance weight"
+        imageUrl="https://images.unsplash.com/photo-1580587771525-78b9dba3b914?auto=format&fit=crop&w=1920&q=80"
+        kbVariant={4}
+        imagePosition="center 45%"
+        stats={[
+          { label: "Total Staked", value: "42.5M OSANV", color: "text-amber-400" },
+          { label: "Stakers", value: "3,841" },
+          { label: "Max APR", value: "22%", color: "text-emerald-400" },
+        ]}
+      />
+      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-6">
         {/* Header */}
         <motion.div initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} className="mb-8">
           <h1 className="text-3xl font-bold text-foreground">OSANV Staking</h1>

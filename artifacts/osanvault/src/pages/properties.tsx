@@ -10,6 +10,7 @@ import {
 import type { Property } from "@workspace/api-client-react";
 import { useListProperties, useGetPlatformStats } from "@workspace/api-client-react";
 import Layout from "@/components/layout/Layout";
+import CinematicPageHeader from "@/components/ui/CinematicPageHeader";
 
 type FilterType = "All" | "LandBank" | "Commercial" | "Residential" | "Industrial" | "Mixed";
 type FilterStatus = "All" | "live" | "funding" | "closed";
@@ -126,7 +127,16 @@ export default function PropertiesPage() {
 
   return (
     <Layout>
-      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-8">
+      <CinematicPageHeader
+        icon={Building2}
+        eyebrow="Real Estate"
+        title="Property SPVs"
+        subtitle="Tokenized African real estate — fractional ownership from ₦1,000 across Nigeria, Ghana &amp; Kenya"
+        imageUrl="https://images.unsplash.com/photo-1512917774080-9991f1c4c750?auto=format&fit=crop&w=1920&q=80"
+        kbVariant={3}
+        imagePosition="center 50%"
+      />
+      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-6">
         {/* Header */}
         <motion.div initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} className="mb-8">
           <div className="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-4">

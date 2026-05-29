@@ -7,6 +7,7 @@ import {
 } from "lucide-react";
 import { toast } from "sonner";
 import Layout from "@/components/layout/Layout";
+import CinematicPageHeader from "@/components/ui/CinematicPageHeader";
 import { explorerAddress, POLYGONSCAN_BASE } from "@/lib/contract";
 
 const BASE = import.meta.env.BASE_URL.replace(/\/$/, "");
@@ -314,7 +315,16 @@ export default function WhitelistPage() {
     <Layout>
       <AnimatePresence>{showAdd && <AddModal onClose={() => setShowAdd(false)} onAdded={handleAdded} />}</AnimatePresence>
 
-      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-8">
+      <CinematicPageHeader
+        icon={Shield}
+        eyebrow="Compliance"
+        title="Investor Whitelist"
+        subtitle="KYC/AML-verified wallet addresses — SEC ARIP Sandbox compliant on Polygon Amoy"
+        imageUrl="https://images.unsplash.com/photo-1518005020951-eccb494ad742?auto=format&fit=crop&w=1920&q=80"
+        kbVariant={3}
+        imagePosition="center 40%"
+      />
+      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-6">
         {/* Header */}
         <motion.div initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} className="mb-8 flex flex-col sm:flex-row sm:items-end sm:justify-between gap-4">
           <div>

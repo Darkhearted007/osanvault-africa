@@ -19,6 +19,7 @@ import {
 import { useGetPlatformStats, useListProperties, useListActivity } from "@workspace/api-client-react";
 import { shortenAddress } from "@/lib/contract";
 import Layout from "@/components/layout/Layout";
+import CinematicPageHeader from "@/components/ui/CinematicPageHeader";
 
 const TVL_HISTORY = [
   { month: "Dec", tvl: 2_800_000_000 },
@@ -99,7 +100,7 @@ export default function DashboardPage() {
 
   const { data: statsData } = useGetPlatformStats();
   const { data: propertiesData } = useListProperties();
-  const { data: activityData } = useListActivity({ limit: "8" });
+  const { data: activityData } = useListActivity({ limit: 8 });
 
   const stats = statsData ?? PLATFORM_STATS;
   const allProperties = propertiesData ?? [];
@@ -114,7 +115,21 @@ export default function DashboardPage() {
 
   return (
     <Layout>
-      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-8">
+      <CinematicPageHeader
+        icon={BarChart3}
+        eyebrow="Analytics"
+        title="Analytics Dashboard"
+        subtitle="Protocol-wide performance metrics — TVL, staking, governance and carbon activity"
+        imageUrl="https://images.unsplash.com/photo-1486325212027-8081e485255e?auto=format&fit=crop&w=1920&q=80"
+        kbVariant={1}
+        imagePosition="center 40%"
+        stats={[
+          { label: "TVL", value: "₦9.2B", color: "text-amber-400" },
+          { label: "Investors", value: "12,841" },
+          { label: "Properties", value: "6", color: "text-primary" },
+        ]}
+      />
+      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-6">
 
         {/* ── Header ── */}
         <motion.div initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} className="mb-8">

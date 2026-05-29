@@ -11,6 +11,7 @@ import {
 } from "lucide-react";
 import { IS_CONTRACT_DEPLOYED, LAND_REGISTRY_CONTRACT, explorerAddress } from "@/lib/contract";
 import Layout from "@/components/layout/Layout";
+import CinematicPageHeader from "@/components/ui/CinematicPageHeader";
 
 const PARCELS = [
   { id: "EKT-2024-001", state: "Ekiti", flag: "🇳🇬", lga: "Ado-Ekiti", area: "50.0 ha", owner: "SPV #1 — Ekiti LandBank", status: "verified", nftId: "1001", govVerified: true, indiVerified: true, date: "2024-01-15", titleRef: "EKT/ML/2024/001" },
@@ -82,7 +83,21 @@ export default function LandRegistryPage() {
 
   return (
     <Layout>
-      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-8">
+      <CinematicPageHeader
+        icon={MapPin}
+        eyebrow="Land Registry"
+        title="Land Registry"
+        subtitle="On-chain verified parcels with dual government + indigenous authority certification"
+        imageUrl="https://images.unsplash.com/photo-1509391366360-2e959784a276?auto=format&fit=crop&w=1920&q=80"
+        kbVariant={2}
+        imagePosition="center 40%"
+        stats={[
+          { label: "Parcels", value: "9" },
+          { label: "Verified", value: "7", color: "text-emerald-400" },
+          { label: "Countries", value: "3", color: "text-primary" },
+        ]}
+      />
+      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-6">
         {/* Header */}
         <motion.div initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} className="mb-8">
           <p className="text-xs font-semibold text-primary uppercase tracking-widest mb-2">Land Registry Intelligence</p>
