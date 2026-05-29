@@ -11,15 +11,11 @@
     "dev:api": "pnpm --filter @osanvault/api dev",
     "dev:web": "pnpm --filter web dev",
     "build:api": "pnpm --filter @osanvault/api build",
-    "build:web": "pnpm --filter web build",
-    "test:contracts": "cd programs && anchor test",
-    "test:contracts:core": "cd programs/osanvault_core && anchor test",
-    "test:contracts:lend": "cd programs/osanvault_lend && anchor test",
-    "test:contracts:reits": "cd programs/reits && anchor test"
+    "build:web": "pnpm --filter web build"
   },
   "devDependencies": {
     "turbo": "^2.9.14",
-    "typescript": "^6.0.3"
+    "typescript": "^5.8.3"
   },
   "pnpm": {
     "overrides": {
@@ -27,8 +23,7 @@
       "file-type": ">=21.3.2",
       "esbuild": ">=0.25.0",
       "protobufjs": ">=7.6.0",
-      "lodash": ">=4.18.0",
-      "@solana/spl-token@0.4.14": "npm:@solana/spl-token@0.4.6"
+      "lodash": ">=4.18.0"
     }
   },
   "engines": {
