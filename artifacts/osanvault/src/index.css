@@ -336,6 +336,12 @@
   }
 }
 
+/* Hide scrollbar while keeping scroll behaviour */
+@utility scrollbar-hide {
+  scrollbar-width: none;
+  &::-webkit-scrollbar { display: none; }
+}
+
 /* RainbowKit overrides — emerald + dark */
 [data-rk] {
   --rk-colors-accentColor: hsl(168, 79%, 27%) !important;

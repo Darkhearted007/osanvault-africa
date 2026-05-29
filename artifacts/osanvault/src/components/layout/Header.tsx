@@ -40,12 +40,13 @@ export default function Header() {
         className="border-b border-white/[0.06] backdrop-blur-xl"
         style={{ background: "rgba(7, 17, 26, 0.92)" }}
       >
-        <div className="mx-auto flex h-14 max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
+        <div className="mx-auto flex h-14 max-w-7xl items-center gap-2 px-4 sm:px-6 lg:px-8">
           <Link href="/" className="shrink-0">
             <OsanVaultLockup markSize={30} />
           </Link>
 
-          <nav className="hidden lg:flex items-center gap-0.5">
+          {/* Scrollable nav row — flex-1 so it fills space between logo and wallet */}
+          <nav className="hidden lg:flex flex-1 min-w-0 overflow-x-auto scrollbar-hide items-center gap-0.5">
             {PRIMARY_NAV.map((link) => (
               <Link
                 key={link.href}
@@ -120,7 +121,7 @@ export default function Header() {
             </div>
           </nav>
 
-          <div className="flex items-center gap-3">
+          <div className="shrink-0 flex items-center gap-3">
             <div className="hidden md:block">
               <ConnectButton accountStatus="avatar" chainStatus="icon" showBalance={false} />
             </div>
@@ -138,8 +139,8 @@ export default function Header() {
 
       {mobileOpen && (
         <div
-          className="lg:hidden border-b border-white/[0.06]"
-          style={{ background: "rgba(7, 17, 26, 0.98)" }}
+          className="lg:hidden border-b border-white/[0.06] overflow-y-auto"
+          style={{ background: "rgba(7, 17, 26, 0.98)", maxHeight: "calc(100svh - 3.5rem)" }}
         >
           <div className="px-4 py-4 space-y-0.5">
             {MOBILE_ALL_NAV.map((link) => {
