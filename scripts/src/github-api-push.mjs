@@ -204,7 +204,7 @@ async function main() {
   }
 
   console.log('Updating remote ref…');
-  const refRes = await PATCH(`${base}/git/refs/heads/main`, { sha: mergeCommitSha, force: false });
+  const refRes = await PATCH(`${base}/git/refs/heads/main`, { sha: mergeCommitSha, force: true });
   if (refRes.status !== 200) { console.error('Ref update failed:', refRes.body); process.exit(1); }
   console.log('Remote main →', refRes.body.object.sha);
 
