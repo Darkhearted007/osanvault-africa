@@ -12,6 +12,7 @@ import {
 import { Link } from "wouter";
 import { formatNgn } from "@/lib/mock-data";
 import Layout from "@/components/layout/Layout";
+import CinematicPageHeader from "@/components/ui/CinematicPageHeader";
 
 /* ── Fee schedule ─────────────────────────────────────────── */
 const TIERS = [
@@ -313,6 +314,21 @@ export default function IssuerPage() {
 
   return (
     <Layout>
+      <CinematicPageHeader
+        eyebrow="Issuer Portal"
+        icon={BadgeCheck}
+        title="List a Property"
+        subtitle="Tokenize your real estate asset and raise capital from fractional investors across Africa."
+        imageUrl="https://images.unsplash.com/photo-1486325212027-8081e485255e?w=1600&q=80"
+        kbVariant={2}
+        stats={[
+          { label: "Min. Raise", value: "₦50M" },
+          { label: "Avg APY", value: "12.6%" },
+          { label: "Investors", value: "2,550+" },
+          { label: "Countries", value: "6" },
+        ]}
+      />
+
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-12">
 
         {/* Hero */}

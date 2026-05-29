@@ -11,6 +11,7 @@ import {
 import { formatNgn, formatOsanv, PLATFORM_STATS } from "@/lib/mock-data";
 import { IS_CONTRACT_DEPLOYED, POLYGONSCAN_BASE } from "@/lib/contract";
 import Layout from "@/components/layout/Layout";
+import CinematicPageHeader from "@/components/ui/CinematicPageHeader";
 
 const TREASURY_RESERVES = [
   { asset: "Stable Reserves", value: 2_400_000_000, pct: 48, color: "#0E7C66" },
@@ -67,7 +68,21 @@ export default function TreasuryPage() {
 
   return (
     <Layout>
-      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-8">
+      <CinematicPageHeader
+        icon={Shield}
+        eyebrow="Protocol Treasury"
+        title="Treasury Vault"
+        subtitle="Protocol reserves, fee distribution flows, and timelocked vault management"
+        imageUrl="https://images.unsplash.com/photo-1486325212027-8081e485255e?auto=format&fit=crop&w=1920&q=80"
+        kbVariant={1}
+        imagePosition="center 40%"
+        stats={[
+          { label: "Total Reserves", value: "₦5B", color: "text-amber-400" },
+          { label: "Fee Burn", value: "20%", color: "text-rose-400" },
+          { label: "Staking Pool", value: "40%", color: "text-emerald-400" },
+        ]}
+      />
+      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-6">
         {/* Header */}
         <motion.div initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} className="mb-8">
           <p className="text-xs font-semibold text-primary uppercase tracking-widest mb-2">Protocol Treasury</p>
