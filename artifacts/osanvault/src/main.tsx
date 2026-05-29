@@ -76,12 +76,12 @@ class AppErrorBoundary extends React.Component<
 
 createRoot(document.getElementById("root")!).render(
   <AppErrorBoundary>
-    <WagmiProvider config={wagmiConfig}>
-      <QueryClientProvider client={queryClient}>
+    <QueryClientProvider client={queryClient}>
+      <WagmiProvider config={wagmiConfig}>
         <RainbowKitProvider theme={rainbowTheme} locale="en-US">
           <App />
         </RainbowKitProvider>
-      </QueryClientProvider>
-    </WagmiProvider>
+      </WagmiProvider>
+    </QueryClientProvider>
   </AppErrorBoundary>
 );
