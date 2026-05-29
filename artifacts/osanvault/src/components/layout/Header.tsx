@@ -8,18 +8,18 @@ import { OsanVaultLockup } from "@/components/ui/OsanVaultLogo";
 const PRIMARY_NAV = [
   { href: "/dashboard", label: "Dashboard", icon: LayoutDashboard },
   { href: "/properties", label: "Properties", icon: Building2 },
-  { href: "/land-registry", label: "Land Registry", icon: Map },
-  { href: "/government", label: "Government", icon: Landmark },
-  { href: "/treasury", label: "Treasury", icon: Vault },
+  { href: "/carbon", label: "Carbon Credits", icon: Leaf },
+  { href: "/staking", label: "Staking", icon: TrendingUp },
+  { href: "/portfolio", label: "Portfolio", icon: Briefcase },
 ];
 
 const SECONDARY_NAV = [
-  { href: "/staking", label: "Staking", icon: TrendingUp },
   { href: "/governance", label: "Governance", icon: Vote },
-  { href: "/carbon", label: "Carbon Credits", icon: Leaf },
+  { href: "/land-registry", label: "Land Registry", icon: Map },
+  { href: "/government", label: "Government", icon: Landmark },
+  { href: "/treasury", label: "Treasury", icon: Vault },
   { href: "/whitelist", label: "Whitelist", icon: UserCheck },
   { href: "/admin", label: "Admin", icon: Shield },
-  { href: "/portfolio", label: "Portfolio", icon: Briefcase },
 ];
 
 const ISSUER_LINK = { href: "/issuer", label: "List a Property", icon: BadgeCheck };
