@@ -275,16 +275,15 @@ function RetirePanel({ projects }: { projects: CarbonProject[] }) {
                 </View>
 
                 <View style={styles.certSigBlock}>
-                  <Text style={styles.certSigCursive}>Carbon Registry</Text>
                   <View style={styles.certSigLine} />
-                  <Text style={styles.certSigName}>CARBON REGISTRY</Text>
+                  <Text style={styles.certSigName}>CARBON REGISTRY AUTHORITY</Text>
                   <Text style={styles.certSigRole}>Authorized Verifier</Text>
                 </View>
               </View>
 
               {/* Footer note */}
               <Text style={styles.certFooterNote}>
-                These carbon credits have been permanently removed from circulation and cannot be reused, resold, or re-issued.
+                This certificate serves as proof of retirement in accordance with applicable carbon market standards. Credits cannot be reused, resold, or re-issued.
               </Text>
 
               {/* Trust badges */}

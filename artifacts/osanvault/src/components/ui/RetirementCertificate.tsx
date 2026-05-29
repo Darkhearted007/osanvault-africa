@@ -234,9 +234,7 @@ export default function RetirementCertificate({ data, onClose }: Props) {
                     </div>
 
                     <div style={{ textAlign: "center" }}>
-                      <div style={{ borderBottom: "1px solid #1a1a1a", marginBottom: "6px", height: "32px", display: "flex", alignItems: "flex-end", justifyContent: "center" }}>
-                        <span style={{ fontSize: "18px", color: "#0d3320", fontStyle: "italic" }}>Carbon Registry</span>
-                      </div>
+                      <div style={{ borderBottom: "1px solid #1a1a1a", marginBottom: "6px", height: "32px" }} />
                       <div style={{ fontSize: "10px", color: "#555", letterSpacing: "0.5px" }}>CARBON REGISTRY AUTHORITY</div>
                       <div style={{ fontSize: "9px", color: "#888" }}>Authorized Verifier</div>
                       <div style={{ fontSize: "9px", color: "#888" }}>VCS / Gold Standard Body</div>
@@ -246,9 +244,8 @@ export default function RetirementCertificate({ data, onClose }: Props) {
                   {/* Footer note */}
                   <div style={{ textAlign: "center", marginBottom: "20px" }}>
                     <p style={{ fontSize: "10px", color: "#999", fontFamily: "sans-serif", lineHeight: 1.6, maxWidth: "480px", margin: "0 auto" }}>
-                      These carbon credits have been permanently removed from circulation and cannot be reused, resold,
-                      or re-issued. This certificate serves as proof of retirement in accordance with applicable carbon
-                      market standards.
+                      This certificate serves as proof of retirement in accordance with applicable carbon market standards.
+                      Credits cannot be reused, resold, or re-issued.
                     </p>
                   </div>
 
