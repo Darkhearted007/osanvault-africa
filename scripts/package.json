@@ -6,7 +6,9 @@
   "scripts": {
     "hello": "tsx ./src/hello.ts",
     "seed": "tsx ./src/seed-osanvault.ts",
-    "typecheck": "tsc -p tsconfig.json --noEmit"
+    "typecheck": "tsc -p tsconfig.json --noEmit",
+    "github-sync": "node ./src/github-api-push.mjs",
+    "github-sync-git": "node ./src/push-to-github.mjs"
   },
   "dependencies": {
     "@workspace/db": "workspace:*",
