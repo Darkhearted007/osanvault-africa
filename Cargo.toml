@@ -1,0 +1,18 @@
+[workspace]
+members = [
+  "programs/osanvault_core",
+  "programs/osanvault_lend",
+  "programs/reits",
+  "programs/minerals",
+  "programs/carbon",
+  "programs/landbank",
+  "programs/oracle",
+]
+
+resolver = "2"
+
+[profile.release]
+opt-level = 3
+lto = true
+codegen-units = 1
+overflow-checks = true

@@ -1,0 +1,10 @@
+{
+  "compilerOptions": {
+    "types": ["@coral-xyz/anchor", "mocha"],
+    "baseUrl": ".",
+    "paths": {
+      "*": ["target/types/*"]
+    }
+  },
+  "include": ["tests/**/*.ts", "target/types/**/*.ts"]
+}
