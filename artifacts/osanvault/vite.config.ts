@@ -28,6 +28,9 @@ if (!basePath) {
 
 export default defineConfig({
   base: basePath,
+  define: {
+    global: "globalThis",
+  },
   plugins: [
     react(),
     tailwindcss(),
@@ -60,7 +63,7 @@ export default defineConfig({
     sourcemap: true,
     minify: "esbuild",
     cssMinify: true,
-    target: "es2020",
+    target: "esnext",
     reportCompressedSize: false,
     rollupOptions: {
       output: {
