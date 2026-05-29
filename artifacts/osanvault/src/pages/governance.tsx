@@ -11,6 +11,7 @@ import { useListGovernanceProposals } from "@workspace/api-client-react";
 
 import { shortenAddress } from "@/lib/contract";
 import Layout from "@/components/layout/Layout";
+import CinematicPageHeader from "@/components/ui/CinematicPageHeader";
 import { toast } from "sonner";
 
 const STATUS_CONFIG: Record<string, { label: string; icon: React.ElementType; className: string }> = {
@@ -176,7 +177,16 @@ export default function GovernancePage() {
 
   return (
     <Layout>
-      <div className="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8 py-8">
+      <CinematicPageHeader
+        icon={Users}
+        eyebrow="Layer 4 · Governance"
+        title="Protocol Governance"
+        subtitle="On-chain DAO proposals — 100K OSANV to propose, 5M quorum, 7-day voting period"
+        imageUrl="https://images.unsplash.com/photo-1477959858617-67f85cf4f1df?auto=format&fit=crop&w=1920&q=80"
+        kbVariant={2}
+        imagePosition="center 30%"
+      />
+      <div className="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8 py-6">
         {/* Header */}
         <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-8">
           <motion.div initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }}>

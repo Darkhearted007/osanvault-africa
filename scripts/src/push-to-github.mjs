@@ -9,6 +9,10 @@ if (!pat) {
 const repo = 'https://github.com/Darkhearted007/osanvault-africa.git';
 const remoteWithAuth = `https://${pat}@github.com/Darkhearted007/osanvault-africa.git`;
 const cwd = '/home/runner/workspace';
+
+// Sanitize any string so the PAT never appears in log output.
+const sanitize = (s) => (s ? String(s).replaceAll(pat, '***') : s);
+
 const run = (cmd, opts = {}) =>
   execSync(cmd, { cwd, encoding: 'utf8', stdio: ['pipe', 'pipe', 'pipe'], ...opts });
 
@@ -43,6 +47,6 @@ try {
   const log = run('git log --oneline -6');
   console.log('\nLatest commits:\n' + log);
 } catch (err) {
-  console.error('Failed:', err.stderr || err.message);
+  console.error('Failed:', sanitize(err.stderr) || sanitize(err.message));
   process.exit(1);
 }
