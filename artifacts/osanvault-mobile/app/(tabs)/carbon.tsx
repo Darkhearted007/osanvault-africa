@@ -743,4 +743,10 @@ const styles = StyleSheet.create({
   certBadgeRow: { flexDirection: 'row', justifyContent: 'center', gap: 8 },
   certBadge: { borderBottomWidth: 1, borderBottomColor: '#e0e0e0', paddingBottom: 2 },
   certBadgeText: { fontSize: 7, color: '#aaa', letterSpacing: 1, textTransform: 'uppercase' },
+
+  certStamp: { borderWidth: 2, borderColor: '#0d3320', borderRadius: 5, paddingHorizontal: 8, paddingVertical: 5, marginBottom: 5, alignItems: 'center', transform: [{ rotate: '-4deg' }], opacity: 0.85 },
+  certStampTop: { fontSize: 6, color: '#0d3320', letterSpacing: 1.5, fontWeight: '700', textTransform: 'uppercase', marginBottom: 1 },
+  certStampMain: { fontSize: 11, color: '#0d3320', letterSpacing: 2, fontWeight: '700', textTransform: 'uppercase' },
+  certStampRule: { width: '100%', height: 1, backgroundColor: '#0d3320', opacity: 0.3, marginVertical: 2 },
+  certStampSub: { fontSize: 6, color: '#0d3320', letterSpacing: 0.8 },
 });
