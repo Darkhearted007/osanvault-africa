@@ -1,4 +1,6 @@
 import { router } from 'expo-router';
+import { Image } from 'expo-image';
+import { LinearGradient } from 'expo-linear-gradient';
 import React from 'react';
 import { Pressable, StyleSheet, Text, View } from 'react-native';
 import * as Haptics from 'expo-haptics';
@@ -7,6 +9,15 @@ import type { Property } from '@workspace/api-client-react';
 import ProgressBar from './ProgressBar';
 
 type Props = { property: Property; compact?: boolean };
+
+const PROPERTY_PHOTOS: Record<number, string> = {
+  1: 'https://images.unsplash.com/photo-1586348943529-beaae6c28db9?auto=format&fit=crop&w=800&q=70',
+  2: 'https://images.unsplash.com/photo-1509391366360-2e959784a276?auto=format&fit=crop&w=800&q=70',
+  3: 'https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?auto=format&fit=crop&w=800&q=70',
+  4: 'https://images.unsplash.com/photo-1512917774080-9991f1c4c750?auto=format&fit=crop&w=800&q=70',
+  5: 'https://images.unsplash.com/photo-1518005020951-eccb494ad742?auto=format&fit=crop&w=800&q=70',
+  6: 'https://images.unsplash.com/photo-1560185893-a55cbc8c57e8?auto=format&fit=crop&w=800&q=70',
+};
 
 function formatNgn(n: number): string {
   if (n >= 1e9) return `₦${(n / 1e9).toFixed(1)}B`;
@@ -18,6 +29,8 @@ function formatNgn(n: number): string {
 export default function PropertyCard({ property, compact = false }: Props) {
   const colors = useColors();
   const pct = Math.min(100, (property.raised / property.targetRaise) * 100);
+  const photoUrl = PROPERTY_PHOTOS[property.id];
+  const imageHeight = compact ? 110 : 150;
 
   const statusColor =
     property.status === 'live'
@@ -50,28 +63,42 @@ export default function PropertyCard({ property, compact = false }: Props) {
         router.push(`/property/${property.id}`);
       }}
     >
-      <View style={[styles.topBar, { backgroundColor: property.gradientFrom }]} />
-      <View style={styles.body}>
-        <View style={styles.rowBetween}>
-          <View style={styles.row}>
-            <Text style={styles.flag}>{property.flag}</Text>
-            <View style={[styles.badge, { backgroundColor: colors.muted }]}>
-              <Text style={[styles.badgeText, { color: colors.mutedForeground }]}>
-                {property.type}
-              </Text>
-            </View>
-          </View>
+      <View style={[styles.imageContainer, { height: imageHeight, backgroundColor: property.gradientFrom }]}>
+        {photoUrl ? (
+          <Image
+            source={{ uri: photoUrl }}
+            style={StyleSheet.absoluteFill}
+            contentFit="cover"
+            transition={200}
+          />
+        ) : null}
+        <LinearGradient
+          colors={['transparent', 'rgba(0,0,0,0.55)']}
+          style={StyleSheet.absoluteFill}
+        />
+        <View style={styles.imageOverlay}>
           <View
             style={[
               styles.statusPill,
               {
-                borderColor: statusColor + '55',
-                backgroundColor: statusColor + '20',
+                borderColor: statusColor + '88',
+                backgroundColor: 'rgba(0,0,0,0.45)',
               },
             ]}
           >
             <View style={[styles.dot, { backgroundColor: statusColor }]} />
-            <Text style={[styles.statusText, { color: statusColor }]}>{statusLabel}</Text>
+            <Text style={[styles.statusText, { color: '#fff' }]}>{statusLabel}</Text>
+          </View>
+        </View>
+      </View>
+
+      <View style={styles.body}>
+        <View style={styles.row}>
+          <Text style={styles.flag}>{property.flag}</Text>
+          <View style={[styles.badge, { backgroundColor: colors.muted }]}>
+            <Text style={[styles.badgeText, { color: colors.mutedForeground }]}>
+              {property.type}
+            </Text>
           </View>
         </View>
 
@@ -128,15 +155,22 @@ const styles = StyleSheet.create({
     overflow: 'hidden',
     borderWidth: 1,
   },
-  topBar: { height: 3 },
+  imageContainer: {
+    width: '100%',
+    overflow: 'hidden',
+  },
+  imageOverlay: {
+    position: 'absolute',
+    top: 8,
+    right: 8,
+  },
   body: { padding: 14 },
+  row: { flexDirection: 'row', alignItems: 'center', gap: 6, marginBottom: 6 },
   rowBetween: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    marginBottom: 8,
   },
-  row: { flexDirection: 'row', alignItems: 'center', gap: 6 },
   flag: { fontSize: 20 },
   badge: {
     paddingHorizontal: 7,

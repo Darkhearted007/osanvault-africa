@@ -1,4 +1,6 @@
 import { Feather, Ionicons } from '@expo/vector-icons';
+import { Image } from 'expo-image';
+import { LinearGradient } from 'expo-linear-gradient';
 import { router, useLocalSearchParams } from 'expo-router';
 import * as Haptics from 'expo-haptics';
 import React, { useState } from 'react';
@@ -16,6 +18,15 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useGetProperty } from '@workspace/api-client-react';
 import { useColors } from '@/hooks/useColors';
 import ProgressBar from '@/components/ProgressBar';
+
+const PROPERTY_PHOTOS: Record<number, string> = {
+  1: 'https://images.unsplash.com/photo-1586348943529-beaae6c28db9?auto=format&fit=crop&w=1200&q=80',
+  2: 'https://images.unsplash.com/photo-1509391366360-2e959784a276?auto=format&fit=crop&w=1200&q=80',
+  3: 'https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?auto=format&fit=crop&w=1200&q=80',
+  4: 'https://images.unsplash.com/photo-1512917774080-9991f1c4c750?auto=format&fit=crop&w=1200&q=80',
+  5: 'https://images.unsplash.com/photo-1518005020951-eccb494ad742?auto=format&fit=crop&w=1200&q=80',
+  6: 'https://images.unsplash.com/photo-1560185893-a55cbc8c57e8?auto=format&fit=crop&w=1200&q=80',
+};
 
 function formatNgn(n: number): string {
   if (n >= 1e9) return `₦${(n / 1e9).toFixed(1)}B`;
@@ -80,44 +91,52 @@ export default function PropertyDetailScreen() {
 
   const topPad = isWeb ? 67 : insets.top;
 
+  const photoUrl = PROPERTY_PHOTOS[property.id];
+
   return (
     <View style={[styles.screen, { backgroundColor: colors.background }]}>
-      <View
-        style={[
-          styles.heroHeader,
-          {
-            backgroundColor: property.gradientFrom,
-            paddingTop: topPad + 8,
-          },
-        ]}
-      >
-        <View style={styles.heroNav}>
-          <Pressable
-            onPress={() => router.back()}
-            style={[styles.navBtn, { backgroundColor: 'rgba(0,0,0,0.35)' }]}
-          >
-            <Ionicons name="arrow-back" size={20} color="#fff" />
-          </Pressable>
-          <View style={styles.heroTags}>
-            <Text style={styles.heroFlag}>{property.flag}</Text>
-            <View style={[styles.heroBadge, { backgroundColor: 'rgba(0,0,0,0.35)' }]}>
-              <Text style={styles.heroBadgeText}>{property.type}</Text>
-            </View>
-            <View
-              style={[
-                styles.heroStatus,
-                { borderColor: statusColor + '88', backgroundColor: statusColor + '33' },
-              ]}
+      <View style={[styles.heroHeader, { backgroundColor: property.gradientFrom }]}>
+        {photoUrl ? (
+          <Image
+            source={{ uri: photoUrl }}
+            style={StyleSheet.absoluteFill}
+            contentFit="cover"
+            transition={300}
+          />
+        ) : null}
+        <LinearGradient
+          colors={['rgba(0,0,0,0.15)', 'rgba(0,0,0,0.72)']}
+          style={StyleSheet.absoluteFill}
+        />
+        <View style={[styles.heroContent, { paddingTop: topPad + 8 }]}>
+          <View style={styles.heroNav}>
+            <Pressable
+              onPress={() => router.back()}
+              style={[styles.navBtn, { backgroundColor: 'rgba(0,0,0,0.35)' }]}
             >
-              <View style={[styles.statusDot, { backgroundColor: statusColor }]} />
-              <Text style={[styles.heroStatusText, { color: statusColor }]}>
-                {property.status.charAt(0).toUpperCase() + property.status.slice(1)}
-              </Text>
+              <Ionicons name="arrow-back" size={20} color="#fff" />
+            </Pressable>
+            <View style={styles.heroTags}>
+              <Text style={styles.heroFlag}>{property.flag}</Text>
+              <View style={[styles.heroBadge, { backgroundColor: 'rgba(0,0,0,0.35)' }]}>
+                <Text style={styles.heroBadgeText}>{property.type}</Text>
+              </View>
+              <View
+                style={[
+                  styles.heroStatus,
+                  { borderColor: statusColor + '88', backgroundColor: statusColor + '33' },
+                ]}
+              >
+                <View style={[styles.statusDot, { backgroundColor: statusColor }]} />
+                <Text style={[styles.heroStatusText, { color: statusColor }]}>
+                  {property.status.charAt(0).toUpperCase() + property.status.slice(1)}
+                </Text>
+              </View>
             </View>
           </View>
+          <Text style={styles.heroName}>{property.name}</Text>
+          <Text style={styles.heroLoc}>{property.location}</Text>
         </View>
-        <Text style={styles.heroName}>{property.name}</Text>
-        <Text style={styles.heroLoc}>{property.location}</Text>
       </View>
 
       <ScrollView
@@ -248,7 +267,8 @@ const styles = StyleSheet.create({
   loadingText: { fontSize: 14, fontFamily: 'Inter_400Regular' },
   backBtn: { paddingHorizontal: 20, paddingVertical: 10, marginTop: 4 },
   backBtnText: { color: '#fff', fontFamily: 'Inter_600SemiBold', fontSize: 14 },
-  heroHeader: { paddingHorizontal: 16, paddingBottom: 18 },
+  heroHeader: { overflow: 'hidden', minHeight: 200 },
+  heroContent: { paddingHorizontal: 16, paddingBottom: 18 },
   heroNav: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: 14 },
   navBtn: { width: 36, height: 36, borderRadius: 18, alignItems: 'center', justifyContent: 'center' },
   heroTags: { flexDirection: 'row', alignItems: 'center', gap: 6 },
