@@ -234,7 +234,23 @@ export default function RetirementCertificate({ data, onClose }: Props) {
                     </div>
 
                     <div style={{ textAlign: "center" }}>
-                      <div style={{ borderBottom: "1px solid #1a1a1a", marginBottom: "6px", height: "32px" }} />
+                      {/* OsanVault stamp */}
+                      <div style={{
+                        display: "inline-block",
+                        border: "2.5px solid #0d3320",
+                        borderRadius: "6px",
+                        padding: "6px 12px",
+                        marginBottom: "6px",
+                        transform: "rotate(-4deg)",
+                        opacity: 0.85,
+                        background: "transparent",
+                        minWidth: "110px",
+                      }}>
+                        <div style={{ fontSize: "7px", color: "#0d3320", letterSpacing: "2px", fontFamily: "sans-serif", fontWeight: "bold", textTransform: "uppercase", marginBottom: "2px" }}>✦ OsanVault Africa</div>
+                        <div style={{ fontSize: "11px", color: "#0d3320", letterSpacing: "1.5px", fontFamily: "sans-serif", fontWeight: "bold", textTransform: "uppercase" }}>AUTHORIZED</div>
+                        <div style={{ height: "1px", background: "#0d3320", margin: "3px 0", opacity: 0.4 }} />
+                        <div style={{ fontSize: "7px", color: "#0d3320", letterSpacing: "1px", fontFamily: "sans-serif" }}>Carbon Registry · Polygon</div>
+                      </div>
                       <div style={{ fontSize: "10px", color: "#555", letterSpacing: "0.5px" }}>CARBON REGISTRY AUTHORITY</div>
                       <div style={{ fontSize: "9px", color: "#888" }}>Authorized Verifier</div>
                       <div style={{ fontSize: "9px", color: "#888" }}>VCS / Gold Standard Body</div>

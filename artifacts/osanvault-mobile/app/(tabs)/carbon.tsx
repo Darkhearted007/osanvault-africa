@@ -275,7 +275,12 @@ function RetirePanel({ projects }: { projects: CarbonProject[] }) {
                 </View>
 
                 <View style={styles.certSigBlock}>
-                  <View style={styles.certSigLine} />
+                  <View style={styles.certStamp}>
+                    <Text style={styles.certStampTop}>✦ OSANVAULT AFRICA</Text>
+                    <Text style={styles.certStampMain}>AUTHORIZED</Text>
+                    <View style={styles.certStampRule} />
+                    <Text style={styles.certStampSub}>Carbon Registry · Polygon</Text>
+                  </View>
                   <Text style={styles.certSigName}>CARBON REGISTRY AUTHORITY</Text>
                   <Text style={styles.certSigRole}>Authorized Verifier</Text>
                 </View>
