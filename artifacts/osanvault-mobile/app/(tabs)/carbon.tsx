@@ -146,6 +146,12 @@ function RetirePanel({ projects }: { projects: CarbonProject[] }) {
   const [selectedId, setSelectedId] = useState(projects[0]?.id ?? 1);
   const [amount, setAmount] = useState('');
   const [reason, setReason] = useState('');
+  const [certId] = useState(() => {
+    const year = new Date().getFullYear();
+    const rand = Math.random().toString(36).substring(2, 8).toUpperCase();
+    return `OSAN-CERT-${year}-${rand}`;
+  });
+  const [retiredAt] = useState(() => new Date());
 
   const selected = projects.find((p) => p.id === selectedId);
 
@@ -155,23 +161,150 @@ function RetirePanel({ projects }: { projects: CarbonProject[] }) {
   }
 
   if (step === 'done') {
+    const dateStr = retiredAt.toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' });
     return (
-      <View style={[styles.retireSuccess, { backgroundColor: colors.card, borderColor: colors.border, borderRadius: colors.radius }]}>
-        <View style={[styles.successIcon, { backgroundColor: colors.primary + '20' }]}>
-          <Ionicons name="checkmark-circle" size={48} color={colors.primary} />
+      <View style={styles.certOuter}>
+        {/* Gold border wrapper */}
+        <View style={styles.certGoldBorder}>
+          <View style={[styles.certInner, { backgroundColor: '#fff' }]}>
+            {/* Inner decorative border */}
+            <View style={styles.certDecoFrame}>
+              {/* Corner ornaments */}
+              <View style={[styles.corner, styles.cornerTL]} />
+              <View style={[styles.corner, styles.cornerTR]} />
+              <View style={[styles.corner, styles.cornerBL]} />
+              <View style={[styles.corner, styles.cornerBR]} />
+
+              {/* Header */}
+              <View style={styles.certHeaderRow}>
+                <View style={styles.certLogoBox}>
+                  <Text style={styles.certLogoStar}>✦</Text>
+                </View>
+                <View>
+                  <Text style={styles.certOrgName}>OSANVAULT AFRICA</Text>
+                  <Text style={styles.certOrgSub}>Fractional Real Estate & Carbon Credits</Text>
+                </View>
+              </View>
+
+              {/* Decorative rule */}
+              <View style={styles.certRuleRow}>
+                <View style={[styles.certRuleLine, { backgroundColor: '#D4A01760' }]} />
+                <Text style={styles.certRuleStar}>✦</Text>
+                <View style={[styles.certRuleLine, { backgroundColor: '#D4A01760' }]} />
+              </View>
+
+              {/* Title */}
+              <Text style={styles.certDocLabel}>Official Document of</Text>
+              <Text style={styles.certTitle}>Certificate of{'\n'}Carbon Credit Retirement</Text>
+
+              {/* Body */}
+              <Text style={[styles.certBody, { color: '#555' }]}>
+                This certifies that the following verified carbon credits have been{' '}
+                <Text style={{ fontWeight: '700', color: '#1a1a1a' }}>permanently and irrevocably retired</Text>{' '}
+                from circulation:
+              </Text>
+
+              {/* Amount highlight */}
+              <View style={styles.certAmountBox}>
+                <Text style={styles.certAmountVal}>{amount}</Text>
+                <Text style={styles.certAmountUnit}>TONNES CO₂ EQUIVALENT (tCO₂e)</Text>
+              </View>
+
+              <Text style={[styles.certBody, { color: '#555', marginBottom: 6 }]}>from the verified climate project:</Text>
+
+              <View style={styles.certProjectBox}>
+                <Text style={styles.certProjectFlag}>{selected?.flag}</Text>
+                <Text style={styles.certProjectName}>{selected?.name}</Text>
+                <Text style={styles.certProjectMeta}>
+                  {selected?.region} · {selected?.methodology} Standard
+                </Text>
+              </View>
+
+              {/* Rule */}
+              <View style={[styles.certRuleRow, { marginVertical: 14 }]}>
+                <View style={[styles.certRuleLine, { backgroundColor: '#e8e0cc' }]} />
+                <Text style={[styles.certRuleStar, { color: '#D4A017', fontSize: 8 }]}>◆</Text>
+                <View style={[styles.certRuleLine, { backgroundColor: '#e8e0cc' }]} />
+              </View>
+
+              {/* Details grid */}
+              <View style={styles.certGrid}>
+                {[
+                  { label: 'Certificate ID', value: certId },
+                  { label: 'Date of Retirement', value: dateStr },
+                  { label: 'Retirement Reason', value: reason },
+                  { label: 'Verification Standard', value: `${selected?.methodology} Protocol` },
+                  { label: 'Blockchain Network', value: 'Polygon Amoy Testnet' },
+                  { label: 'Token Standard', value: 'ERC-1155 (OsanCarbon)' },
+                ].map(({ label, value }) => (
+                  <View key={label} style={styles.certDetailCell}>
+                    <Text style={styles.certDetailLabel}>{label}</Text>
+                    <Text style={styles.certDetailVal} numberOfLines={2}>{value}</Text>
+                  </View>
+                ))}
+              </View>
+
+              {/* Testnet notice */}
+              <View style={styles.certTestnetBox}>
+                <Text style={styles.certTestnetText}>
+                  ⚠ Testnet Simulation — Blockchain transaction will be recorded on Polygon mainnet upon contract deployment.
+                </Text>
+              </View>
+
+              {/* Rule */}
+              <View style={[styles.certRuleRow, { marginVertical: 14 }]}>
+                <View style={[styles.certRuleLine, { backgroundColor: '#D4A01760' }]} />
+                <Text style={styles.certRuleStar}>✦</Text>
+                <View style={[styles.certRuleLine, { backgroundColor: '#D4A01760' }]} />
+              </View>
+
+              {/* Signatures & Seal */}
+              <View style={styles.certSigRow}>
+                <View style={styles.certSigBlock}>
+                  <Text style={styles.certSigCursive}>O. Adewale</Text>
+                  <View style={styles.certSigLine} />
+                  <Text style={styles.certSigName}>OLAWALE ADEWALE</Text>
+                  <Text style={styles.certSigRole}>Chief Executive Officer</Text>
+                </View>
+
+                <View style={styles.certSeal}>
+                  <View style={styles.certSealInner}>
+                    <Text style={styles.certSealStar}>✦</Text>
+                    <Text style={styles.certSealText}>OSANVAULT{'\n'}AFRICA{'\n'}VERIFIED</Text>
+                  </View>
+                </View>
+
+                <View style={styles.certSigBlock}>
+                  <Text style={styles.certSigCursive}>Carbon Registry</Text>
+                  <View style={styles.certSigLine} />
+                  <Text style={styles.certSigName}>CARBON REGISTRY</Text>
+                  <Text style={styles.certSigRole}>Authorized Verifier</Text>
+                </View>
+              </View>
+
+              {/* Footer note */}
+              <Text style={styles.certFooterNote}>
+                These carbon credits have been permanently removed from circulation and cannot be reused, resold, or re-issued.
+              </Text>
+
+              {/* Trust badges */}
+              <View style={styles.certBadgeRow}>
+                {['SEC ARIP', 'Polygon', 'VCS Verified'].map((b) => (
+                  <View key={b} style={styles.certBadge}>
+                    <Text style={styles.certBadgeText}>{b}</Text>
+                  </View>
+                ))}
+              </View>
+            </View>
+          </View>
         </View>
-        <Text style={[styles.successTitle, { color: colors.foreground }]}>Credits Retired!</Text>
-        <Text style={[styles.successSub, { color: colors.mutedForeground }]}>
-          {amount} tCO₂e permanently retired from{'\n'}{selected?.name}
-        </Text>
-        <Text style={[styles.successNote, { color: colors.mutedForeground }]}>
-          Simulated transaction — contracts deploy on mainnet.
-        </Text>
+
+        {/* Action button */}
         <Pressable
-          style={[styles.retireAgainBtn, { backgroundColor: colors.primary, borderRadius: colors.radius - 2 }]}
+          style={({ pressed }) => [styles.retireAgainBtn, { backgroundColor: colors.primary, opacity: pressed ? 0.85 : 1, borderRadius: colors.radius - 2 }]}
           onPress={() => { setStep(1); setAmount(''); setReason(''); }}
         >
-          <Text style={styles.retireAgainText}>Retire More</Text>
+          <Text style={styles.retireAgainText}>Retire More Credits</Text>
         </Pressable>
       </View>
     );
@@ -545,11 +678,65 @@ const styles = StyleSheet.create({
   confirmRetireBtn: { flex: 1, flexDirection: 'row', alignItems: 'center', justifyContent: 'center', gap: 6, paddingVertical: 12 },
   confirmRetireText: { color: '#fff', fontSize: 13, fontFamily: 'Inter_700Bold' },
 
-  retireSuccess: { borderWidth: 1, padding: 32, alignItems: 'center', gap: 12 },
-  successIcon: { width: 80, height: 80, borderRadius: 40, alignItems: 'center', justifyContent: 'center' },
-  successTitle: { fontSize: 22, fontFamily: 'Inter_700Bold' },
-  successSub: { fontSize: 14, fontFamily: 'Inter_400Regular', textAlign: 'center', lineHeight: 20 },
-  successNote: { fontSize: 11, fontFamily: 'Inter_400Regular', textAlign: 'center', opacity: 0.6 },
-  retireAgainBtn: { marginTop: 8, paddingHorizontal: 24, paddingVertical: 12, alignItems: 'center' },
+  retireAgainBtn: { marginTop: 12, paddingHorizontal: 24, paddingVertical: 14, alignItems: 'center' },
   retireAgainText: { color: '#fff', fontFamily: 'Inter_700Bold', fontSize: 14 },
+
+  certOuter: { gap: 0 },
+  certGoldBorder: { padding: 3, borderRadius: 14, backgroundColor: '#D4A017' },
+  certInner: { borderRadius: 12, overflow: 'hidden' },
+  certDecoFrame: { margin: 10, borderWidth: 1, borderColor: '#D4A01733', borderRadius: 8, padding: 20, position: 'relative' },
+
+  corner: { position: 'absolute', width: 18, height: 18, borderColor: '#D4A017', borderStyle: 'solid' },
+  cornerTL: { top: -1, left: -1, borderTopWidth: 2, borderLeftWidth: 2, borderTopLeftRadius: 4 },
+  cornerTR: { top: -1, right: -1, borderTopWidth: 2, borderRightWidth: 2, borderTopRightRadius: 4 },
+  cornerBL: { bottom: -1, left: -1, borderBottomWidth: 2, borderLeftWidth: 2, borderBottomLeftRadius: 4 },
+  cornerBR: { bottom: -1, right: -1, borderBottomWidth: 2, borderRightWidth: 2, borderBottomRightRadius: 4 },
+
+  certHeaderRow: { flexDirection: 'row', alignItems: 'center', gap: 10, marginBottom: 12 },
+  certLogoBox: { width: 28, height: 28, borderRadius: 7, backgroundColor: '#0d3320', alignItems: 'center', justifyContent: 'center' },
+  certLogoStar: { color: '#D4A017', fontSize: 14 },
+  certOrgName: { fontSize: 12, fontWeight: '700', color: '#0d3320', letterSpacing: 1.5 },
+  certOrgSub: { fontSize: 8, color: '#888', letterSpacing: 0.5, marginTop: 1 },
+
+  certRuleRow: { flexDirection: 'row', alignItems: 'center', gap: 8, marginBottom: 12 },
+  certRuleLine: { flex: 1, height: 1 },
+  certRuleStar: { color: '#D4A017', fontSize: 10 },
+
+  certDocLabel: { fontSize: 8, color: '#999', letterSpacing: 3, textAlign: 'center', textTransform: 'uppercase', marginBottom: 4 },
+  certTitle: { fontSize: 17, fontWeight: '700', color: '#0d3320', textAlign: 'center', marginBottom: 12, lineHeight: 24 },
+  certBody: { fontSize: 11, lineHeight: 17, textAlign: 'center', marginBottom: 12 },
+
+  certAmountBox: { borderWidth: 2, borderColor: '#3a8042', borderRadius: 10, padding: 12, alignItems: 'center', backgroundColor: '#f0f9f0', marginBottom: 10 },
+  certAmountVal: { fontSize: 36, fontWeight: '700', color: '#0d3320', lineHeight: 40 },
+  certAmountUnit: { fontSize: 9, color: '#3a8042', letterSpacing: 1, marginTop: 2 },
+
+  certProjectBox: { borderWidth: 1, borderColor: '#f0ece0', borderRadius: 8, padding: 10, alignItems: 'center', backgroundColor: '#fafaf8', marginBottom: 4 },
+  certProjectFlag: { fontSize: 22, marginBottom: 4 },
+  certProjectName: { fontSize: 13, fontWeight: '700', color: '#1a1a1a', textAlign: 'center' },
+  certProjectMeta: { fontSize: 9, color: '#888', marginTop: 2, letterSpacing: 0.5, textAlign: 'center' },
+
+  certGrid: { flexDirection: 'row', flexWrap: 'wrap', gap: 6, marginBottom: 10 },
+  certDetailCell: { width: '48%', backgroundColor: '#fafaf8', borderWidth: 1, borderColor: '#f0ece0', borderRadius: 6, padding: 8 },
+  certDetailLabel: { fontSize: 7, color: '#999', letterSpacing: 1.2, textTransform: 'uppercase', marginBottom: 2 },
+  certDetailVal: { fontSize: 10, color: '#1a1a1a', fontWeight: '600', lineHeight: 14 },
+
+  certTestnetBox: { backgroundColor: '#fffbeb', borderWidth: 1, borderColor: '#fde68a', borderRadius: 6, padding: 8, marginBottom: 4 },
+  certTestnetText: { fontSize: 9, color: '#92400e', lineHeight: 14 },
+
+  certSigRow: { flexDirection: 'row', alignItems: 'flex-end', gap: 8, marginBottom: 16 },
+  certSigBlock: { flex: 1, alignItems: 'center' },
+  certSigCursive: { fontSize: 13, color: '#0d3320', fontStyle: 'italic', marginBottom: 4 },
+  certSigLine: { width: '100%', height: 1, backgroundColor: '#1a1a1a', marginBottom: 4 },
+  certSigName: { fontSize: 7, color: '#555', letterSpacing: 0.5, textAlign: 'center' },
+  certSigRole: { fontSize: 7, color: '#888', textAlign: 'center', marginTop: 1 },
+
+  certSeal: { width: 72, height: 72, borderRadius: 36, borderWidth: 2, borderColor: '#D4A017', backgroundColor: '#0d3320', alignItems: 'center', justifyContent: 'center' },
+  certSealInner: { alignItems: 'center' },
+  certSealStar: { color: '#D4A017', fontSize: 14, marginBottom: 2 },
+  certSealText: { color: '#D4A017', fontSize: 6, fontWeight: '700', textAlign: 'center', letterSpacing: 0.5, lineHeight: 9 },
+
+  certFooterNote: { fontSize: 9, color: '#999', textAlign: 'center', lineHeight: 14, marginBottom: 12 },
+  certBadgeRow: { flexDirection: 'row', justifyContent: 'center', gap: 8 },
+  certBadge: { borderBottomWidth: 1, borderBottomColor: '#e0e0e0', paddingBottom: 2 },
+  certBadgeText: { fontSize: 7, color: '#aaa', letterSpacing: 1, textTransform: 'uppercase' },
 });

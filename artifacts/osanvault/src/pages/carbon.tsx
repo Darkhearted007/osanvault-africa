@@ -5,7 +5,7 @@ import { ConnectButton } from "@rainbow-me/rainbowkit";
 import { useAccount, useWriteContract, useWaitForTransactionReceipt } from "wagmi";
 import {
   Leaf, CheckCircle2, Clock, ExternalLink, TrendingUp,
-  ChevronRight, AlertCircle, Wallet, Copy, BarChart3,
+  ChevronRight, AlertCircle, Wallet, Copy, BarChart3, Printer,
 } from "lucide-react";
 import { toast } from "sonner";
 import {
@@ -17,6 +17,7 @@ import { useListCarbonProjects, useGetPlatformStats } from "@workspace/api-clien
 import { OSANCARBON_ADDRESS, OsanCarbonAbi, IS_CONTRACT_DEPLOYED, explorerTx } from "@/lib/contract";
 import Layout from "@/components/layout/Layout";
 import CinematicPageHeader from "@/components/ui/CinematicPageHeader";
+import RetirementCertificate, { generateCertId, type CertificateData } from "@/components/ui/RetirementCertificate";
 
 const REASON_PRESETS = [
   { emoji: "🌍", label: "Corporate ESG offset" },
@@ -99,6 +100,8 @@ function RetireWizard({ projects }: { projects: CarbonProject[] }) {
   const [amount, setAmount] = useState("");
   const [reason, setReason] = useState("");
   const [note, setNote] = useState("");
+  const [certId] = useState(generateCertId);
+  const [showCertificate, setShowCertificate] = useState(false);
 
   const { writeContract, data: txHash, isPending, error: writeError } = useWriteContract();
   const { isLoading: isConfirming, isSuccess: isConfirmed } = useWaitForTransactionReceipt({ hash: txHash });
@@ -140,44 +143,103 @@ function RetireWizard({ projects }: { projects: CarbonProject[] }) {
   }
 
   if (step === "success") {
+    const certData: CertificateData = {
+      certId,
+      projectName: selected?.name ?? "",
+      projectFlag: selected?.flag ?? "🌍",
+      methodology: selected?.methodology ?? "",
+      region: selected?.region ?? "",
+      vintage: String(selected?.vintage ?? ""),
+      amount,
+      reason: reason + (note ? ` — ${note}` : ""),
+      date: new Date().toISOString(),
+      txHash,
+    };
+
     return (
-      <motion.div
-        initial={{ opacity: 0, scale: 0.95 }}
-        animate={{ opacity: 1, scale: 1 }}
-        className="bg-card border border-card-border rounded-2xl p-8 text-center"
-      >
-        <div className="inline-flex h-16 w-16 items-center justify-center rounded-full bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 mb-4 mx-auto">
-          <CheckCircle2 className="h-8 w-8" />
-        </div>
-        <h3 className="text-2xl font-bold text-foreground mb-1">Credits Retired!</h3>
-        <p className="text-muted-foreground text-sm mb-5">
-          <span className="font-bold text-foreground">{amount} tCO₂e</span> permanently retired from <span className="font-bold text-foreground">{selected?.name}</span>.
-        </p>
-        {txHash && (
-          <div className="bg-muted rounded-lg p-3 mb-5 text-left">
-            <p className="text-xs text-muted-foreground mb-1">Transaction Hash</p>
-            <div className="flex items-center justify-between gap-2">
-              <span className="font-mono text-xs text-foreground truncate">{txHash}</span>
-              <div className="flex gap-1 shrink-0">
-                <button onClick={() => copyToClipboard(txHash)} className="p-1 hover:bg-background rounded transition-colors">
-                  <Copy className="h-3.5 w-3.5 text-muted-foreground" />
-                </button>
-                <a href={explorerTx(txHash)} target="_blank" rel="noopener noreferrer" className="p-1 hover:bg-background rounded transition-colors">
-                  <ExternalLink className="h-3.5 w-3.5 text-muted-foreground" />
-                </a>
+      <>
+        {showCertificate && (
+          <RetirementCertificate data={certData} onClose={() => setShowCertificate(false)} />
+        )}
+        <motion.div
+          initial={{ opacity: 0, scale: 0.95 }}
+          animate={{ opacity: 1, scale: 1 }}
+          className="bg-card border border-card-border rounded-2xl overflow-hidden"
+        >
+          {/* Certificate preview strip */}
+          <div className="bg-gradient-to-r from-[#0d3320] to-[#1a5c34] p-5 text-center">
+            <div className="inline-flex h-14 w-14 items-center justify-center rounded-full bg-emerald-400/20 border border-emerald-400/30 mb-3">
+              <CheckCircle2 className="h-7 w-7 text-emerald-400" />
+            </div>
+            <h3 className="text-xl font-bold text-white mb-1">Credits Retired!</h3>
+            <p className="text-emerald-200/80 text-sm">
+              <span className="font-bold text-white">{amount} tCO₂e</span> permanently removed from circulation
+            </p>
+          </div>
+
+          {/* Mini certificate preview */}
+          <div className="p-5">
+            <div className="border-2 border-[#D4A017]/40 rounded-xl p-4 mb-4 bg-gradient-to-b from-amber-50/5 to-transparent">
+              <div className="flex items-center justify-between mb-3">
+                <div className="flex items-center gap-1.5">
+                  <div className="h-5 w-5 rounded bg-gradient-to-br from-[#0d3320] to-[#3a8042] flex items-center justify-center">
+                    <span className="text-[#D4A017] text-xs">✦</span>
+                  </div>
+                  <span className="text-xs font-semibold text-foreground tracking-wide">OSANVAULT AFRICA</span>
+                </div>
+                <span className="text-xs text-muted-foreground font-mono">{certId}</span>
+              </div>
+              <div className="h-px bg-gradient-to-r from-transparent via-[#D4A017]/40 to-transparent mb-3" />
+              <p className="text-xs text-muted-foreground text-center mb-2 tracking-widest uppercase">Certificate of Carbon Credit Retirement</p>
+              <div className="text-center mb-3">
+                <span className="text-2xl font-bold text-emerald-600 dark:text-emerald-400">{amount} tCO₂e</span>
+              </div>
+              <div className="grid grid-cols-2 gap-2 text-xs">
+                {[
+                  { label: "Project", value: `${selected?.flag} ${selected?.name}` },
+                  { label: "Standard", value: selected?.methodology ?? "" },
+                  { label: "Region", value: selected?.region ?? "" },
+                  { label: "Date", value: new Date().toLocaleDateString("en-GB", { day: "numeric", month: "short", year: "numeric" }) },
+                ].map(({ label, value }) => (
+                  <div key={label} className="bg-muted/50 rounded-lg px-2.5 py-1.5">
+                    <div className="text-muted-foreground text-[10px] uppercase tracking-wider mb-0.5">{label}</div>
+                    <div className="font-medium text-foreground truncate">{value}</div>
+                  </div>
+                ))}
               </div>
             </div>
+
+            {txHash && (
+              <div className="bg-muted rounded-lg p-2.5 mb-4 flex items-center justify-between gap-2">
+                <span className="font-mono text-xs text-foreground truncate">{txHash}</span>
+                <div className="flex gap-1 shrink-0">
+                  <button onClick={() => copyToClipboard(txHash)} className="p-1 hover:bg-background rounded">
+                    <Copy className="h-3 w-3 text-muted-foreground" />
+                  </button>
+                  <a href={explorerTx(txHash)} target="_blank" rel="noopener noreferrer" className="p-1 hover:bg-background rounded">
+                    <ExternalLink className="h-3 w-3 text-muted-foreground" />
+                  </a>
+                </div>
+              </div>
+            )}
+
+            <div className="flex flex-col sm:flex-row gap-3">
+              <button
+                onClick={() => setShowCertificate(true)}
+                className="flex-1 flex items-center justify-center gap-2 bg-[#D4A017] hover:bg-[#c49015] text-black font-semibold py-2.5 rounded-xl text-sm transition-colors"
+              >
+                <Printer className="h-4 w-4" /> Download Certificate
+              </button>
+              <button
+                onClick={() => { setStep(1); setAmount(""); setReason(""); setNote(""); }}
+                className="flex-1 bg-primary hover:bg-primary/90 text-primary-foreground font-semibold py-2.5 rounded-xl text-sm transition-colors"
+              >
+                Retire More
+              </button>
+            </div>
           </div>
-        )}
-        <div className="flex flex-col sm:flex-row gap-3">
-          <button onClick={() => window.print()} className="flex-1 border border-border text-foreground font-medium py-2.5 rounded-xl text-sm hover:bg-muted transition-colors">
-            Download Certificate
-          </button>
-          <button onClick={() => { setStep(1); setAmount(""); setReason(""); setNote(""); }} className="flex-1 bg-primary hover:bg-primary/90 text-primary-foreground font-semibold py-2.5 rounded-xl text-sm transition-colors">
-            Retire More
-          </button>
-        </div>
-      </motion.div>
+        </motion.div>
+      </>
     );
   }
 
