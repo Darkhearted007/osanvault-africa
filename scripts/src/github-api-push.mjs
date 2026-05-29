@@ -113,6 +113,11 @@ async function main() {
   const toRemove = Object.keys(remoteFiles).filter(p => !lsTree.find(f => f.path === p));
   console.log(`\nDiff: ${toUpload.length} new/changed, ${toRemove.length} deleted.`);
 
+  if (toUpload.length === 0 && toRemove.length === 0) {
+    console.log('Nothing to sync — remote tree matches local tree exactly.');
+    process.exit(0);
+  }
+
   // ── 7. Upload only the changed blobs (paced) ────────────────────────────────
   const treeItems = [];
   let done = 0;
@@ -184,9 +189,22 @@ async function main() {
   const mergeCommitSha = commitRes.body.sha;
   console.log('Merge commit:', mergeCommitSha);
 
-  // ── 10. Update ref ──────────────────────────────────────────────────────────
-  console.log('\nUpdating remote ref…');
-  const refRes = await PATCH(`${base}/git/refs/heads/main`, { sha: mergeCommitSha, force: true });
+  // ── 10. Optimistic concurrency check then update ref ────────────────────────
+  // Re-fetch the remote HEAD right before patching. If it moved (e.g. another
+  // sync process or a direct GitHub push beat us here), our commit's parent is
+  // stale — abort cleanly rather than force-overwriting a newer push.
+  console.log('\nChecking remote ref before update (optimistic concurrency)…');
+  const preRefRes = await GET(`${base}/git/refs/heads/main`);
+  if (preRefRes.status === 200 && preRefRes.body.object.sha !== remoteHeadSha) {
+    console.log('⚠ Remote ref advanced since sync started — aborting to avoid overwriting newer push.');
+    console.log('  Started with:', remoteHeadSha);
+    console.log('  Remote is now:', preRefRes.body.object.sha);
+    console.log('  The next commit will trigger a fresh sync from the new remote state.');
+    process.exit(0);
+  }
+
+  console.log('Updating remote ref…');
+  const refRes = await PATCH(`${base}/git/refs/heads/main`, { sha: mergeCommitSha, force: false });
   if (refRes.status !== 200) { console.error('Ref update failed:', refRes.body); process.exit(1); }
   console.log('Remote main →', refRes.body.object.sha);
 
