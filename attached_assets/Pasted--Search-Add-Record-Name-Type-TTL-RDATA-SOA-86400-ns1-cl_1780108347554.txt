@@ -1,0 +1,108 @@
+
+Search...
+Add Record
+
+Name  
+Type  
+TTL  	
+RDATA  
+@	SOA	86400	
+ns1.cloudoon.com root.lim106.truehost.cloud 2026052907 3600 1800 1209600 86400
+ 
+autoconfig	A	14400	
+141.95.120.221
+ 
+autodiscover	A	14400	
+141.95.120.221
+ 
+cpanel	A	14400	
+141.95.120.221
+ 
+cpcalendars	A	14400	
+141.95.120.221
+ 
+cpcontacts	A	14400	
+141.95.120.221
+ 
+ftp	A	14400	
+145.239.3.48
+ 
+@	A	14440	
+34.111.179.208
+ 
+webdisk	A	14400	
+141.95.120.221
+ 
+webmail	A	14400	
+141.95.120.221
+ 
+whm	A	14400	
+141.95.120.221
+ 
+@	NS	86400	
+ns3.cloudoon.com
+ 
+@	NS	86400	
+ns1.cloudoon.com
+ 
+@	NS	86400	
+ns2.cloudoon.com
+ 
+@	MX	14400	
+0 osanvaultafrica.com
+ 
+_acme-challenge	TXT	14400	
+"vz5Zgf6as2WW_aMvsio4aWfAAUw602by5CAs_8u9W7w"
+ 
+_caldav._tcp	TXT	14400	
+"path=/"
+ 
+_caldavs._tcp	TXT	14400	
+"path=/"
+ 
+_carddav._tcp	TXT	14400	
+"path=/"
+ 
+_carddavs._tcp	TXT	14400	
+"path=/"
+ 
+_cpanel-dcv-test-record	TXT	14400	
+"_cpanel-dcv-test-record=sRNEYvKOYENfR9VOAyNRIZiHQ8VCXvdErHJX509Zq8KUSDzSfoxXHFgVuSt7rfvR"
+ 
+_dmarc	TXT	14400	
+"v=DMARC1;p=quarantine;sp=quarantine;adkim=r;aspf=s;pct=100;fo=0;rf=afrf;ri=86400;rua=mailto:dmarc-reports@truehostcloud.com;ruf=mailto:dmarc-reports@truehostcloud.com"
+ 
+_github-pages-challenge-darkhearted007	TXT	14400	
+"edb8917eb2decb4624a540bfd10264"
+ 
+default._domainkey	TXT	14400	
+"v=DKIM1; k=rsa; p=MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAuuNe8rpu+qVXE6pPEnJgh54GudewkzWa06DFVTMMS8+pqcPtGU7wIJ/U/aC2eAAPuWiV58bSzBYSEKWuiO7Gx+H81+07DeGhnIiqUkzDy1DHc2GTZ3Ys/KyHWD+whxD0lc2DOcBImxVW81WxdxiVG2cQ6GItji/XEkcyzz2FS7ZMYfNOxE16d/X1EBvW1/GXFWevf5V58tTCCpooWP+W8irHN6WLJfj8QcL0M1ab0XIpd75OU4k0+FhkvLe6jZhR+2elKxz1cCqshibD75FRlrsDsmKhEQnMpFV82z3EjJy4tOf+RyhjoZGw3JF1FWwpOCXnpG9SjMIW6V/5E49ddwIDAQAB;"
+ 
+@	TXT	14440	
+"replit-verify=3574b3f8-bfbe-468c-b041-01ab6d85cd31"
+ 
+@	TXT	14400	
+"v=spf1 +a +mx include:_spf.truehostcloud.com ~all"
+ 
+smarthost._domainkey	TXT	14400	
+"v=DKIM1; h=sha256; k=rsa; p=MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAv882rEXZRMdtin+CVwig1NUSxaSkGNdHO0+xhaV82EI6MKiLrVk00OjKf/VOSRoxEl3d67TluSHBeFmKl2GSWCTr/JJgxlunYX2dXdrNIJI08Po6IJ7E5jKyNvv3Oh6i8Obu6P+BfiaKr9XztO29kwRCYLzJP3nHsmPj3AyESfEM0X7tWLA2+sOdVsHUvNlp6Kqp0dSHK4bVGOx5J2A8C//uYvYYkekqXD99LXQ/jTL9W6Rn+oyyiwPfaTRYQv2O5YDQU3+iTJDs28cXNZdrArf9yIUnJyxmTeRJw08WKyz0g9sRmGkQg8xxBz+FNxjYeATITcs/S1Af4Rtz7MU3PwIDAQAB"
+ 
+_caldavs._tcp	SRV	14400	
+0 0 2080 osanvaultafrica.com.
+ 
+_caldav._tcp	SRV	14400	
+0 0 2079 osanvaultafrica.com.
+ 
+_carddav._tcp	SRV	14400	
+0 0 2079 osanvaultafrica.com.
+ 
+_autodiscover._tcp	SRV	14400	
+0 0 443 cpanelemaildiscovery.cpanel.net.
+ 
+_carddavs._tcp	SRV	14400	
+0 0 2080 osanvaultafrica.com.
+ 
+www	CNAME	380	
+osanvaultafrica.com
+ 
+Copyright © 2026 Truehost Nigeria. All Rights Reserved.
