@@ -1,0 +1,17 @@
+{
+  "_note": "Run 'pnpm deploy:amoy' to populate this file with real addresses",
+  "network": "polygonAmoy",
+  "chainId": 80002,
+  "deployedAt": null,
+  "deployer": null,
+  "contracts": {
+    "OsanVToken":    null,
+    "LandRegistry":  null,
+    "PropertyNFT":   null,
+    "OsanCarbon":    null,
+    "StakingVault":  null,
+    "TreasuryVault": null,
+    "FeeRouter":     null,
+    "Governance":    null
+  }
+}
