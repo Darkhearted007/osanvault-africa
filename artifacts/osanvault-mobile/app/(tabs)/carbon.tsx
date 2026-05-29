@@ -261,9 +261,9 @@ function RetirePanel({ projects }: { projects: CarbonProject[] }) {
               {/* Signatures & Seal */}
               <View style={styles.certSigRow}>
                 <View style={styles.certSigBlock}>
-                  <Text style={styles.certSigCursive}>O. Adewale</Text>
+                  <Text style={styles.certSigCursive}>O. Ajayi</Text>
                   <View style={styles.certSigLine} />
-                  <Text style={styles.certSigName}>OLAWALE ADEWALE</Text>
+                  <Text style={styles.certSigName}>O. AJAYI</Text>
                   <Text style={styles.certSigRole}>Chief Executive Officer</Text>
                 </View>
 
