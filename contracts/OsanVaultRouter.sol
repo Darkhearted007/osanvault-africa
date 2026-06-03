@@ -111,14 +111,12 @@ contract OsanVaultRouter is Initializable, UUPSUpgradeable, AccessControlUpgrade
     /// @param marketplace_ Marketplace contract address
     /// @param listingId_ Listing identifier
     /// @param amount_ Amount to purchase
-    /// @param paymentToken_ Token used for payment (kept for API compatibility)
-    /// @param maxTotal_ Maximum total spend (kept for API compatibility)
     function buyProperty(
         address marketplace_,
         uint256 listingId_,
         uint256 amount_,
-        address, // paymentToken_
-        uint256  // maxTotal_
+        address, // paymentToken_ (deprecated)
+        uint256  // maxTotal_ (deprecated)
     ) external whenNotPaused nonReentrant {
         require(marketplace_ != address(0), "invalid marketplace");
         require(listingId_ > 0, "invalid listing");

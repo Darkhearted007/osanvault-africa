@@ -37,6 +37,8 @@ contract Marketplace is Initializable, UUPSUpgradeable, AccessControlUpgradeable
     uint256 public marketplaceFee;
     address public treasuryVault;
     address public complianceManager;
+    address public riskEngine;
+    uint16 public riskThreshold;
     mapping(uint256 => Listing) private _listings;
 
     event ListingCreated(uint256 indexed listingId, address indexed seller, address indexed tokenAddress, uint256 tokenId, uint256 amount, uint256 pricePerUnit);
@@ -45,6 +47,8 @@ contract Marketplace is Initializable, UUPSUpgradeable, AccessControlUpgradeable
     event MarketplaceFeeUpdated(uint256 oldFee, uint256 newFee);
     event TreasuryVaultUpdated(address indexed oldVault, address indexed newVault);
     event ComplianceManagerUpdated(address indexed oldManager, address indexed newManager);
+    event RiskEngineUpdated(address indexed oldEngine, address indexed newEngine);
+    event HighRiskAssetPurchase(uint256 indexed listingId, address indexed buyer, uint16 riskScore);
 
     /// @custom:oz-upgrades-unsafe-allow constructor
     constructor() { _disableInitializers(); }
@@ -70,6 +74,7 @@ contract Marketplace is Initializable, UUPSUpgradeable, AccessControlUpgradeable
         treasuryVault = treasuryVault_;
         complianceManager = complianceManager_;
         marketplaceFee = marketplaceFee_;
+        riskThreshold = 700;
     }
 
     /// @notice Create a new fixed-price listing.
@@ -127,6 +132,11 @@ contract Marketplace is Initializable, UUPSUpgradeable, AccessControlUpgradeable
         Listing storage l = _listings[listingId_];
         require(l.active, "not active");
         require(amount_ > 0 && amount_ <= l.amount, "invalid amount");
+
+        if (riskEngine != address(0)) {
+            _checkAssetRisk(l.tokenId, l.seller, msg.sender);
+        }
+
         uint256 totalPrice = amount_ * l.pricePerUnit;
         uint256 fee = (totalPrice * marketplaceFee) / 10000;
         uint256 sellerProceeds = totalPrice - fee;
@@ -138,6 +148,22 @@ contract Marketplace is Initializable, UUPSUpgradeable, AccessControlUpgradeable
         l.amount -= amount_;
         if (l.amount == 0) l.active = false;
         emit ListingSold(listingId_, msg.sender, amount_, totalPrice);
+    }
+
+    /// @notice Internal: check asset risk and emit warning if high-risk
+    /// @param tokenId_ Token ID of the asset
+    /// @param seller_ Seller address
+    /// @param buyer_ Buyer address
+    function _checkAssetRisk(uint256 tokenId_, address seller_, address buyer_) internal {
+        (bool success, bytes memory data) = riskEngine.staticcall(
+            abi.encodeWithSignature("getRiskScore(uint256,address)", tokenId_, seller_)
+        );
+        if (success && data.length > 0) {
+            (uint16 riskScore) = abi.decode(data, (uint16));
+            if (riskScore < riskThreshold) {
+                emit HighRiskAssetPurchase(0, buyer_, riskScore);
+            }
+        }
     }
 
     /// @notice Get full listing details.
@@ -174,6 +200,20 @@ contract Marketplace is Initializable, UUPSUpgradeable, AccessControlUpgradeable
         require(newManager_ != address(0), "invalid manager");
         emit ComplianceManagerUpdated(complianceManager, newManager_);
         complianceManager = newManager_;
+    }
+
+    /// @notice Set the risk engine address.
+    /// @param newEngine_ New risk engine address.
+    function setRiskEngine(address newEngine_) external onlyRole(DEFAULT_ADMIN_ROLE) {
+        emit RiskEngineUpdated(riskEngine, newEngine_);
+        riskEngine = newEngine_;
+    }
+
+    /// @notice Set the risk threshold (below this = high risk warning).
+    /// @param threshold_ Risk score threshold (0-1000).
+    function setRiskThreshold(uint16 threshold_) external onlyRole(MARKET_ADMIN_ROLE) {
+        require(threshold_ <= 1000, "invalid threshold");
+        riskThreshold = threshold_;
     }
 
     /// @notice Pause the contract.
