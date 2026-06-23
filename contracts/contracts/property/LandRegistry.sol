@@ -1,5 +1,17 @@
-// SPDX-License-Identifier: MIT
+// SPDX-License-Identifier: UNLICENSED
 pragma solidity ^0.8.28;
+
+/**
+ * @title LandRegistry
+ * @notice Copyright (c) 2025-2026 ÒsánVault Africa. All rights reserved.
+ * 
+ * CONFIDENTIAL AND PROPRIETARY
+ * 
+ * This smart contract is the exclusive property of ÒsánVault Africa.
+ * Unauthorized copying, deployment, modification, or use of this contract,
+ * via any medium, is strictly prohibited without explicit written
+ * permission from ÒsánVault Africa.
+ */
 
 import "@openzeppelin/contracts-upgradeable/access/AccessControlUpgradeable.sol";
 import "@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol";
@@ -77,146 +89,136 @@ contract LandRegistry is Initializable, AccessControlUpgradeable, UUPSUpgradeabl
 
     // ─── Registration ──────────────────────────────────────────────────────
 
-    /// @notice Register a new land parcel linked to a property ID
     function registerParcel(
-        uint256 propertyId,
-        string  calldata parcelId,
-        string  calldata region,
-        string  calldata coordinates,
-        bytes32 metadataHash,
-        bytes32 governmentTitleHash,
-        address indigenousAuthority
-    ) external override onlyRole(REGISTRAR_ROLE) {
-        if (_parcels[propertyId].registeredAt != 0) revert Errors.AlreadyExists();
-        if (indigenousAuthority == address(0)) revert Errors.ZeroAddress();
-
+        string calldata parcelId,
+        string calldata region,
+        string calldata coordinates,
+        address         owner,
+        bytes32         governmentTitleHash,
+        address         indigenousAuthority,
+        bytes32         metadataHash
+    ) external override onlyRole(REGISTRAR_ROLE) returns (uint256 propertyId) {
+        if (owner == address(0) || indigenousAuthority == address(0)) revert Errors.ZeroAddress();
+        propertyId = ++parcelCount;
         _parcels[propertyId] = LandParcel({
             parcelId:             parcelId,
             region:               region,
             coordinates:          coordinates,
-            owner:                msg.sender,
+            owner:                owner,
             metadataHash:         metadataHash,
             governmentTitleHash:  governmentTitleHash,
             indigenousAuthority:  indigenousAuthority,
             governmentVerifier:   address(0),
-            verificationStatus:   VerificationStatus.Pending,
+            verificationStatus:   VerificationStatus.Unverified,
             hasDispute:           false,
             tokenized:            false,
             active:               true,
             registeredAt:         block.timestamp,
             lastUpdatedAt:        block.timestamp
         });
-        parcelCount++;
-
-        emit ParcelRegistered(
-            propertyId, parcelId, region, msg.sender, governmentTitleHash, indigenousAuthority
-        );
+        emit ParcelRegistered(propertyId, parcelId, region, owner, governmentTitleHash, indigenousAuthority);
     }
 
     // ─── Verification ──────────────────────────────────────────────────────
 
-    /// @notice Government authority confirms title validity
     function verifyGovernment(uint256 propertyId) external override onlyRole(VERIFIER_ROLE) {
         LandParcel storage p = _parcels[propertyId];
-        if (p.registeredAt == 0) revert Errors.DoesNotExist();
-        if (p.hasDispute)        revert Errors.InvalidState();
-
-        p.governmentVerifier  = msg.sender;
-        p.lastUpdatedAt       = block.timestamp;
-
+        if (!p.active) revert Errors.InvalidState();
+        if (p.verificationStatus == VerificationStatus.GovernmentVerified ||
+            p.verificationStatus == VerificationStatus.FullyVerified) revert Errors.AlreadyExists();
+        
+        p.governmentVerifier = msg.sender;
         if (p.verificationStatus == VerificationStatus.IndigenousVerified) {
             p.verificationStatus = VerificationStatus.FullyVerified;
             emit FullyVerified(propertyId);
         } else {
             p.verificationStatus = VerificationStatus.GovernmentVerified;
         }
+        p.lastUpdatedAt = block.timestamp;
         emit GovernmentVerified(propertyId, msg.sender);
     }
 
-    /// @notice Indigenous authority self-verifies their approval
     function verifyIndigenous(uint256 propertyId) external override {
         LandParcel storage p = _parcels[propertyId];
-        if (p.registeredAt == 0)                          revert Errors.DoesNotExist();
-        if (msg.sender != p.indigenousAuthority)          revert Errors.Unauthorized();
-        if (p.hasDispute)                                 revert Errors.InvalidState();
-
-        p.lastUpdatedAt = block.timestamp;
-
+        if (!p.active) revert Errors.InvalidState();
+        if (msg.sender != p.indigenousAuthority) revert Errors.Unauthorized();
+        if (p.verificationStatus == VerificationStatus.IndigenousVerified ||
+            p.verificationStatus == VerificationStatus.FullyVerified) revert Errors.AlreadyExists();
+        
         if (p.verificationStatus == VerificationStatus.GovernmentVerified) {
             p.verificationStatus = VerificationStatus.FullyVerified;
             emit FullyVerified(propertyId);
         } else {
             p.verificationStatus = VerificationStatus.IndigenousVerified;
         }
+        p.lastUpdatedAt = block.timestamp;
         emit IndigenousVerified(propertyId, msg.sender);
     }
 
-    // ─── Dispute Handling ──────────────────────────────────────────────────
+    // ─── Disputes ──────────────────────────────────────────────────────────
 
     function flagDispute(
         uint256 propertyId,
         string calldata reason
     ) external override onlyRole(DISPUTE_RESOLVER_ROLE) {
         LandParcel storage p = _parcels[propertyId];
-        if (p.registeredAt == 0) revert Errors.DoesNotExist();
-        p.hasDispute          = true;
-        p.verificationStatus  = VerificationStatus.Disputed;
-        p.lastUpdatedAt       = block.timestamp;
+        if (!p.active) revert Errors.InvalidState();
+        p.hasDispute = true;
+        p.lastUpdatedAt = block.timestamp;
         _disputeLog[propertyId].push(reason);
         emit DisputeFlagged(propertyId, reason, msg.sender);
     }
 
     function resolveDispute(uint256 propertyId) external override onlyRole(DISPUTE_RESOLVER_ROLE) {
         LandParcel storage p = _parcels[propertyId];
-        if (p.registeredAt == 0) revert Errors.DoesNotExist();
-        p.hasDispute          = false;
-        p.verificationStatus  = VerificationStatus.Pending;
-        p.lastUpdatedAt       = block.timestamp;
+        if (!p.hasDispute) revert Errors.InvalidState();
+        p.hasDispute = false;
+        p.lastUpdatedAt = block.timestamp;
         emit DisputeResolved(propertyId, msg.sender);
     }
 
     // ─── Tokenization Gate ─────────────────────────────────────────────────
 
-    /// @notice Called by PropertyNFT after first mint to mark parcel as tokenized
     function markTokenized(uint256 propertyId) external override onlyRole(PROPERTY_NFT_ROLE) {
         LandParcel storage p = _parcels[propertyId];
-        if (p.registeredAt == 0) revert Errors.DoesNotExist();
-        p.tokenized     = true;
+        if (p.tokenized) revert Errors.PropertyAlreadyTokenized();
+        if (p.verificationStatus != VerificationStatus.FullyVerified) revert Errors.LandNotFullyVerified();
+        p.tokenized = true;
         p.lastUpdatedAt = block.timestamp;
         emit ParcelTokenized(propertyId);
-    }
-
-    // ─── Admin ─────────────────────────────────────────────────────────────
-
-    function updateMetadata(
-        uint256 propertyId,
-        bytes32 newHash
-    ) external onlyRole(REGISTRAR_ROLE) {
-        LandParcel storage p = _parcels[propertyId];
-        if (p.registeredAt == 0) revert Errors.DoesNotExist();
-        p.metadataHash  = newHash;
-        p.lastUpdatedAt = block.timestamp;
-        emit MetadataUpdated(propertyId, newHash);
     }
 
     // ─── Views ─────────────────────────────────────────────────────────────
 
     function isFullyVerified(uint256 propertyId) external view override returns (bool) {
-        return _parcels[propertyId].verificationStatus == VerificationStatus.FullyVerified;
+        return _parcels[propertyId].verificationStatus == VerificationStatus.FullyVerified &&
+               !_parcels[propertyId].hasDispute;
     }
 
-    function getVerificationStatus(uint256 propertyId)
-        external view override returns (VerificationStatus)
-    {
-        return _parcels[propertyId].verificationStatus;
-    }
-
-    function getParcel(uint256 propertyId) external view returns (LandParcel memory) {
-        return _parcels[propertyId];
+    function getParcel(uint256 propertyId) external view override returns (
+        string memory parcelId,
+        string memory region,
+        address owner,
+        VerificationStatus status,
+        bool hasDispute,
+        bool tokenized
+    ) {
+        LandParcel storage p = _parcels[propertyId];
+        return (p.parcelId, p.region, p.owner, p.verificationStatus, p.hasDispute, p.tokenized);
     }
 
     function getDisputeLog(uint256 propertyId) external view returns (string[] memory) {
         return _disputeLog[propertyId];
+    }
+
+    // ─── Admin ─────────────────────────────────────────────────────────────
+
+    function updateMetadata(uint256 propertyId, bytes32 newHash) external onlyRole(REGISTRAR_ROLE) {
+        LandParcel storage p = _parcels[propertyId];
+        if (!p.active) revert Errors.InvalidState();
+        p.metadataHash = newHash;
+        p.lastUpdatedAt = block.timestamp;
+        emit MetadataUpdated(propertyId, newHash);
     }
 
     function _authorizeUpgrade(address) internal override onlyRole(DEFAULT_ADMIN_ROLE) {}

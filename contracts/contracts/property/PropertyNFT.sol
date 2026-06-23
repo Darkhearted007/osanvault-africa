@@ -1,5 +1,17 @@
-// SPDX-License-Identifier: MIT
+// SPDX-License-Identifier: UNLICENSED
 pragma solidity ^0.8.28;
+
+/**
+ * @title PropertyNFT
+ * @notice Copyright (c) 2025-2026 ÒsánVault Africa. All rights reserved.
+ * 
+ * CONFIDENTIAL AND PROPRIETARY
+ * 
+ * This smart contract is the exclusive property of ÒsánVault Africa.
+ * Unauthorized copying, deployment, modification, or use of this contract,
+ * via any medium, is strictly prohibited without explicit written
+ * permission from ÒsánVault Africa.
+ */
 
 import "@openzeppelin/contracts-upgradeable/token/ERC1155/ERC1155Upgradeable.sol";
 import "@openzeppelin/contracts-upgradeable/token/ERC1155/extensions/ERC1155SupplyUpgradeable.sol";
