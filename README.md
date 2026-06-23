@@ -8,7 +8,7 @@ Africa's institutional real estate tokenization platform — fractional property
 
 ## Overview
 
-OsanVault tokenizes premium African real estate into fractional ERC-1155 tokens (SPVs) accessible from ₦1,000. The protocol layers carbon credit issuance, OSANV token staking, and on-chain governance over a property-first core. Built on Polygon Amoy, regulated under the SEC Nigeria ARIP Sandbox.
+OsanVault tokenizes premium African real estate into fractional ERC-1155 tokens (SPVs) accessible from ₦1,000. The protocol layers carbon credit issuance, OSANV token staking, and on-chain governance over property-first infrastructure.
 
 ---
 
@@ -179,7 +179,7 @@ Never commit secrets. Use Replit Secrets for runtime injection.
 - **NGN primary** — All property values are displayed in Nigerian Naira. `formatNgn()` in `lib/mock-data.ts` handles B / M / K abbreviations.
 - **Contract-first API** — `lib/api-spec/openapi.yaml` is the source of truth. Client hooks and validation schemas are generated, never hand-written.
 - **Mock-first until mainnet** — `IS_CONTRACT_DEPLOYED = false` in `contract.ts` gates all wagmi contract reads. Pages degrade gracefully with mock data and testnet status toasts.
-- **Dual land verification** — `LandRegistry.sol` requires both a government title hash and an indigenous authority address before `PropertyNFT` can mint. This is surfaced in the Property Detail UI under Legal & Compliance.
+- **Dual land verification** — `LandRegistry.sol` requires both a government title hash and an indigenous authority address before `PropertyNFT` can mint. This is surfaced in the Property Details page.
 
 See `docs/ARCHITECTURE.md` for the full system design document.
 
@@ -187,10 +187,14 @@ See `docs/ARCHITECTURE.md` for the full system design document.
 
 ## Regulatory
 
-OsanVault Africa operates under the **SEC Nigeria ARIP Sandbox**. All on-chain token issuance is gated by KYC/AML whitelisting via the investor whitelist registry (`/whitelist`). Full compliance documentation is available at `osanvaultafrica.com/sec-arip`.
+OsanVault Africa operates under the **SEC Nigeria ARIP Sandbox**. All on-chain token issuance is gated by KYC/AML whitelisting via the investor whitelist registry (`/whitelist`). Full compliance documentation is available under `docs/REGULATORY.md`.
 
 ---
 
 ## License
 
-MIT · Copyright 2025–2026 OsanVault Africa
+Proprietary Software License · Copyright 2025–2026 ÒsánVault Africa
+
+All rights reserved. This software contains confidential and proprietary information. No license, right, title, or interest in or to the software is granted. Unauthorized use, copying, or distribution is strictly prohibited and may result in legal action.
+
+See the [LICENSE](./LICENSE) file for complete terms.
