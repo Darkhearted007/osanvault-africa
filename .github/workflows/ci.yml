@@ -1,0 +1,107 @@
+name: CI
+
+on:
+  push:
+    branches: [main, dev]
+  pull_request:
+    branches: [main]
+
+permissions:
+  contents: read
+
+env:
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
+
+jobs:
+  lint-and-type-check:
+    name: Lint & Type Check
+    runs-on: ubuntu-22.04
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: pnpm/action-setup@v6
+        with:
+          version: 10
+
+      - uses: actions/setup-node@v6
+        with:
+          node-version: 24
+          cache: pnpm
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Type check workspace
+        run: pnpm run typecheck
+
+  api-health:
+    name: API Health
+    runs-on: ubuntu-22.04
+
+    services:
+      postgres:
+        image: postgres:16-alpine
+        env:
+          POSTGRES_USER: osanvault
+          POSTGRES_PASSWORD: test_password
+          POSTGRES_DB: osanvault_db
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd "pg_isready -U osanvault -d osanvault_db"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+
+      redis:
+        image: redis:7-alpine
+        ports:
+          - 6379:6379
+        options: >-
+          --health-cmd "redis-cli ping"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+
+    env:
+      DATABASE_URL: ******localhost:5432/osanvault_db
+      REDIS_URL: redis://localhost:6379
+      PORT: 3001
+      NODE_ENV: test
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: pnpm/action-setup@v6
+        with:
+          version: 10
+
+      - uses: actions/setup-node@v6
+        with:
+          node-version: 24
+          cache: pnpm
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Push database schema
+        run: pnpm --filter @workspace/db run push-force
+
+      - name: Seed database
+        run: pnpm --filter @workspace/scripts run seed
+
+      - name: Build API server
+        run: pnpm --filter @workspace/api-server run build
+
+      - name: Start API and test health
+        run: |
+          nohup pnpm --filter @workspace/api-server run start >/tmp/api-server.log 2>&1 &
+          for _ in $(seq 1 30); do
+            if curl -fsS http://127.0.0.1:3001/api/healthz; then
+              break
+            fi
+            sleep 1
+          done
+          curl -fsS http://127.0.0.1:3001/api/healthz
+          curl -fsS http://127.0.0.1:3001/api/properties
