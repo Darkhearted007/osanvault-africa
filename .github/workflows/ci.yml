@@ -65,8 +65,8 @@ jobs:
           --health-retries 5
 
     env:
-      DATABASE_URL: ******localhost:5432/osanvault_db
-      REDIS_URL: redis://localhost:6379
+      DATABASE_URL: ******127.0.0.1:5432/osanvault_db
+      REDIS_URL: redis://127.0.0.1:6379
       PORT: 3001
       NODE_ENV: test
 
@@ -97,11 +97,17 @@ jobs:
       - name: Start API and test health
         run: |
           nohup pnpm --filter @workspace/api-server run start >/tmp/api-server.log 2>&1 &
+          ready=0
           for _ in $(seq 1 30); do
             if curl -fsS http://127.0.0.1:3001/api/healthz; then
+              ready=1
               break
             fi
             sleep 1
           done
+          if [ "$ready" -ne 1 ]; then
+            cat /tmp/api-server.log
+            exit 1
+          fi
           curl -fsS http://127.0.0.1:3001/api/healthz
           curl -fsS http://127.0.0.1:3001/api/properties
