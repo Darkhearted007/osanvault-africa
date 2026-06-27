@@ -4,3 +4,4 @@ export * from "./governance_proposals";
 export * from "./activity_events";
 export * from "./whitelist";
 export * from "./leads";
+export * from "./device_push_tokens";

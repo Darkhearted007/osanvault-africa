@@ -15,9 +15,31 @@
     },
     "ios": {
       "supportsTablet": false,
-      "bundleIdentifier": "com.replit.osanvaultmobile"
+      "bundleIdentifier": "com.replit.osanvaultmobile",
+      "infoPlist": {
+        "UIBackgroundModes": ["remote-notification"]
+      }
     },
-    "android": {},
+    "android": {
+      "googleServicesFile": "./google-services.json",
+      "permissions": [
+        "android.permission.RECEIVE_BOOT_COMPLETED",
+        "android.permission.VIBRATE",
+        "android.permission.POST_NOTIFICATIONS"
+      ],
+      "intentFilters": [
+        {
+          "action": "VIEW",
+          "autoVerify": true,
+          "data": [
+            {
+              "scheme": "osanvault-mobile"
+            }
+          ],
+          "category": ["BROWSABLE", "DEFAULT"]
+        }
+      ]
+    },
     "web": {
       "favicon": "./assets/images/icon.png"
     },
@@ -29,7 +51,17 @@
         }
       ],
       "expo-font",
-      "expo-web-browser"
+      "expo-web-browser",
+      [
+        "expo-notifications",
+        {
+          "icon": "./assets/images/icon.png",
+          "color": "#07111A",
+          "sounds": [],
+          "androidMode": "default",
+          "androidCollapsedTitle": "OsanVault"
+        }
+      ]
     ],
     "experiments": {
       "typedRoutes": true,

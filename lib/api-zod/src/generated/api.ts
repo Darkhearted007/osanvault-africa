@@ -165,3 +165,41 @@ export const GetPlatformStatsResponse = zod.object({
 })
 
 
+/**
+ * @summary Register a device push token
+ */
+export const RegisterDeviceTokenBody = zod.object({
+  "token": zod.string().min(1),
+  "platform": zod.string().optional(),
+})
+
+export const RegisterDeviceTokenResponse = zod.object({
+  "id": zod.number(),
+  "token": zod.string(),
+  "platform": zod.string(),
+  "createdAt": zod.coerce.date(),
+})
+
+
+/**
+ * @summary Create a governance proposal (triggers push notifications when active)
+ */
+export const CreateGovernanceProposalBody = zod.object({
+  "title": zod.string().min(1),
+  "description": zod.string().min(1),
+  "proposer": zod.string().min(1),
+  "status": zod.string().default("active"),
+  "quorum": zod.number().int().positive(),
+  "endTime": zod.coerce.date(),
+  "category": zod.string().min(1),
+})
+
+
+/**
+ * @summary Update property funding (triggers push notifications when fully funded)
+ */
+export const UpdatePropertyFundingBody = zod.object({
+  "raised": zod.number().int().nonnegative(),
+})
+
+
