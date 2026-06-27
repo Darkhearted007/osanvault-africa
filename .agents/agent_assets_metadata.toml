@@ -12,6 +12,18 @@ uri = "file://attached_assets/osanvault-banner.png"
 type = "image"
 title = "osanvault hero banner"
 
+[[generated]]
+id = "juO07zKs4u23lVwDxS91R"
+uri = "file://artifacts/osanvault-mobile/assets/images/icon.png"
+type = "image"
+title = "osanvault mobile app icon"
+
+[[generated]]
+id = "EU2Om-gsjhKLyiKCfK9Ka"
+uri = "file://artifacts/osanvault-mobile/assets/images/splash.png"
+type = "image"
+title = "osanvault splash background"
+
 [[outputs]]
 id = "IPdSRE7OKCQbt5SXFVOVV"
 uri = "file://attached_assets/osanvault-logo.png"
