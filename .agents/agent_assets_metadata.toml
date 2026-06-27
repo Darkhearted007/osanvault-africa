@@ -1,0 +1,25 @@
+uploads = []
+
+[[generated]]
+id = "7m6ksDgPSHfad1eQylTkB"
+uri = "file://attached_assets/osanvault-logo.png"
+type = "image"
+title = "osanvault logo icon"
+
+[[generated]]
+id = "uCUrrz4biruojWNUtLpxn"
+uri = "file://attached_assets/osanvault-banner.png"
+type = "image"
+title = "osanvault hero banner"
+
+[[outputs]]
+id = "IPdSRE7OKCQbt5SXFVOVV"
+uri = "file://attached_assets/osanvault-logo.png"
+type = "image"
+title = "OsanVault Africa — Logo Icon"
+
+[[outputs]]
+id = "ZSNadyhT1xF2k5GncOFEx"
+uri = "file://attached_assets/osanvault-banner.png"
+type = "image"
+title = "OsanVault Africa — Hero Banner"
