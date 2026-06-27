@@ -164,7 +164,7 @@ export default function GovernmentScreen() {
               <View style={styles.spvList}>
                 {partner.spvs.map((spv) => (
                   <View key={spv} style={[styles.spvChip, { backgroundColor: `${colors.primary}15` }]}>
-                    <Feather name="building" size={10} color={colors.primary} />
+                    <Feather name="home" size={10} color={colors.primary} />
                     <Text style={[styles.spvText, { color: colors.primary }]}>{spv}</Text>
                   </View>
                 ))}

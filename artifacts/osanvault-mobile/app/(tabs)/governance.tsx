@@ -116,11 +116,11 @@ export default function GovernanceScreen() {
                       </Text>
                     </View>
                   </View>
-                  {p.endsAt && (
+                  {p.endTime && (
                     <View style={styles.deadline}>
                       <Feather name="clock" size={12} color={colors.mutedForeground} />
                       <Text style={[styles.deadlineText, { color: colors.mutedForeground }]}>
-                        Ends {new Date(p.endsAt).toLocaleDateString()}
+                        Ends {new Date(p.endTime).toLocaleDateString()}
                       </Text>
                     </View>
                   )}
@@ -152,20 +152,20 @@ export default function GovernanceScreen() {
                 <View style={styles.carbonMeta}>
                   <Text style={[styles.proposalTitle, { color: colors.foreground }]}>{c.name}</Text>
                   <Text style={[styles.proposalDesc, { color: colors.mutedForeground }]}>
-                    {c.country} · {c.standard}
+                    {c.region} · {c.methodology}
                   </Text>
                 </View>
               </View>
               <View style={styles.carbonMetrics}>
                 <View style={styles.carbonMetric}>
                   <Text style={[styles.carbonMetricVal, { color: colors.emeraldBright }]}>
-                    {Number(c.credits ?? 0).toLocaleString()}
+                    {Number(c.totalIssued ?? 0).toLocaleString()}
                   </Text>
                   <Text style={[styles.carbonMetricLabel, { color: colors.mutedForeground }]}>tCO₂e Total</Text>
                 </View>
                 <View style={styles.carbonMetric}>
                   <Text style={[styles.carbonMetricVal, { color: colors.gold }]}>
-                    {Number(c.retired ?? 0).toLocaleString()}
+                    {Number(c.totalRetired ?? 0).toLocaleString()}
                   </Text>
                   <Text style={[styles.carbonMetricLabel, { color: colors.mutedForeground }]}>Retired</Text>
                 </View>

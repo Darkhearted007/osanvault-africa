@@ -103,7 +103,7 @@ export default function IssuerScreen() {
       <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={[styles.content, { paddingBottom: bottomPad }]}>
         <View style={[styles.heroBanner, { backgroundColor: colors.card, borderColor: colors.primary }]}>
           <View style={[styles.heroIcon, { backgroundColor: `${colors.primary}20` }]}>
-            <Feather name="building" size={24} color={colors.primary} />
+            <Feather name="home" size={24} color={colors.primary} />
           </View>
           <View style={{ flex: 1 }}>
             <Text style={[styles.heroTitle, { color: colors.foreground }]}>List a Property SPV</Text>

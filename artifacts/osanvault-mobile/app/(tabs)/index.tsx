@@ -73,13 +73,13 @@ export default function HomeScreen() {
           </View>
           <View style={[styles.statCard, { backgroundColor: colors.card, borderColor: colors.border }]}>
             <Text style={[styles.statValue, { color: colors.gold }]}>
-              {statsData.totalProperties ?? 6}
+              {statsData.propertiesLive ?? 6}
             </Text>
             <Text style={[styles.statLabel, { color: colors.mutedForeground }]}>Properties</Text>
           </View>
           <View style={[styles.statCard, { backgroundColor: colors.card, borderColor: colors.border }]}>
             <Text style={[styles.statValue, { color: colors.emeraldBright }]}>
-              {statsData.totalHolders ?? "1,247"}
+              {statsData.totalInvestors ?? "1,247"}
             </Text>
             <Text style={[styles.statLabel, { color: colors.mutedForeground }]}>Holders</Text>
           </View>

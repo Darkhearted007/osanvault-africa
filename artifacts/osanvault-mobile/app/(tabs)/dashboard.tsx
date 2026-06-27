@@ -97,13 +97,13 @@ export default function DashboardScreen() {
         </View>
         <View style={[styles.kpiCard, { backgroundColor: colors.card, borderColor: colors.border }]}>
           <Feather name="users" size={16} color={colors.gold} />
-          <Text style={[styles.kpiVal, { color: colors.foreground }]}>{stats?.totalHolders ?? "1,247"}</Text>
+          <Text style={[styles.kpiVal, { color: colors.foreground }]}>{stats?.totalInvestors ?? "1,247"}</Text>
           <Text style={[styles.kpiLabel, { color: colors.mutedForeground }]}>Holders</Text>
         </View>
         <View style={[styles.kpiCard, { backgroundColor: colors.card, borderColor: colors.border }]}>
           <Feather name="wind" size={16} color={colors.emeraldBright} />
           <Text style={[styles.kpiVal, { color: colors.foreground }]}>
-            {stats?.carbonRetired ?? "2,840"} tCO₂e
+            {stats?.totalCarbonTonnes ?? "2,840"} tCO₂e
           </Text>
           <Text style={[styles.kpiLabel, { color: colors.mutedForeground }]}>Carbon Retired</Text>
         </View>
@@ -190,9 +190,9 @@ export default function DashboardScreen() {
                   <Text style={[styles.activityType, { color: colors.foreground }]}>
                     {event.type.charAt(0).toUpperCase() + event.type.slice(1)}
                   </Text>
-                  {event.wallet && (
+                  {event.address && (
                     <Text style={[styles.activityWallet, { color: colors.mutedForeground }]}>
-                      {event.wallet.slice(0, 6)}...{event.wallet.slice(-4)}
+                      {event.address.slice(0, 6)}...{event.address.slice(-4)}
                     </Text>
                   )}
                 </View>
