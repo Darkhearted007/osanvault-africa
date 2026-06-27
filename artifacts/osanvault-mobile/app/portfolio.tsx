@@ -43,7 +43,7 @@ export default function PortfolioScreen() {
   const properties = propertiesData ?? [];
   const activities = (activityData ?? []).filter((a) => a.type === "purchase");
   const liveProps = properties.filter((p) => p.status === "live");
-  const totalRaised = properties.reduce((sum, p) => sum + Number(p.raisedNgn ?? 0), 0);
+  const totalRaised = properties.reduce((sum, p) => sum + Number(p.raised ?? 0), 0);
 
   return (
     <View style={[styles.container, { backgroundColor: colors.background }]}>
@@ -99,7 +99,7 @@ export default function PortfolioScreen() {
           <ActivityIndicator color={colors.primary} style={{ marginTop: 20 }} />
         ) : (
           properties.map((p) => {
-            const pct = Math.min(100, Math.round((Number(p.raisedNgn ?? 0) / Number(p.targetNgn ?? 1)) * 100));
+            const pct = Math.min(100, Math.round((Number(p.raised ?? 0) / Number(p.targetRaise ?? 1)) * 100));
             return (
               <Pressable
                 key={p.id}
@@ -113,7 +113,7 @@ export default function PortfolioScreen() {
                 <View style={{ flex: 1 }}>
                   <Text style={[styles.propName, { color: colors.foreground }]}>{p.name}</Text>
                   <Text style={[styles.propMeta, { color: colors.mutedForeground }]}>
-                    {p.city} · {p.targetApy}% APY · {pct}% raised
+                    {p.location} · {p.yieldApy}% APY · {pct}% raised
                   </Text>
                   <View style={[styles.propBar, { backgroundColor: colors.muted }]}>
                     <View style={[styles.propFill, { width: `${pct}%` as any, backgroundColor: colors.primary }]} />

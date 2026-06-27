@@ -35,8 +35,8 @@ function formatNgn(val: number | string | null | undefined) {
 }
 
 function fundingPct(p: Property): number {
-  const raised = Number(p.raisedNgn ?? 0);
-  const target = Number(p.targetNgn ?? 1);
+  const raised = Number(p.raised ?? 0);
+  const target = Number(p.targetRaise ?? 1);
   return Math.min(100, Math.round((raised / target) * 100));
 }
 
@@ -56,8 +56,8 @@ export default function PropertiesScreen() {
     const matchesSearch =
       !search ||
       p.name.toLowerCase().includes(search.toLowerCase()) ||
-      p.city.toLowerCase().includes(search.toLowerCase()) ||
-      p.country.toLowerCase().includes(search.toLowerCase());
+      (p.location ?? "").toLowerCase().includes(search.toLowerCase()) ||
+      (p.country ?? "").toLowerCase().includes(search.toLowerCase());
     const matchesType = activeFilter === "All" || p.type === activeFilter;
     return matchesSearch && matchesType;
   });
@@ -187,11 +187,11 @@ export default function PropertiesScreen() {
                 <View style={styles.cardContent}>
                   <Text style={[styles.cardName, { color: colors.foreground }]}>{property.name}</Text>
                   <Text style={[styles.cardLocation, { color: colors.mutedForeground }]}>
-                    {property.city}, {property.country}
+                    {property.location}
                   </Text>
                   <View style={styles.cardMetrics}>
                     <View style={styles.metric}>
-                      <Text style={[styles.metricVal, { color: colors.primary }]}>{property.targetApy}%</Text>
+                      <Text style={[styles.metricVal, { color: colors.primary }]}>{property.yieldApy}%</Text>
                       <Text style={[styles.metricLbl, { color: colors.mutedForeground }]}>APY</Text>
                     </View>
                     <View style={styles.metric}>

@@ -129,11 +129,11 @@ export default function HomeScreen() {
               <View style={styles.cardBody}>
                 <Text style={[styles.cardName, { color: colors.foreground }]} numberOfLines={1}>{property.name}</Text>
                 <Text style={[styles.cardLocation, { color: colors.mutedForeground }]} numberOfLines={1}>
-                  <Feather name="map-pin" size={11} color={colors.mutedForeground} /> {property.city}, {property.country}
+                  <Feather name="map-pin" size={11} color={colors.mutedForeground} /> {property.location}
                 </Text>
                 <View style={styles.cardMetrics}>
                   <View>
-                    <Text style={[styles.metricValue, { color: colors.primary }]}>{property.targetApy}% APY</Text>
+                    <Text style={[styles.metricValue, { color: colors.primary }]}>{property.yieldApy}% APY</Text>
                     <Text style={[styles.metricLabel, { color: colors.mutedForeground }]}>Target</Text>
                   </View>
                   <View>

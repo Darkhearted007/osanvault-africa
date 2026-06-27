@@ -50,7 +50,7 @@ export default function LandRegistryScreen() {
         <View style={styles.statsRow}>
           <View style={[styles.statCard, { backgroundColor: colors.card, borderColor: colors.border }]}>
             <Feather name="check-circle" size={20} color={colors.primary} />
-            <Text style={[styles.statVal, { color: colors.foreground }]}>{properties.filter(p => !!p.titleDeedHash).length}</Text>
+            <Text style={[styles.statVal, { color: colors.foreground }]}>{properties.filter(p => !!p.legalDocCid).length}</Text>
             <Text style={[styles.statLabel, { color: colors.mutedForeground }]}>Title Verified</Text>
           </View>
           <View style={[styles.statCard, { backgroundColor: colors.card, borderColor: colors.border }]}>
@@ -77,7 +77,7 @@ export default function LandRegistryScreen() {
                 <View style={{ flex: 1 }}>
                   <Text style={[styles.propertyName, { color: colors.foreground }]}>{property.name}</Text>
                   <Text style={[styles.propertyLocation, { color: colors.mutedForeground }]}>
-                    {property.city}, {property.country}
+                    {property.location}
                   </Text>
                 </View>
                 <View
@@ -85,31 +85,31 @@ export default function LandRegistryScreen() {
                     styles.verifiedBadge,
                     {
                       backgroundColor:
-                        property.titleDeedHash ? `${colors.primary}20` : `${colors.mutedForeground}20`,
+                        property.legalDocCid ? `${colors.primary}20` : `${colors.mutedForeground}20`,
                     },
                   ]}
                 >
                   <Feather
-                    name={property.titleDeedHash ? "check-circle" : "clock"}
+                    name={property.legalDocCid ? "check-circle" : "clock"}
                     size={12}
-                    color={property.titleDeedHash ? colors.primary : colors.mutedForeground}
+                    color={property.legalDocCid ? colors.primary : colors.mutedForeground}
                   />
                   <Text
                     style={[
                       styles.verifiedText,
-                      { color: property.titleDeedHash ? colors.primary : colors.mutedForeground },
+                      { color: property.legalDocCid ? colors.primary : colors.mutedForeground },
                     ]}
                   >
-                    {property.titleDeedHash ? "Verified" : "Pending"}
+                    {property.legalDocCid ? "Verified" : "Pending"}
                   </Text>
                 </View>
               </View>
 
-              {property.titleDeedHash && (
+              {property.indigenousAuthority && (
                 <View style={[styles.hashRow, { backgroundColor: colors.input }]}>
                   <Feather name="shield" size={12} color={colors.emeraldBright} />
                   <Text style={[styles.hashText, { color: colors.mutedForeground }]} numberOfLines={1}>
-                    Title: {property.titleDeedHash}
+                    Authority: {property.indigenousAuthority}
                   </Text>
                 </View>
               )}

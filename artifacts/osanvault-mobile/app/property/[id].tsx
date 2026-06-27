@@ -40,8 +40,7 @@ export default function PropertyDetailScreen() {
   const topInset = Platform.OS === "web" ? 67 : insets.top;
   const bottomPad = Platform.OS === "web" ? 34 : 40;
 
-  // @ts-ignore — getProperty may have different param types in generated client
-  const { data: property, isLoading } = useGetProperty({ propertyId: Number(id) });
+  const { data: property, isLoading } = useGetProperty(Number(id));
 
   if (isLoading) {
     return (
@@ -65,7 +64,7 @@ export default function PropertyDetailScreen() {
 
   const pct = Math.min(
     100,
-    Math.round((Number(property.raisedNgn ?? 0) / Number(property.targetNgn ?? 1)) * 100)
+    Math.round((Number(property.raised ?? 0) / Number(property.targetRaise ?? 1)) * 100)
   );
   const img = PROPERTY_IMAGES[property.id as number] ?? PROPERTY_IMAGES[1];
 
@@ -125,7 +124,7 @@ export default function PropertyDetailScreen() {
           <View style={styles.locationRow}>
             <Feather name="map-pin" size={14} color={colors.mutedForeground} />
             <Text style={[styles.locationText, { color: colors.mutedForeground }]}>
-              {property.city}, {property.country}
+              {property.location}
             </Text>
             <View style={[styles.typeBadge, { backgroundColor: `${colors.primary}20` }]}>
               <Text style={[styles.typeText, { color: colors.primary }]}>{property.type}</Text>
@@ -134,10 +133,10 @@ export default function PropertyDetailScreen() {
 
           <View style={styles.metricsGrid}>
             {[
-              { label: "Target APY", value: `${property.targetApy}%`, color: colors.primary },
+              { label: "Target APY", value: `${property.yieldApy}%`, color: colors.primary },
               { label: "Token Price", value: formatNgn(property.tokenPrice), color: colors.gold },
               { label: "Total Tokens", value: (property.totalTokens ?? 0).toLocaleString(), color: colors.foreground },
-              { label: "Target Raise", value: formatNgn(property.targetNgn), color: colors.foreground },
+              { label: "Target Raise", value: formatNgn(property.targetRaise), color: colors.foreground },
             ].map(({ label, value, color: c }) => (
               <View key={label} style={[styles.metricCard, { backgroundColor: colors.card, borderColor: colors.border }]}>
                 <Text style={[styles.metricValue, { color: c }]}>{value}</Text>
@@ -161,10 +160,10 @@ export default function PropertyDetailScreen() {
             </View>
             <View style={styles.fundingStats}>
               <Text style={[styles.fundingStat, { color: colors.mutedForeground }]}>
-                Raised: {formatNgn(property.raisedNgn)}
+                Raised: {formatNgn(property.raised)}
               </Text>
               <Text style={[styles.fundingStat, { color: colors.mutedForeground }]}>
-                Target: {formatNgn(property.targetNgn)}
+                Target: {formatNgn(property.targetRaise)}
               </Text>
             </View>
           </View>
@@ -176,14 +175,14 @@ export default function PropertyDetailScreen() {
             </View>
           )}
 
-          {(property.legalDocCid || property.titleDeedHash) && (
+          {(property.legalDocCid || property.indigenousAuthority) && (
             <View style={[styles.legalSection, { backgroundColor: colors.card, borderColor: colors.border }]}>
               <Text style={[styles.descTitle, { color: colors.foreground }]}>Legal Verification</Text>
-              {property.titleDeedHash && (
+              {property.indigenousAuthority && (
                 <View style={styles.legalRow}>
                   <Feather name="shield" size={14} color={colors.emeraldBright} />
                   <Text style={[styles.legalText, { color: colors.mutedForeground }]}>
-                    Title: {property.titleDeedHash.slice(0, 20)}...
+                    Authority: {property.indigenousAuthority}
                   </Text>
                 </View>
               )}
