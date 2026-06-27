@@ -19,7 +19,9 @@ const MENU_SECTIONS = [
       { icon: "layers", label: "Tokenomics", desc: "OSANV token supply and distribution", route: "/tokenomics" },
       { icon: "trending-up", label: "Staking", desc: "Stake OSANV for 8–22% APR", route: "/staking" },
       { icon: "shield", label: "Treasury Vault", desc: "Protocol reserves and fee flows", route: "/treasury" },
+      { icon: "wind", label: "Carbon Credits", desc: "Retire OsanCarbon ERC-1155 credits", route: "/carbon" },
       { icon: "globe", label: "Land Registry", desc: "On-chain title verification", route: "/land-registry" },
+      { icon: "flag", label: "Government Partners", desc: "State and pan-African partnerships", route: "/government" },
       { icon: "briefcase", label: "My Portfolio", desc: "Property tokens and holdings", route: "/portfolio" },
       { icon: "info", label: "About OsanVault", desc: "Our mission, roadmap, and security", route: "/about" },
     ],
@@ -33,10 +35,10 @@ const MENU_SECTIONS = [
   {
     title: "Legal & Compliance",
     items: [
-      { icon: "file-text", label: "SEC ARIP Sandbox", desc: "Regulatory framework", route: null },
-      { icon: "book-open", label: "Terms of Service", desc: "Platform terms", route: null },
-      { icon: "lock", label: "Privacy Policy", desc: "Data handling policy", route: null },
-      { icon: "alert-triangle", label: "Risk Disclosure", desc: "Investment risks", route: null },
+      { icon: "shield", label: "SEC ARIP Sandbox", desc: "Regulatory framework", route: "/legal?tab=sec-arip" },
+      { icon: "file-text", label: "Terms of Service", desc: "Platform terms", route: "/legal?tab=terms" },
+      { icon: "lock", label: "Privacy Policy", desc: "Data handling policy", route: "/legal?tab=privacy" },
+      { icon: "alert-triangle", label: "Risk Disclosure", desc: "Investment risks", route: "/legal?tab=risk" },
     ],
   },
 ];
@@ -93,9 +95,7 @@ export default function MoreScreen() {
                   idx > 0 && { borderTopWidth: 1, borderTopColor: colors.border },
                   { opacity: pressed ? 0.7 : 1 },
                 ]}
-                onPress={() => {
-                  if (item.route) router.push(item.route as any);
-                }}
+                onPress={() => router.push(item.route as any)}
               >
                 <View style={[styles.menuIcon, { backgroundColor: `${colors.primary}15` }]}>
                   <Feather name={item.icon as any} size={16} color={colors.primary} />
@@ -104,11 +104,7 @@ export default function MoreScreen() {
                   <Text style={[styles.menuLabel, { color: colors.foreground }]}>{item.label}</Text>
                   <Text style={[styles.menuDesc, { color: colors.mutedForeground }]}>{item.desc}</Text>
                 </View>
-                <Feather
-                  name="chevron-right"
-                  size={16}
-                  color={item.route ? colors.mutedForeground : `${colors.mutedForeground}50`}
-                />
+                <Feather name="chevron-right" size={16} color={colors.mutedForeground} />
               </Pressable>
             ))}
           </View>

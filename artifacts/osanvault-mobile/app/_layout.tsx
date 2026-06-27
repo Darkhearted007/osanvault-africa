@@ -35,6 +35,9 @@ function RootLayoutNav() {
       <Stack.Screen name="tokenomics" options={{ headerShown: false }} />
       <Stack.Screen name="land-registry" options={{ headerShown: false }} />
       <Stack.Screen name="portfolio" options={{ headerShown: false }} />
+      <Stack.Screen name="carbon" options={{ headerShown: false }} />
+      <Stack.Screen name="government" options={{ headerShown: false }} />
+      <Stack.Screen name="legal" options={{ headerShown: false }} />
     </Stack>
   );
 }
