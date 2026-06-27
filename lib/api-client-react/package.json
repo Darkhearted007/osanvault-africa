@@ -1,7 +1,6 @@
 {
   "name": "@workspace/api-client-react",
-  "version": "0.1.0",
-  "description": "TanStack Query v5 hooks auto-generated from the OsanVault OpenAPI specification",
+  "version": "0.0.0",
   "private": true,
   "type": "module",
   "exports": {

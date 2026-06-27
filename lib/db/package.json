@@ -1,7 +1,6 @@
 {
   "name": "@workspace/db",
-  "version": "0.1.0",
-  "description": "Drizzle ORM schema, migrations, and type-safe PostgreSQL query helpers",
+  "version": "0.0.0",
   "private": true,
   "type": "module",
   "exports": {
@@ -15,7 +14,7 @@
   "dependencies": {
     "drizzle-orm": "catalog:",
     "drizzle-zod": "^0.8.3",
-    "pg": "^8.20.0",
+    "pg": "^8.22.0",
     "zod": "catalog:"
   },
   "devDependencies": {

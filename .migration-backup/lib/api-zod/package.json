@@ -1,0 +1,13 @@
+{
+  "name": "@workspace/api-zod",
+  "version": "0.1.0",
+  "description": "Zod validation schemas auto-generated from the OsanVault OpenAPI specification",
+  "private": true,
+  "type": "module",
+  "exports": {
+    ".": "./src/index.ts"
+  },
+  "dependencies": {
+    "zod": "catalog:"
+  }
+}

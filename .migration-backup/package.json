@@ -1,0 +1,39 @@
+{
+  "name": "@osanvault/monorepo",
+  "version": "0.1.0",
+  "description": "Institutional real estate tokenization platform — fractional property ownership on Polygon Amoy",
+  "author": "OsanVault Africa <engineering@osanvaultafrica.com>",
+  "license": "UNLICENSED",
+  "private": true,
+  "homepage": "https://osanvaultafrica.com",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Darkhearted007/osanvault-africa.git"
+  },
+  "engines": {
+    "node": ">=22",
+    "pnpm": ">=10"
+  },
+  "keywords": [
+    "real-estate-tokenization",
+    "defi",
+    "polygon",
+    "erc-1155",
+    "africa",
+    "fintech",
+    "blockchain"
+  ],
+  "scripts": {
+    "preinstall": "sh -c 'rm -f package-lock.json yarn.lock; case \"$npm_config_user_agent\" in pnpm/*) ;; *) echo \"Use pnpm instead\" >&2; exit 1 ;; esac'",
+    "build": "pnpm run typecheck && pnpm -r --if-present run build",
+    "typecheck:libs": "tsc --build",
+    "typecheck": "pnpm run typecheck:libs && pnpm -r --filter \"./artifacts/**\" --filter \"./scripts\" --if-present run typecheck",
+    "format": "prettier --write \"**/*.{ts,tsx,js,mjs,json,css,md,yaml}\" --ignore-path .gitignore",
+    "format:check": "prettier --check \"**/*.{ts,tsx,js,mjs,json,css,md,yaml}\" --ignore-path .gitignore",
+    "clean": "find . -name 'dist' -not -path '*/node_modules/*' -exec rm -rf {} + 2>/dev/null; find . -name '*.tsbuildinfo' -not -path '*/node_modules/*' -delete 2>/dev/null; echo 'Clean complete'"
+  },
+  "devDependencies": {
+    "prettier": "^3.8.3",
+    "typescript": "~5.9.3"
+  }
+}
