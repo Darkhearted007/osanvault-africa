@@ -1,4 +1,7 @@
 # OsanVault Africa
+# Copyright © 2024–2025 ÒsánVault Africa Ltd. All Rights Reserved.
+# Trademarks: OsanVault®, OsanCarbon™, OSANV™ — may not be used without consent.
+# Contact: legal@osanvault.africa
 
 > Africa's institutional-grade real estate tokenization platform on Polygon blockchain. Fractional ownership of premium properties in Nigeria, Ghana, and Kenya from ₦1,000.
 
