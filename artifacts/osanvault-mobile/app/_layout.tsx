@@ -19,15 +19,22 @@ import { ErrorBoundary } from "@/components/ErrorBoundary";
 const domain = process.env.EXPO_PUBLIC_DOMAIN;
 if (domain) setBaseUrl(`https://${domain}`);
 
-// Prevent the splash screen from auto-hiding before asset loading is complete.
 SplashScreen.preventAutoHideAsync();
 
 const queryClient = new QueryClient();
 
 function RootLayoutNav() {
   return (
-    <Stack screenOptions={{ headerBackTitle: "Back" }}>
+    <Stack screenOptions={{ headerShown: false }}>
       <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+      <Stack.Screen name="property/[id]" options={{ headerShown: false }} />
+      <Stack.Screen name="staking" options={{ headerShown: false }} />
+      <Stack.Screen name="treasury" options={{ headerShown: false }} />
+      <Stack.Screen name="about" options={{ headerShown: false }} />
+      <Stack.Screen name="whitelist" options={{ headerShown: false }} />
+      <Stack.Screen name="tokenomics" options={{ headerShown: false }} />
+      <Stack.Screen name="land-registry" options={{ headerShown: false }} />
+      <Stack.Screen name="portfolio" options={{ headerShown: false }} />
     </Stack>
   );
 }

@@ -5,9 +5,9 @@ import {
   StyleSheet,
   ScrollView,
   Pressable,
-  Linking,
   Platform,
 } from "react-native";
+import { useRouter } from "expo-router";
 import { Feather } from "@expo/vector-icons";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { useColors } from "@/hooks/useColors";
@@ -16,31 +16,34 @@ const MENU_SECTIONS = [
   {
     title: "Platform",
     items: [
-      { icon: "layers", label: "Tokenomics", desc: "OSANV token supply and distribution" },
-      { icon: "shield", label: "Security", desc: "Audits, multisig, and dual verification" },
-      { icon: "globe", label: "Land Registry", desc: "On-chain title verification" },
-    ],
-  },
-  {
-    title: "Legal & Compliance",
-    items: [
-      { icon: "file-text", label: "SEC ARIP Sandbox", desc: "Regulatory framework" },
-      { icon: "book-open", label: "Terms of Service", desc: "Platform terms" },
-      { icon: "lock", label: "Privacy Policy", desc: "Data handling policy" },
-      { icon: "alert-triangle", label: "Risk Disclosure", desc: "Investment risks" },
+      { icon: "layers", label: "Tokenomics", desc: "OSANV token supply and distribution", route: "/tokenomics" },
+      { icon: "trending-up", label: "Staking", desc: "Stake OSANV for 8–22% APR", route: "/staking" },
+      { icon: "shield", label: "Treasury Vault", desc: "Protocol reserves and fee flows", route: "/treasury" },
+      { icon: "globe", label: "Land Registry", desc: "On-chain title verification", route: "/land-registry" },
+      { icon: "briefcase", label: "My Portfolio", desc: "Property tokens and holdings", route: "/portfolio" },
+      { icon: "info", label: "About OsanVault", desc: "Our mission, roadmap, and security", route: "/about" },
     ],
   },
   {
     title: "Community",
     items: [
-      { icon: "info", label: "About OsanVault", desc: "Our mission and team" },
-      { icon: "mail", label: "Early Access", desc: "Join the whitelist" },
+      { icon: "star", label: "Early Access", desc: "Apply for the investor whitelist", route: "/whitelist" },
+    ],
+  },
+  {
+    title: "Legal & Compliance",
+    items: [
+      { icon: "file-text", label: "SEC ARIP Sandbox", desc: "Regulatory framework", route: null },
+      { icon: "book-open", label: "Terms of Service", desc: "Platform terms", route: null },
+      { icon: "lock", label: "Privacy Policy", desc: "Data handling policy", route: null },
+      { icon: "alert-triangle", label: "Risk Disclosure", desc: "Investment risks", route: null },
     ],
   },
 ];
 
 export default function MoreScreen() {
   const colors = useColors();
+  const router = useRouter();
   const insets = useSafeAreaInsets();
   const topInset = Platform.OS === "web" ? 67 : insets.top;
   const bottomPad = Platform.OS === "web" ? 34 : 100;
@@ -55,7 +58,13 @@ export default function MoreScreen() {
         <Text style={[styles.title, { color: colors.foreground }]}>More</Text>
       </View>
 
-      <View style={[styles.earlyAccessCard, { backgroundColor: colors.card, borderColor: colors.primary }]}>
+      <Pressable
+        style={({ pressed }) => [
+          styles.earlyAccessCard,
+          { backgroundColor: colors.card, borderColor: colors.primary, opacity: pressed ? 0.9 : 1 },
+        ]}
+        onPress={() => router.push("/whitelist")}
+      >
         <View style={styles.earlyAccessLeft}>
           <View style={[styles.earlyAccessIcon, { backgroundColor: `${colors.primary}20` }]}>
             <Feather name="star" size={20} color={colors.gold} />
@@ -70,7 +79,7 @@ export default function MoreScreen() {
         <View style={[styles.earlyAccessBadge, { backgroundColor: colors.primary }]}>
           <Text style={[styles.earlyAccessBadgeText, { color: colors.primaryForeground }]}>Apply</Text>
         </View>
-      </View>
+      </Pressable>
 
       {MENU_SECTIONS.map((section) => (
         <View key={section.title} style={styles.sectionGroup}>
@@ -84,7 +93,9 @@ export default function MoreScreen() {
                   idx > 0 && { borderTopWidth: 1, borderTopColor: colors.border },
                   { opacity: pressed ? 0.7 : 1 },
                 ]}
-                onPress={() => {}}
+                onPress={() => {
+                  if (item.route) router.push(item.route as any);
+                }}
               >
                 <View style={[styles.menuIcon, { backgroundColor: `${colors.primary}15` }]}>
                   <Feather name={item.icon as any} size={16} color={colors.primary} />
@@ -93,7 +104,11 @@ export default function MoreScreen() {
                   <Text style={[styles.menuLabel, { color: colors.foreground }]}>{item.label}</Text>
                   <Text style={[styles.menuDesc, { color: colors.mutedForeground }]}>{item.desc}</Text>
                 </View>
-                <Feather name="chevron-right" size={16} color={colors.mutedForeground} />
+                <Feather
+                  name="chevron-right"
+                  size={16}
+                  color={item.route ? colors.mutedForeground : `${colors.mutedForeground}50`}
+                />
               </Pressable>
             ))}
           </View>
