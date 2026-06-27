@@ -24,6 +24,8 @@ const MENU_SECTIONS = [
       { icon: "flag", label: "Government Partners", desc: "State and pan-African partnerships", route: "/government" },
       { icon: "briefcase", label: "My Portfolio", desc: "Property tokens and holdings", route: "/portfolio" },
       { icon: "info", label: "About OsanVault", desc: "Our mission, roadmap, and security", route: "/about" },
+      { icon: "box", label: "Issuer Portal", desc: "Tokenize a property SPV", route: "/issuer" },
+      { icon: "settings", label: "Admin Panel", desc: "SPV approvals, KYC, oracle feeds", route: "/admin" },
     ],
   },
   {

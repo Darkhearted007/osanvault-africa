@@ -38,6 +38,8 @@ function RootLayoutNav() {
       <Stack.Screen name="carbon" options={{ headerShown: false }} />
       <Stack.Screen name="government" options={{ headerShown: false }} />
       <Stack.Screen name="legal" options={{ headerShown: false }} />
+      <Stack.Screen name="admin" options={{ headerShown: false }} />
+      <Stack.Screen name="issuer" options={{ headerShown: false }} />
     </Stack>
   );
 }
