@@ -1,0 +1,38 @@
+# OsanVault Africa
+
+> Africa's institutional-grade real estate tokenization platform on Polygon blockchain. Fractional ownership of premium properties in Nigeria, Ghana, and Kenya from ₦1,000.
+
+## Platform
+
+OsanVault Africa enables fractional real estate investment through Special Purpose Vehicles (SPVs) tokenized as ERC-1155 NFTs on the Polygon Amoy network. The platform combines property investment, carbon credit retirement, OSANV token staking, and on-chain governance.
+
+## Core Features
+
+- **Tokenized Real Estate**: Browse and invest in 6 premium African property SPVs (commercial, residential, land banking, industrial) from ₦1,000 per fraction
+- **Carbon Credits**: Verified tCO₂e credits from 5 African climate projects, distributed to property token holders as ERC-1155 tokens via OsanCarbon.sol
+- **OSANV Staking**: Lock OSANV tokens for 30–365 days to earn 8–22% APR across 4 tiers (Bronze, Silver, Gold, Platinum)
+- **Governance**: On-chain DAO voting — 100K OSANV to propose, 5M quorum, 7-day voting window, 2-day execution timelock
+- **Dual Land Verification**: Every property verified by both government title hash and indigenous authority approval via LandRegistry.sol
+
+## Pages
+
+- [Home](https://osanvaultafrica.com/): Platform overview, live property listings, activity feed
+- [Properties](https://osanvaultafrica.com/properties): Browse all tokenized property SPVs with search and filters
+- [Staking](https://osanvaultafrica.com/staking): OSANV staking tiers and rewards
+- [Governance](https://osanvaultafrica.com/governance): Active proposals and on-chain voting
+- [Carbon Credits](https://osanvaultafrica.com/carbon): African climate projects and credit retirement
+- [Portfolio](https://osanvaultafrica.com/portfolio): Wallet holdings — properties, carbon credits, stake, history
+
+## Technical
+
+- Chain: Polygon Amoy Testnet (EVM-compatible)
+- Token standard: ERC-1155 (PropertyNFT.sol, OsanCarbon.sol)
+- Staking: StakingVault.sol (4 tiers, OSANV)
+- Governance: Governance.sol (DAO)
+- Land registry: LandRegistry.sol (dual verification)
+- Treasury: TreasuryVault.sol + FeeRouter.sol (30% treasury / 20% burn / 40% staking / 10% team)
+- Regulatory: SEC ARIP Sandbox compliant
+
+## Currency
+
+All property values are displayed in Nigerian Naira (₦) as the primary currency.
