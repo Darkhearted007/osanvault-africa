@@ -1,5 +1,5 @@
 import { pgTable, uuid, varchar, text, timestamp, doublePrecision, uniqueIndex, primaryKey } from "drizzle-orm/pg-core";
-import { tenantsTable, jurisdictionsTable, partiesTable } from "./platform";
+import { tenantsTable, jurisdictionsTable } from "./platform";
 
 export const assetTypesTable = pgTable("asset_types", {
   id: uuid("id").defaultRandom().primaryKey(),
