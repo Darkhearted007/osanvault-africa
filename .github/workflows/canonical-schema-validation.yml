@@ -24,12 +24,29 @@ on:
 permissions:
   contents: read
 
+env:
+  DATABASE_URL: postgresql://postgres:postgres@localhost:5432/osanvault_ci
+
 jobs:
   canonical-schema:
-    name: Canonical schema typecheck and generation
+    name: Canonical schema typecheck, migration, and integrity validation
     runs-on: ubuntu-latest
-    env:
-      DATABASE_URL: postgresql://postgres:postgres@localhost:5432/osanvault_ci
+
+    services:
+      postgres:
+        image: postgres:16
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
+          POSTGRES_DB: osanvault_ci
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd "pg_isready -U postgres -d osanvault_ci"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 10
+
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -51,6 +68,67 @@ jobs:
 
       - name: Generate Drizzle migrations
         run: pnpm --filter @workspace/db generate
+
+      - name: Reject destructive migration operations
+        shell: bash
+        run: |
+          set -euo pipefail
+          if grep -REniE '(^|[[:space:]])(DROP[[:space:]]+TABLE|DROP[[:space:]]+COLUMN|TRUNCATE|DELETE[[:space:]]+FROM)([[:space:]]|$)' lib/db/drizzle --include='*.sql'; then
+            echo "Destructive SQL detected in generated canonical migration. Review required."
+            exit 1
+          fi
+
+      - name: Apply generated migration to isolated PostgreSQL
+        run: pnpm --filter @workspace/db exec drizzle-kit migrate --config ./drizzle.config.ts
+
+      - name: Validate canonical and legacy tables coexist
+        run: |
+          set -euo pipefail
+          psql "$DATABASE_URL" -v ON_ERROR_STOP=1 <<'SQL'
+          DO $$
+          DECLARE
+            table_name text;
+            required_tables text[] := ARRAY[
+              'tenants',
+              'jurisdictions',
+              'parties',
+              'persons',
+              'legal_entities',
+              'organizations',
+              'users',
+              'roles',
+              'permissions',
+              'assets',
+              'asset_types',
+              'asset_identifiers',
+              'asset_locations',
+              'asset_relationships',
+              'asset_passports',
+              'documents',
+              'evidence',
+              'verification_cases',
+              'verification_evidence',
+              'verification_actions',
+              'spvs',
+              'ownership_interests',
+              'asset_rights',
+              'asset_encumbrances',
+              'properties',
+              'carbon_projects',
+              'governance_proposals',
+              'activity_events',
+              'whitelist',
+              'leads',
+              'device_push_tokens'
+            ];
+          BEGIN
+            FOREACH table_name IN ARRAY required_tables LOOP
+              IF to_regclass('public.' || table_name) IS NULL THEN
+                RAISE EXCEPTION 'Required table missing: %', table_name;
+              END IF;
+            END LOOP;
+          END $$;
+          SQL
 
       - name: Typecheck workspace
         run: pnpm typecheck
