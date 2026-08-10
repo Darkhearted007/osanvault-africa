@@ -1,0 +1,56 @@
+name: Canonical Schema Validation
+
+on:
+  pull_request:
+    branches:
+      - main
+    paths:
+      - "lib/db/**"
+      - "package.json"
+      - "pnpm-lock.yaml"
+      - "pnpm-workspace.yaml"
+      - ".github/workflows/canonical-schema-validation.yml"
+  push:
+    branches:
+      - architecture/canonical-schema-validation
+      - architecture/canonical-schema-v1
+    paths:
+      - "lib/db/**"
+      - "package.json"
+      - "pnpm-lock.yaml"
+      - "pnpm-workspace.yaml"
+      - ".github/workflows/canonical-schema-validation.yml"
+
+permissions:
+  contents: read
+
+jobs:
+  canonical-schema:
+    name: Canonical schema typecheck and generation
+    runs-on: ubuntu-latest
+    env:
+      DATABASE_URL: postgresql://postgres:postgres@localhost:5432/osanvault_ci
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 10
+          run_install: false
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: pnpm
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Generate Drizzle migrations
+        run: pnpm --filter @workspace/db generate
+
+      - name: Typecheck workspace
+        run: pnpm typecheck
