@@ -1,4 +1,4 @@
-import { pgTable, uuid, varchar, text, timestamp, integer } from "drizzle-orm/pg-core";
+import { pgTable, uuid, varchar, text, timestamp, integer, primaryKey } from "drizzle-orm/pg-core";
 import { tenantsTable, platformUsersTable, partiesTable } from "./platform";
 import { assetsTable } from "./assets";
 
@@ -48,7 +48,7 @@ export const verificationEvidenceTable = pgTable("verification_evidence", {
   verificationCaseId: uuid("verification_case_id").notNull().references(() => verificationCasesTable.id),
   evidenceId: uuid("evidence_id").notNull().references(() => evidenceTable.id),
   createdAt: timestamp("created_at", { withTimezone: true }).notNull().defaultNow(),
-});
+}, (table) => [primaryKey({ columns: [table.verificationCaseId, table.evidenceId] })]);
 
 export const verificationActionsTable = pgTable("verification_actions", {
   id: uuid("id").defaultRandom().primaryKey(),
