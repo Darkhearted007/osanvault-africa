@@ -1,0 +1,39 @@
+name: OV1 Canonical Foundation
+
+on:
+  pull_request:
+    branches: [main]
+    paths:
+      - 'lib/db/**'
+      - 'artifacts/api-server/**'
+      - 'lib/api-*/*'
+      - 'docs/architecture/**'
+      - 'docs/migration/**'
+      - '.github/workflows/ov1-canonical-foundation.yml'
+      - 'package.json'
+      - 'pnpm-lock.yaml'
+  workflow_dispatch:
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 10
+          run_install: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - name: Workspace typecheck
+        run: pnpm -r typecheck
+      - name: Verify canonical schema source
+        run: test -f lib/db/src/schema/canonical-foundation.ts
+      - name: Verify migration safety documentation
+        run: test -f docs/migration/OV1_LEGACY_MAPPING.md
+      - name: Verify prototype route remains present
+        run: test -f artifacts/api-server/src/routes/properties.ts
